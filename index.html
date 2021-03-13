@@ -11,6 +11,12 @@ h1, h2, h3, h4, h5, h6 {
   font-family: "Playfair Display";
   letter-spacing: 5px;
 }
+  .centered {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 </style>
 <body>
 
@@ -32,7 +38,7 @@ h1, h2, h3, h4, h5, h6 {
 <header class="w3-display-container w3-content w3-wide" style="max-width:1600px;min-width:500px" id="home">
   <img class="w3-image" src="roboticHand.jpg" alt="Machine Learning Helps" width="1600" height="400">
   <div class="w3-display-left w3-padding-large w3-opacity">
-    <h1 style="font-size:5vw; text-align:center">Let me show you my world.</h1>
+    <h1 class="centered" style="font-size:8vw; text-align:center">Let me show you my world.</h1>
   </div>
 </header>
 
@@ -47,7 +53,7 @@ h1, h2, h3, h4, h5, h6 {
 
     <div class="w3-col m6 w3-padding-large">
       <h1 class="w3-center">About me</h1><br>
-      <<h5 class="w3-center">Machine Learning Enthusiast</h5>
+      <h5 class="w3-center">Machine Learning Enthusiast</h5>
       <p class="w3-large"> I started my journey with Machine Learning at 2018 when during my MRes course I began to explore machine learning tools and paradigms. Currenty I am 
         in the process of obtainging my Ph.D. at Edinburgh University within CDT in Biomedical AI scheme. Under supervision of Dr Kianoush Nazarpour and Dr Agamemnon Krasoulis I investivate active learning for upper limb prostheses usage. 
         The objective of my work includes developing architecture for deep active learning to include human in the loop: by identifying low confidence signals annotated by human oracle in iterative manner to define personalised feature representation.
