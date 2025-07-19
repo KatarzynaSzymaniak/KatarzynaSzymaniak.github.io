@@ -1,0 +1,845 @@
+import React, { useState, useEffect, useRef } from 'react';
+
+// Main App Component
+const App = () => {
+    // State for current view: 'home', 'projectDetail', 'blog'
+    const [currentView, setCurrentView] = useState('home');
+    // State for selected project details when in 'projectDetail' view
+    const [selectedProject, setSelectedProject] = useState(null);
+    // State for theme: 'light' or 'dark'
+    const [isDarkTheme, setIsDarkTheme] = useState(false);
+    // State for video modal visibility
+    const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+    // State for the video URL to display in the modal
+    const [modalVideoUrl, setModalVideoUrl] = useState('');
+    // State to hold the ID of the section to scroll to
+    const [scrollToId, setScrollToId] = useState(null);
+
+    // States for AI Insights feature
+    const [aiInsights, setAiInsights] = useState(null);
+    const [aiInsightsLoading, setAiInsightsLoading] = useState(false);
+    const [aiInsightsError, setAiInsightsError] = useState(null);
+
+    // Refs for sections to scroll to
+    const differentiatorsRef = useRef(null);
+    const professionalExperienceRef = useRef(null);
+    const researchPortfolioMainRef = useRef(null);
+    const contactRef = useRef(null);
+
+    // Map section IDs to their refs
+    const sectionRefs = {
+        'differentiators': differentiatorsRef,
+        'professional-experience': professionalExperienceRef,
+        'research-portfolio-main': researchPortfolioMainRef,
+        'contact': contactRef,
+    };
+
+    // Project data
+    const flagshipProjects = [
+        {
+            id: 'myoelectric',
+            title: 'Adaptive Myoelectric Control with Human-in-the-Loop Learning',
+            description: 'Developed a novel system for myoelectric control that adapts in real-time to user intent and physiological changes, significantly reducing training burden and improving prosthetic control.',
+            marketRelevance: 'Healthcare AI, assistive technology, real-time adaptation',
+            businessImpact: 'Reduced training time, improved user experience, clinical applications',
+            technicalInnovation: 'Active learning, domain adaptation, signal processing',
+            tags: ['#HealthcareAI', '#AssistiveTech', '#SignalProcessing'],
+            videoUrl: 'https://www.youtube.com/embed/BCHFJswreW8'
+        },
+        {
+            id: 'metaverse',
+            title: 'Multimodal Sensor Fusion for Metaverse Interactions (Meta Work)',
+            description: 'Pioneered multimodal sensor fusion techniques for natural and intuitive interactions within immersive metaverse environments, leveraging speech and biosignal data.',
+            marketRelevance: 'Spatial computing, AR/VR, consumer tech',
+            businessImpact: 'Enhanced user experience, reduced latency, natural interaction',
+            technicalInnovation: 'Speech recognition, temporal ML, cross-modal learning',
+            tags: ['#Metaverse', '#ARVR', '#MultimodalAI'],
+            videoUrl: ''
+        },
+        {
+            id: 'neuroprosthetics',
+            title: 'Agentic AI for Adaptive Neuroprosthetics',
+            description: 'Designed and implemented agentic AI systems that continually learn and adapt to individual patient needs for advanced neuroprosthetic control, improving long-term usability.',
+            marketRelevance: 'Medical devices, assistive technology, personalized healthcare',
+            businessImpact: 'Improved patient outcomes, reduced clinical overhead',
+            technicalInnovation: 'Continual learning, transfer learning, human-AI collaboration',
+            tags: ['#MedicalDevices', '#Neurotech', '#AgenticAI'],
+            videoUrl: ''
+        },
+        {
+            id: 'hololens',
+            title: 'Neuroimaging Data Analysis: using HoloLens for Teaching Purposes',
+            description: 'Awarded with a certificate for \'Best Student Project\' in the College of Science, Department of Computer Science. This project involved rendering MRI scan volumetric data to a 3D mesh model of a human brain, which was then incorporated with Microsoft HoloLens using Unity. This created a teaching tool for medical students to address the common problem of spatial data visualization. It required excellent planning, organizational skills, and the ability to self-teach complex subjects and cross-platform game engine development.',
+            marketRelevance: 'Medical Education, AR/VR, Spatial Computing, Human-Computer Interaction',
+            businessImpact: 'Improved spatial data visualization for medical students, enhanced learning tools.',
+            technicalInnovation: '3D rendering, Unity integration, HoloLens development, cross-platform game engine use.',
+            tags: ['#HCI', '#ARVR', '#MedicalEducation', '#Unity'],
+            videoUrl: ''
+        }
+    ];
+
+    // Blog post data
+    const blogPosts = [
+        {
+            id: 'agentic-ai-human-loop',
+            title: 'Why Agentic AI Needs Human-in-the-Loop Design',
+            date: 'July 18, 2025',
+            excerpt: 'As agentic AI rapidly evolves, the critical role of human oversight becomes paramount. This post explores the ethical and practical imperatives of integrating human-in-the-loop mechanisms to ensure trustworthy and effective autonomous systems.'
+        },
+        {
+            id: 'signal-processing-renaissance',
+            title: 'The Signal Processing Renaissance in AI',
+            date: 'June 20, 2025',
+            excerpt: 'From biosignals to environmental audio, the ability to extract meaningful insights from raw sensory data is foundational to advanced AI. This article delves into how traditional signal processing techniques are experiencing a resurgence, empowering next-generation AI applications.'
+        },
+        {
+            id: 'trust-autonomous-ai',
+            title: 'Building Trust in Autonomous AI Systems',
+            date: 'May 15, 2025',
+            excerpt: 'For AI agents to be widely adopted, trust is essential. This post discusses design principles and technical approaches to foster transparency, predictability, and accountability in autonomous AI, ensuring user confidence.'
+        }
+    ];
+
+    // Load theme preference from localStorage on component mount
+    useEffect(() => {
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            setIsDarkTheme(true);
+            document.body.classList.add('dark');
+        } else {
+            setIsDarkTheme(false);
+            document.body.classList.remove('dark');
+        }
+    }, []);
+
+    // Effect to scroll to the specified section
+    useEffect(() => {
+        if (scrollToId && currentView === 'home') {
+            const element = sectionRefs[scrollToId]?.current;
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            setScrollToId(null); // Reset after scrolling
+        } else if (currentView === 'home' && !scrollToId) {
+            // If navigating to home without a specific section, scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }, [currentView, scrollToId]);
+
+
+    // Toggle theme
+    const toggleTheme = () => {
+        setIsDarkTheme(prevTheme => {
+            const newTheme = !prevTheme;
+            if (newTheme) {
+                document.body.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.body.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            }
+            return newTheme;
+        });
+    };
+
+    // Handle navigation to different sections
+    const handleNavigation = (view, sectionId = null, project = null) => {
+        setCurrentView(view);
+        setSelectedProject(project);
+        setScrollToId(sectionId); // Set the section to scroll to
+        // Clear AI insights when navigating away from a project detail
+        if (view !== 'projectDetail') {
+            setAiInsights(null);
+            setAiInsightsError(null);
+        }
+    };
+
+    // Open video modal
+    const openVideoModal = (videoUrl) => {
+        setModalVideoUrl(videoUrl);
+        setIsVideoModalOpen(true);
+    };
+
+    // Close video modal
+    const closeVideoModal = () => {
+        setIsVideoModalOpen(false);
+        setModalVideoUrl(''); // Clear video URL when closing
+    };
+
+    // Function to generate AI insights using Gemini API
+    const generateProjectInsights = async (project) => {
+        setAiInsightsLoading(true);
+        setAiInsightsError(null);
+        setAiInsights(null); // Clear previous insights
+
+        const prompt = `Given the following research project title and description, provide a concise, engaging summary suitable for a non-technical audience, and then suggest one or two potential future research directions.
+        
+        Title: ${project.title}
+        Description: ${project.description}
+        
+        Please format your response clearly with a "Summary:" section and a "Future Research Directions:" section.`;
+
+        try {
+            let chatHistory = [];
+            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+            const payload = { contents: chatHistory };
+            const apiKey = ""; // Canvas will inject the API key here
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+
+            if (result.candidates && result.candidates.length > 0 &&
+                result.candidates[0].content && result.candidates[0].content.parts &&
+                result.candidates[0].content.parts.length > 0) {
+                const text = result.candidates[0].content.parts[0].text;
+                setAiInsights(text);
+            } else {
+                setAiInsightsError("Failed to generate insights: Unexpected API response structure.");
+                console.error("Gemini API response error:", result);
+            }
+        } catch (error) {
+            setAiInsightsError(`Failed to generate insights: ${error.message}`);
+            console.error("Error calling Gemini API:", error);
+        } finally {
+            setAiInsightsLoading(false);
+        }
+    };
+
+    // Components for different sections
+
+    const Header = () => (
+        <header className="bg-white py-8 sm:py-12 px-4 sm:px-6 lg:px-8 rounded-xl shadow-lg mb-12">
+            <div className="flex flex-col md:flex-row items-center md:items-start md:space-x-8">
+                <div className="flex flex-col items-center md:items-start md:w-1/3 lg:w-1/4 mb-6 md:mb-0">
+                    <img src="https://placehold.co/180x180/F3F4F6/1F2937?text=KS" alt="Dr. Katarzyna Szymaniak" className="w-48 h-48 rounded-full object-cover border-4 border-indigo-500 shadow-xl mb-4" />
+                    <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-1 text-center md:text-left">Dr. Katarzyna Szymaniak</h1>
+                    <p className="text-lg sm:text-xl text-gray-700 mb-4 text-center md:text-left">Human-Centered Agentic AI Researcher</p>
+                    <div className="flex space-x-4">
+                        <a href="#" className="text-gray-600 hover:text-indigo-700 transition duration-300 ease-in-out" aria-label="LinkedIn Profile">
+                            <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path fillRule="evenodd" d="M19 0H5a5 5 0 00-5 5v14a5 5 0 005 5h14a5 5 0 005-5V5a5 5 0 00-5-5zM8 19H5V8h3v11zM6.5 6.75A1.75 1.75 0 118.25 5 1.75 1.75 0 016.5 6.75zM19 19h-3v-5.625c0-1.01-.018-2.317-1.416-2.317-1.417 0-1.637 1.109-1.637 2.25V19h-3V8h2.891v1.265h.04c.398-.758 1.37-1.554 2.85-1.554 3.05 0 3.623 2.008 3.623 4.613V19z" clipRule="evenodd" />
+                            </svg>
+                        </a>
+                        <a href="#" className="text-gray-600 hover:text-indigo-700 transition duration-300 ease-in-out" aria-label="Download CV">
+                            <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path fillRule="evenodd" d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm1 10V7h-2v5H8l4 4 4-4h-3z" clipRule="evenodd" />
+                            </svg>
+                        </a>
+                        <a href="mailto:your.email@example.com" className="text-gray-600 hover:text-indigo-700 transition duration-300 ease-in-out" aria-label="Email Address">
+                            <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H8a2 2 0 00-1.997 1.884zM18 8.118l4 2V14l-4 2V8.118zM2 14V10.118l4-2V16l-4 2zM7.5 19h9c.983 0 1.815-.592 1.95-1.428L12 13.414 4.55 17.572C4.685 18.408 5.517 19 6.5 19zm-2-7.5l-2 1V14l2 1V11.5z" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <div className="md:flex-1 md:w-2/3 lg:w-3/4 text-center md:text-left bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-6 sm:p-8 rounded-lg shadow-md">
+                    <h2 className="text-2xl sm:text-3xl font-bold mb-4">"Designing AI agents that amplify human intelligence through adaptive, multimodal, and context-aware systems"</h2>
+                    <p className="text-base sm:text-lg leading-relaxed mb-4">
+                        PhD researcher specializing in human-in-the-loop agentic AI, with 5+ years bridging neuroscience, signal processing, and adaptive machine learning. From Meta Reality Labs to Edinburgh's cutting-edge neuroprosthetics research, I design AI systems that augment human capabilities rather than replace them.
+                    </p>
+                    <p className="text-sm sm:text-base font-medium">
+                        [Recent: PhD in Biomedical AI • Meta Reality Labs • 5+ Years Research Experience]
+                    </p>
+                </div>
+            </div>
+        </header>
+    );
+
+    const NavBar = ({ onNavigate, isDarkTheme, toggleTheme }) => (
+        <nav className="sticky-nav bg-gray-100 text-gray-800 shadow-lg py-4">
+            <div className="container mx-auto flex justify-between items-center px-4 sm:px-6 lg:px-8">
+                <button onClick={() => onNavigate('home', 'top')} className="text-xl font-bold text-indigo-700 hover:text-indigo-900 transition duration-300 ease-in-out">Szymaniak</button>
+                <div className="flex space-x-6 sm:space-x-8 items-center">
+                    <button onClick={() => onNavigate('home', 'differentiators')} className="hover:text-indigo-700 transition duration-300 ease-in-out">Edge</button>
+                    <button onClick={() => onNavigate('home', 'professional-experience')} className="hover:text-indigo-700 transition duration-300 ease-in-out">Experience</button>
+                    <button onClick={() => onNavigate('home', 'research-portfolio-main')} className="hover:text-indigo-700 transition duration-300 ease-in-out">Research</button>
+                    <button onClick={() => onNavigate('blog')} className="hover:text-indigo-700 transition duration-300 ease-in-out">Blog</button>
+                    <button onClick={() => onNavigate('home', 'contact')} className="hover:text-indigo-700 transition duration-300 ease-in-out">Contact</button>
+                    <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition duration-300 ease-in-out" aria-label="Toggle day/night mode">
+                        {isDarkTheme ? (
+                            <svg className="w-6 h-6 text-gray-700 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                            </svg>
+                        ) : (
+                            <svg className="w-6 h-6 text-yellow-500 dark:text-yellow-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 3v1m0 16v1m9-9h1M3 12h1m15.325-7.757l-.707-.707M5.382 18.382l-.707-.707M18.382 5.382l-.707.707M5.382 5.382l-.707.707M12 18a6 6 0 100-12 6 6 0 000 12z"></path>
+                            </svg>
+                        )}
+                    </button>
+                </div>
+            </div>
+        </nav>
+    );
+
+    const Differentiators = () => (
+        <section id="differentiators" ref={differentiatorsRef} className="py-10">
+            <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-8">Key Differentiators</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="bg-white p-6 rounded-lg shadow-md card-hover transition duration-300 ease-in-out">
+                    <div className="text-indigo-600 mb-3 text-4xl text-center">🧠</div>
+                    <h4 className="font-semibold text-lg mb-2 text-center">Neuroscience-Informed AI</h4>
+                    <p className="text-gray-600 text-center">"AI systems that understand how humans actually think and adapt"</p>
+                </div>
+                <div className="bg-white p-6 rounded-lg shadow-md card-hover transition duration-300 ease-in-out">
+                    <div className="text-indigo-600 mb-3 text-4xl text-center">🤖</div>
+                    <h4 className="font-semibold text-lg mb-2 text-center">Agentic AI Pioneer</h4>
+                    <p className="text-gray-600 text-center">"Building autonomous agents with human oversight and ethical constraints"</p>
+                </div>
+                <div className="bg-white p-6 rounded-lg shadow-md card-hover transition duration-300 ease-in-out">
+                    <div className="text-indigo-600 mb-3 text-4xl text-center">⚡</div>
+                    <h4 className="font-semibold text-lg mb-2 text-center">Real-Time Adaptation</h4>
+                    <p className="text-gray-600 text-center">"Systems that learn and improve during deployment, not just during training"</p>
+                </div>
+                <div className="bg-white p-6 rounded-lg shadow-md card-hover transition duration-300 ease-in-out">
+                    <div className="text-indigo-600 mb-3 text-4xl text-center">🔗</div>
+                    <h4 className="font-semibold text-lg mb-2 text-center">Multimodal Integration</h4>
+                    <p className="text-gray-600 text-center">"Bridging audio, biosignals, and behavioral data for comprehensive AI understanding"</p>
+                </div>
+            </div>
+        </section>
+    );
+
+    const Experience = () => (
+        <section id="professional-experience" ref={professionalExperienceRef} className="py-10">
+            <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-8">Professional Experience</h3>
+            <div className="space-y-8">
+                {/* PhD - University of Edinburgh */}
+                <div className="bg-white p-6 rounded-lg shadow-md card-hover transition duration-300 ease-in-out">
+                    <h4 className="font-bold text-xl mb-2 text-indigo-700">Ph.D. Biomedical Artificial Intelligence</h4>
+                    <p className="text-lg text-gray-800 mb-1">University of Edinburgh, Edinburgh</p>
+                    <p className="text-sm text-gray-600 mb-4">Sep 2020 - Present</p>
+                    <ul className="list-disc list-inside text-gray-700 space-y-2">
+                        <li>Conducted cutting-edge research in human-in-the-loop agentic AI, bridging neuroscience, signal processing, and adaptive machine learning.</li>
+                        <li>Focused on developing robust, ethical, and intuitive AI solutions that augment human capabilities.</li>
+                        <li>(Add more specific PhD achievements/research areas here if desired)</li>
+                    </ul>
+                </div>
+
+                {/* Meta Reality Labs */}
+                <div className="bg-white p-6 rounded-lg shadow-md card-hover transition duration-300 ease-in-out">
+                    <h4 className="font-bold text-xl mb-2 text-indigo-700">Research Scientist Intern</h4>
+                    <p className="text-lg text-gray-800 mb-1">Meta Reality Labs, New York</p>
+                    <p className="text-sm text-gray-600 mb-4">Sep 2022 - Mar 2023</p>
+                    <ul className="list-disc list-inside text-gray-700 space-y-2">
+                        <li>Investigated methods for sensor fusion and data multimodality in metaverse for wristband interactions.</li>
+                        <li>Research focused on temporal machine learning in signal processing.</li>
+                        <li>Utilized speech recognition models and multimodal learning to investigate cross-modality for feature fusion models.</li>
+                        <li>Collaborated as part of a larger ecosystem, cross-functional team towards common objectives.</li>
+                    </ul>
+                </div>
+
+                {/* University of Edinburgh - Teaching Assistant */}
+                <div className="bg-white p-6 rounded-lg shadow-md card-hover transition duration-300 ease-in-out">
+                    <h4 className="font-bold text-xl mb-2 text-indigo-700">Teaching Assistant</h4>
+                    <p className="text-lg text-gray-800 mb-1">University of Edinburgh, Edinburgh</p>
+                    <p className="text-sm text-gray-600 mb-4">Sep 2023 - June 2024</p>
+                    <ul className="list-disc list-inside text-gray-700 space-y-2">
+                        <li>Co-led and instructed an Entrepreneurship and Innovation Course, bridging theory with practical application.</li>
+                        <li>Guided students in identifying real-world challenges and developing targeted solutions.</li>
+                        <li>Emphasized the integration of entrepreneurial mindset with technical implementation, enabling students to scope and prototype minimum viable products (MVPs).</li>
+                    </ul>
+                </div>
+
+                {/* Swansea University - Teaching Assistant, Lab Demonstrator */}
+                <div className="bg-white p-6 rounded-lg shadow-md card-hover transition duration-300 ease-in-out">
+                    <h4 className="font-bold text-xl mb-2 text-indigo-700">Teaching Assistant, Lab Demonstrator</h4>
+                    <p className="text-lg text-gray-800 mb-1">Swansea University, Swansea</p>
+                    <p className="text-sm text-gray-600 mb-4">Jan 2017 - Sep 2019</p>
+                    <ul className="list-disc list-inside text-gray-700 space-y-2">
+                        <li>Delivered modules, such as Object Oriented Programming (Java) and Concepts of Computer Science (data structures and algorithms).</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    );
+
+    const ResearchPortfolio = ({ onProjectClick, onVideoOpen, projects }) => (
+        <section id="research-portfolio-main" ref={researchPortfolioMainRef} className="py-10">
+            <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-8">Research Portfolio</h3>
+
+            <div className="mb-12">
+                <h4 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-6 border-b pb-2">Flagship Projects</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {projects.map(project => (
+                        <div key={project.id} className="bg-white p-6 rounded-lg shadow-md card-hover transition duration-300 ease-in-out" onClick={() => onProjectClick(project)}>
+                            <h5 className="font-bold text-xl mb-3 text-indigo-700">{project.title}</h5>
+                            <p className="text-gray-700 mb-4">
+                                {project.description.length > 150 ? project.description.substring(0, 150) + '...' : project.description}
+                            </p>
+                            <ul className="list-disc list-inside text-gray-600 space-y-1">
+                                <li><strong>Market Relevance:</strong> {project.marketRelevance}</li>
+                                <li><strong>Business Impact:</strong> {project.businessImpact}</li>
+                                <li><strong>Technical Innovation:</strong> {project.technicalInnovation}</li>
+                            </ul>
+                            <div className="mt-4 flex flex-wrap gap-2">
+                                {project.tags.map((tag, index) => (
+                                    <span key={index} className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${
+                                        tag.includes('Healthcare') || tag.includes('Assistive') || tag.includes('Signal') ? 'bg-indigo-100 text-indigo-800' :
+                                        tag.includes('Metaverse') || tag.includes('ARVR') || tag.includes('Multimodal') ? 'bg-purple-100 text-purple-800' :
+                                        tag.includes('MedicalDevices') || tag.includes('Neurotech') || tag.includes('AgenticAI') ? 'bg-green-100 text-green-800' :
+                                        'bg-blue-100 text-blue-800'
+                                    }`}>{tag}</span>
+                                ))}
+                            </div>
+                            {project.videoUrl && (
+                                <div className="mt-4 w-full">
+                                    <div className="video-preview-container w-full aspect-video rounded-md overflow-hidden mb-2">
+                                        <iframe src={`${project.videoUrl}?controls=0`} frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="w-full h-full"></iframe>
+                                    </div>
+                                </div>
+                            )}
+                            <div className="mt-4 flex flex-wrap gap-2 justify-center">
+                                <a href="#" className="bg-indigo-500 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-indigo-600 transition duration-300">PDF</a>
+                                <a href="#" className="bg-purple-500 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-purple-600 transition duration-300">CITE</a>
+                                <a href="#" className="bg-green-500 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-green-600 transition duration-300">Dataset</a>
+                                {project.videoUrl && (
+                                    <button onClick={(e) => { e.stopPropagation(); onVideoOpen(project.videoUrl); }} className="bg-red-600 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-red-700 transition duration-300">Watch Video</button>
+                                )}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            <div id="expertise" className="mb-12">
+                <h4 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-6 border-b pb-2">Technical Expertise Dashboard</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="bg-white p-6 rounded-lg shadow-md card-hover transition duration-300 ease-in-out">
+                        <h5 className="font-bold text-lg mb-3 text-indigo-700">Core Technologies</h5>
+                        <ul className="list-disc list-inside text-gray-700 space-y-2">
+                            <li><strong>Agentic AI Systems:</strong> Autonomous agents with human oversight</li>
+                            <li><strong>Signal Processing:</strong> EMG, EEG, audio, multimodal biosignals</li>
+                            <li><strong>Adaptive Learning:</strong> Domain adaptation, transfer learning, continual learning</li>
+                            <li><strong>Human-Computer Interaction:</strong> Neural interfaces, AR/VR, assistive technology</li>
+                        </ul>
+                    </div>
+                    <div className="bg-white p-6 rounded-lg shadow-md card-hover transition duration-300 ease-in-out">
+                        <h5 className="font-bold text-lg mb-3 text-indigo-700">Industry Applications</h5>
+                        <ul className="list-disc list-inside text-gray-700 space-y-2">
+                            <li>Healthcare & Medical Devices</li>
+                            <li>Consumer Electronics & Wearables</li>
+                            <li>Metaverse & Spatial Computing</li>
+                            <li>Assistive Technology & Accessibility</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="philosophy">
+                <h4 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-6 border-b pb-2">Research Philosophy: Human-Centered AI Design Principles</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="bg-white p-6 rounded-lg shadow-md card-hover transition duration-300 ease-in-out">
+                        <h5 className="font-bold text-lg mb-3 text-indigo-700">Adaptive by Design</h5>
+                        <p className="text-gray-700">AI systems that evolve with user needs, ensuring long-term relevance and effectiveness.</p>
+                    </div>
+                    <div className="bg-white p-6 rounded-lg shadow-md card-hover transition duration-300 ease-in-out">
+                        <h5 className="font-bold text-lg mb-3 text-indigo-700">Transparent Decision-Making</h5>
+                        <p className="text-gray-700">Developing interpretable AI for high-stakes applications where understanding 'why' is as crucial as 'what'.</p>
+                    </div>
+                    <div className="bg-white p-6 rounded-lg shadow-md card-hover transition duration-300 ease-in-out">
+                        <h5 className="font-bold text-lg mb-3 text-indigo-700">Minimal Human Overhead</h5>
+                        <p className="text-gray-700">Maximizing system performance with minimal training data and user effort, optimizing efficiency.</p>
+                    </div>
+                    <div className="bg-white p-6 rounded-lg shadow-md card-hover transition duration-300 ease-in-out">
+                        <h5 className="font-bold text-lg mb-3 text-indigo-700">Ethical AI Deployment</h5>
+                        <p className="text-gray-700">Prioritizing human oversight and robust control mechanisms to ensure responsible and beneficial AI.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
+
+    const ProjectDetail = ({ project, onBackToPortfolio, onVideoOpen, generateInsights, insights, insightsLoading, insightsError }) => (
+        <div className="container mx-auto p-4 sm:p-6 lg:p-8 max-w-4xl">
+            <header className="flex flex-col sm:flex-row justify-between items-center py-6 border-b border-gray-200 mb-8">
+                <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 text-center sm:text-left mb-4 sm:mb-0">{project.title}</h1>
+                <button onClick={() => onBackToPortfolio('research-portfolio-main')} className="text-indigo-700 hover:text-indigo-900 transition duration-300 ease-in-out">← Back to Portfolio</button>
+            </header>
+
+            <section className="bg-white p-6 rounded-lg shadow-md mb-8">
+                <p className="text-gray-700 mb-4 text-lg leading-relaxed">{project.description} abc</p>
+
+                <div className="mb-4">
+                    <h4 className="font-bold text-lg text-indigo-700 mb-2">Market Relevance:</h4>
+                    <p className="text-gray-700">{project.marketRelevance}</p>
+                </div>
+
+                <div className="mb-4">
+                    <h4 className="font-bold text-lg text-indigo-700 mb-2">Business Impact:</h4>
+                    <p className="text-gray-700">{project.businessImpact}</p>
+                </div>
+
+                <div className="mb-4">
+                    <h4 className="font-bold text-lg text-indigo-700 mb-2">Technical Innovation:</h4>
+                    <p className="text-gray-700">{project.technicalInnovation}</p>
+                </div>
+
+                <div className="mt-4 flex flex-wrap gap-2">
+                    {project.tags.map((tag, index) => (
+                        <span key={index} className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${
+                            tag.includes('Healthcare') || tag.includes('Assistive') || tag.includes('Signal') ? 'bg-indigo-100 text-indigo-800' :
+                            tag.includes('Metaverse') || tag.includes('ARVR') || tag.includes('Multimodal') ? 'bg-purple-100 text-purple-800' :
+                            tag.includes('MedicalDevices') || tag.includes('Neurotech') || tag.includes('AgenticAI') ? 'bg-green-100 text-green-800' :
+                            'bg-blue-100 text-blue-800'
+                        }`}>{tag}</span>
+                    ))}
+                </div>
+
+                {project.videoUrl && (
+                    <div className="mt-8">
+                        <h4 className="font-bold text-lg text-indigo-700 mb-2">Project Video:</h4>
+                        <div className="video-container">
+                            <iframe src={project.videoUrl} frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+                        </div>
+                    </div>
+                )}
+
+                <div className="mt-8 flex flex-wrap gap-2 justify-center">
+                    <a href="#" className="bg-indigo-500 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-indigo-600 transition duration-300">PDF</a>
+                    <a href="#" className="bg-purple-500 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-purple-600 transition duration-300">CITE</a>
+                    <a href="#" className="bg-green-500 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-green-600 transition duration-300">Dataset</a>
+                    {project.videoUrl && (
+                        <button onClick={() => onVideoOpen(project.videoUrl)} className="bg-red-600 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-red-700 transition duration-300">Watch Video</button>
+                    )}
+                </div>
+
+                {/* AI Insights Section */}
+                <div className="mt-8 pt-8 border-t border-gray-200">
+                    <h4 className="font-bold text-lg text-indigo-700 mb-4">AI Insights ✨</h4>
+                    {insightsLoading && (
+                        <div className="text-gray-600 flex items-center justify-center">
+                            <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            Generating insights...
+                        </div>
+                    )}
+                    {insightsError && (
+                        <div className="text-red-600 p-3 bg-red-100 rounded-md">
+                            Error: {insightsError}
+                        </div>
+                    )}
+                    {insights ? (
+                        <div className="bg-gray-50 p-4 rounded-md text-gray-700 whitespace-pre-wrap">
+                            {insights}
+                        </div>
+                    ) : (
+                        !insightsLoading && !insightsError && (
+                            <button
+                                onClick={() => generateInsights(project)}
+                                className="bg-blue-500 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-blue-600 transition duration-300"
+                            >
+                                ✨ Generate AI Insights
+                            </button>
+                        )
+                    )}
+                </div>
+            </section>
+        </div>
+    );
+
+    const BlogList = ({ posts, onBackToPortfolio }) => (
+        <div className="container mx-auto p-4 sm:p-6 lg:p-8 max-w-4xl">
+            <header className="flex justify-between items-center py-6 border-b border-gray-200 mb-8">
+                <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">My Blog</h1>
+                <button onClick={() => onBackToPortfolio('research-portfolio-main')} className="text-indigo-700 hover:text-indigo-900 transition duration-300 ease-in-out">← Back to Portfolio</button>
+            </header>
+
+            <section className="space-y-8">
+                {posts.map(post => (
+                    <div key={post.id} className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300 ease-in-out">
+                        <h2 className="text-2xl font-bold text-indigo-700 mb-2">{post.title}</h2>
+                        <p className="text-gray-600 text-sm mb-4">Published on {post.date}</p>
+                        <p className="text-gray-700 mb-4">
+                            {post.excerpt}
+                        </p>
+                        <a href="#" className="text-indigo-600 hover:underline font-semibold">Read More &rarr;</a>
+                    </div>
+                ))}
+            </section>
+        </div>
+    );
+
+    const Contact = () => (
+        <section id="contact" ref={contactRef} className="text-center py-12 sm:py-16 bg-indigo-700 text-white rounded-xl shadow-lg mt-12">
+            <h3 className="text-2xl sm:text-3xl font-bold mb-4">Let's Connect and Build the Future of Human-AI Collaboration</h3>
+            <p className="text-lg sm:text-xl max-w-3xl mx-auto mb-8">
+                Whether you're looking for an expert in human-centered AI, a strategic advisor, or a research collaborator, I'm eager to discuss how my expertise can contribute to your goals.
+            </p>
+            <div className="flex flex-wrap justify-center gap-4">
+                <a href="#" className="bg-white text-indigo-700 px-6 py-3 rounded-full font-semibold hover:bg-gray-200 transition duration-300 ease-in-out shadow-md">Explore Research Portfolio</a>
+                <a href="mailto:your.email@example.com" className="bg-indigo-500 text-white px-6 py-3 rounded-full font-semibold hover:bg-indigo-600 transition duration-300 ease-in-out shadow-md">Schedule Consultation</a>
+                <a href="#" className="bg-purple-500 text-white px-6 py-3 rounded-full text-sm font-semibold hover:bg-purple-600 transition duration-300">Download CV</a>
+                <a href="#" className="bg-gray-200 text-gray-800 px-6 py-3 rounded-full font-semibold hover:bg-gray-300 transition duration-300 ease-in-out shadow-md">Connect on LinkedIn</a>
+            </div>
+        </section>
+    );
+
+    const Footer = () => (
+        <footer className="text-center py-8 mt-12 border-t border-gray-200 text-gray-500 text-sm">
+            &copy; 2025 Dr. Katarzyna Szymaniak. All rights reserved.
+        </footer>
+    );
+
+    return (
+        <div className="min-h-screen flex flex-col">
+            <style jsx global>{`
+                body {
+                    font-family: 'Inter', sans-serif;
+                    scroll-behavior: smooth;
+                    padding-top: 64px;
+                    transition: background-color 0.3s ease, color 0.3s ease;
+                }
+                .card-hover:hover {
+                    transform: translateY(-5px);
+                    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+                    cursor: pointer;
+                }
+                .sticky-nav {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    z-index: 1000;
+                }
+                .video-container {
+                    position: relative;
+                    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+                    height: 0;
+                    overflow: hidden;
+                    max-width: 100%;
+                    background: #000;
+                }
+                .video-container iframe {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                }
+                .video-preview-container {
+                    position: relative;
+                    width: 100%;
+                    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+                    height: 0;
+                    overflow: hidden;
+                    background: #000;
+                }
+                .video-preview-container iframe {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                }
+                /* Modal styles */
+                .modal {
+                    display: none; /* Hidden by default */
+                    position: fixed; /* Stay in place */
+                    z-index: 2000; /* Sit on top */
+                    left: 0;
+                    top: 0;
+                    width: 100%; /* Full width */
+                    height: 100%; /* Full height */
+                    overflow: auto; /* Enable scroll if needed */
+                    background-color: rgba(0,0,0,0.8); /* Black w/ opacity */
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                .modal-content {
+                    background-color: #fefefe;
+                    margin: auto;
+                    padding: 20px;
+                    border-radius: 8px;
+                    width: 90%;
+                    max-width: 800px;
+                    position: relative;
+                    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+                    animation: fadeIn 0.3s;
+                }
+                .close-button {
+                    color: #aaa;
+                    position: absolute;
+                    top: 10px;
+                    right: 20px;
+                    font-size: 28px;
+                    font-weight: bold;
+                }
+                .close-button:hover,
+                .close-button:focus {
+                    color: black;
+                    text-decoration: none;
+                    cursor: pointer;
+                }
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+
+                /* Dark Mode Styles - REVERTED TO PREVIOUS VERSION */
+                body.dark {
+                    background-color: #1a202c; /* Dark gray background */
+                    color: #e2e8f0; /* Light text color */
+                }
+
+                body.dark .bg-white {
+                    background-color: #2d3748; /* Darker background for white sections */
+                    color: #e2e8f0;
+                }
+
+                body.dark .text-gray-900 {
+                    color: #f7fafc; /* Lighter text for headings */
+                }
+
+                body.dark .text-gray-800 {
+                    color: #edf2f7; /* Lighter text for general content */
+                }
+
+                body.dark .text-gray-700 {
+                    color: #cbd5e0; /* Lighter text for general content */
+                }
+
+                body.dark .text-gray-600 {
+                    color: #a0aec0; /* Lighter text for subtle elements */
+                }
+
+                body.dark .text-gray-500 {
+                    color: #718096; /* Lighter text for footer */
+                }
+
+                body.dark .border-gray-200 {
+                    border-color: #4a5568; /* Darker border for separation */
+                }
+
+                body.dark .text-indigo-700 {
+                    color: #9f7aea; /* Lighter indigo for dark mode */
+                }
+
+                body.dark .text-purple-800 {
+                    color: #b794f4; /* Lighter purple for dark mode */
+                }
+
+                body.dark .text-green-800 {
+                    color: #68d391; /* Lighter green for dark mode */
+                }
+
+                body.dark .bg-indigo-100 {
+                    background-color: #4c51bf; /* Darker background for tags */
+                    color: #e0e7ff; /* Lighter text for tags */
+                }
+                body.dark .bg-purple-100 {
+                    background-color: #6b46c1; /* Darker background for tags */
+                    color: #e9d8fd; /* Lighter text for tags */
+                }
+                body.dark .bg-green-100 {
+                    background-color: #38a169; /* Darker background for tags */
+                    color: #c6f6d5; /* Lighter text for tags */
+                }
+                body.dark .bg-blue-100 {
+                    background-color: #3182ce; /* Darker blue for dark mode */
+                    color: #ebf8ff;
+                }
+
+                body.dark .text-indigo-400 {
+                    color: #a78bfa; /* Adjust for nav links */
+                }
+
+                body.dark .hover\:text-indigo-300:hover {
+                    color: #c4b5fd; /* Adjust for nav links hover */
+                }
+
+                body.dark .hover\:text-indigo-400:hover {
+                    color: #c4b5fd; /* Adjust for nav links hover */
+                }
+
+                body.dark .text-gray-400 {
+                    color: #a0aec0; /* Adjust for social icons */
+                }
+                body.dark .hover\:text-indigo-400:hover {
+                    color: #c4b5fd; /* Adjust for social icons hover */
+                }
+
+                body.dark .bg-gray-100 {
+                    background-color: #2d3748; /* Darker nav bar background */
+                }
+                body.dark .text-gray-800 {
+                    color: #e2e8f0; /* Lighter nav bar text */
+                }
+
+                /* Dark mode for modal */
+                .modal-content.dark {
+                    background-color: #2d3748;
+                    color: #e2e8f0;
+                }
+                .close-button.dark {
+                    color: #e2e8f0;
+                }
+                .close-button.dark:hover,
+                .close-button.dark:focus {
+                    color: #cbd5e0;
+                }
+            `}</style>
+
+            <NavBar onNavigate={handleNavigation} isDarkTheme={isDarkTheme} toggleTheme={toggleTheme} />
+
+            <div className="flex-grow container mx-auto p-4 sm:p-6 lg:p-8 max-w-6xl">
+                {currentView === 'home' && (
+                    <>
+                        <Header />
+                        <Differentiators />
+                        <Experience />
+                        <ResearchPortfolio
+                            onProjectClick={(project) => handleNavigation('projectDetail', null, project)}
+                            onVideoOpen={openVideoModal}
+                            projects={flagshipProjects}
+                        />
+                        <Contact />
+                    </>
+                )}
+
+                {currentView === 'projectDetail' && selectedProject && (
+                    <ProjectDetail
+                        project={selectedProject}
+                        onBackToPortfolio={() => handleNavigation('home', 'research-portfolio-main')}
+                        onVideoOpen={openVideoModal}
+                        generateInsights={generateProjectInsights}
+                        insights={aiInsights}
+                        insightsLoading={aiInsightsLoading}
+                        insightsError={aiInsightsError}
+                    />
+                )}
+
+                {currentView === 'blog' && (
+                    <BlogList
+                        posts={blogPosts}
+                        onBackToPortfolio={() => handleNavigation('home', 'research-portfolio-main')}
+                    />
+                )}
+            </div>
+
+            <Footer />
+
+            {/* Video Modal */}
+            {isVideoModalOpen && (
+                <div className="modal" style={{ display: 'flex' }}>
+                    <div className={`modal-content ${isDarkTheme ? 'dark' : ''}`}>
+                        <span className={`close-button ${isDarkTheme ? 'dark' : ''}`} onClick={closeVideoModal}>&times;</span>
+                        <div className="video-container">
+                            <iframe src={modalVideoUrl} frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};
+
+export default App;
