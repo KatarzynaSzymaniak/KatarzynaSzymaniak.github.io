@@ -1,1 +1,1 @@
-# KatarzynaSzymaniak.github.io
+# KatarzynaSzymaniak.io
