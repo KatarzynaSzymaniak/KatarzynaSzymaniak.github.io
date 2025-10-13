@@ -307,63 +307,47 @@
 
     <div id="top" class="container mx-auto p-4 sm:p-6 lg:p-8 max-w-6xl">
         
-        <!-- Header Section - CLEANED UP: Removed bg-white, shadow-lg, and rounded-xl -->
-        <header class="py-8 sm:py-12 px-4 sm:px-6 lg:px-8 mb-12">
-            <div class="flex flex-col md:flex-row items-center md:items-start md:space-x-8">
+            <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
 
-                <!-- Left Box: Picture, Name, Title, Contact Links -->
-                <div class="flex flex-col items-center md:items-start md:w-1/3 lg:w-1/4 mb-6 md:mb-0">
-                    <!-- Profile Picture -->
-                    <img src="me.jpeg" alt="Dr. Katarzyna Szymaniak" class="w-48 h-48 rounded-full object-cover border-4 border-indigo-500 shadow-xl mb-4">
-                    <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-1 text-center md:text-left">Dr. Katarzyna Szymaniak</h1>
-                    <p class="text-lg sm:text-xl text-gray-700 mb-4 text-center md:text-left">Human-Centered Agentic AI Researcher</p>
-                    
-                    <!-- NEW SOCIAL LINKS BLOCK -->
-                    <div class="flex space-x-4 text-gray-500">
-                        <!-- Email -->
-                        <a href="mailto:kszymaniak043@gmail.com" target="_blank" class="icon-link hover:text-indigo-700 transition duration-300" aria-label="Email">
-                            <i data-lucide="mail" class="w-7 h-7"></i>
-                        </a>
+        <!-- 1. Home (Landing Page) -->
+        <section id="home" class="grid md:grid-cols-3 gap-8 items-center pb-16">
+            <div class="flex flex-col items-center md:items-start md:col-span-1">
+                <!-- Profile Image Placeholder -->
+                <div class="w-48 h-48 rounded-full overflow-hidden mb-6 border-4 border-dark-card shadow-2xl">
+                    <img src="https://placehold.co/400x400/1e293b/f1f5f9?text=KS" alt="Dr. Katarzyna Szymaniak" class="w-full h-full object-cover">
+                </div>
+                <!-- Updated Headline & Sub-headline -->
+                <h1 class="text-4xl font-extrabold text-dark-text mb-1 text-center md:text-left">Designing Human-in-the-Loop Agentic AI</h1>
+                <p class="text-xl text-gray-400 text-center md:text-left">Dr. Katarzyna Szymaniak, PhD Researcher</p>
+            </div>
+            <div class="md:col-span-2">
+                <!-- Updated Sub-headline/Bio -->
+                <p class="text-gray-300 leading-relaxed mb-4 text-2xl font-light">
+                    PhD researcher with 5+ years of experience bridging **neuroscience, signal processing, and adaptive machine learning**. My work focuses on augmenting human capability by developing efficient, robust, and aligned AI systems for the next generation of multimodal and health-centric applications.
+                </p>
+                <!-- Keywords Bar -->
+                <p class="text-sm text-gray-500 mb-8">
+                    [Recent: **PhD in Biomedical AI** • **Meta Reality Labs** • **Foundation Models** • **Active Learning**]
+                </p>
 
-                        <!-- LinkedIn -->
-                        <a href="https://www.linkedin.com/in/katarzyna-szymaniak-ai/" target="_blank" class="icon-link hover:text-indigo-700 transition duration-300" aria-label="LinkedIn Profile">
-                            <i data-lucide="linkedin" class="w-7 h-7"></i>
-                        </a>
-
-                        <!-- GitHub -->
-                        <a href="https://github.com/KatarzynaSzymaniak" target="_blank" class="icon-link hover:text-indigo-700 transition duration-300" aria-label="GitHub Repository">
-                            <i data-lucide="github" class="w-7 h-7"></i>
-                        </a>
-
-                        <!-- Google Scholar (using GraduationCap icon) -->
-                        <a href="https://scholar.google.com/citations?user=tj08PZcAAAAJ&hl=en" target="_blank" class="icon-link hover:text-indigo-700 transition duration-300" aria-label="Google Scholar Citations">
-                            <i data-lucide="graduation-cap" class="w-7 h-7"></i>
-                        </a>
-                        
-                        <!-- Twitter / X -->
-                        <a href="https://x.com/szymaniak_kasia" target="_blank" class="icon-link hover:text-indigo-700 transition duration-300" aria-label="Twitter/X Profile">
-                            <i data-lucide="x" class="w-7 h-7"></i>
-                        </a>
-                        
-                        <!-- Hugging Face (using Bot icon for AI/Models) -->
-                        <a href="https://huggingface.co/KasiaAI" target="_blank" class="icon-link hover:text-indigo-700 transition duration-300" aria-label="Hugging Face Models">
-                            <i data-lucide="bot" class="w-7 h-7"></i>
-                        </a>
-                    </div>
+                <!-- Professional Summary Section -->
+                <h2 class="text-3xl font-bold text-dark-text mb-4">An AI Scientist for the Next Wave of Innovation</h2>
+                <div class="text-gray-300 space-y-3 text-base">
+                    <p>The AI market is maturing beyond generalist scaling, creating a demand for deep, first-principles expertise to solve complex, second-order problems. My background is built for this challenge.</p>
+                    <p><strong>PhD-level AI Scientist</strong> with expertise in developing and benchmarking machine learning models for noisy, real-world **time-series biosignals**. My research in myoelectric control and experience at Meta Reality Labs is directly applicable to the core challenges of wearable sensor data.</p>
+                    <p>Designed novel **active learning and data curation frameworks** that reduce data labeling costs and optimize training. This demonstrates a deep understanding of the data-efficient methods critical for capital-intensive challenges like preference learning (**DPO/RLHF**) and pre-training.</p>
+                    <p>Proven ability to lead projects from theoretical conception to practical implementation. Strong proficiency in **Python, PyTorch**, and the full scientific computing stack for large-scale data analysis and model deployment.</p>
                 </div>
 
-                <!-- Right Box: Front Catchy Part (Core Value Proposition) - CLEANED UP: Removed gradient and set text color to dark -->
-                <div class="md:flex-1 md:w-2/3 lg:w-3/4 text-center md:text-left text-gray-800 dark:text-e2e8f0 p-6 sm:p-8 rounded-lg shadow-md bg-white dark:bg-gray-800">
-                    <h2 class="text-2xl sm:text-3xl font-bold mb-4">"Designing AI agents that amplify human intelligence through adaptive, multimodal, and context-aware systems"</h2>
-                    <p class="text-base sm:text-lg leading-relaxed mb-4">
-                         PhD researcher with 5+ years of experience bridging **neuroscience, signal processing, and adaptive machine learning**. My work focuses on augmenting human capability by developing efficient, robust, trustworthy and aligned AI systems for the next generation of multimodal and human-centered AI systems.
-                    </p>
-                    <p class="text-sm sm:text-base font-medium">
-                        [Recent: PhD in Biomedical AI • Meta Reality Labs • 5+ Years Research Experience]
-                    </p>
+                <!-- Call to Action Button -->
+                <div class="mt-8">
+                    <a href="#portfolio" class="inline-flex items-center bg-accent-blue hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition duration-300">
+                        View My Portfolio
+                        <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+                    </a>
                 </div>
             </div>
-        </header>
+        </section>
 
         
         <!-- Professional Summary Section -->
