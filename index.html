@@ -3,787 +3,614 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dr. Katarzyna Szymaniak - Human-Centered Agentic AI Researcher</title>
-    <!-- Tailwind CSS CDN -->
+    <title>Dr. Katarzyna Szymaniak | Research Portfolio</title>
+    <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Font: Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Load Lucide Icons -->
-    <script type="module">
-        import { createIcons, icons } from 'https://cdn.jsdelivr.net/npm/lucide@latest';
-        window.addEventListener('load', () => createIcons({ icons }));
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'dark-navy': '#0f172a',
+                        'dark-card': '#1e293b',
+                        'dark-text': '#f1f5f9', // slate-100
+                        'accent-blue': '#3b82f6', // blue-500
+                        'accent-green': '#10b981', // emerald-500
+                        'accent-purple': '#a855f7', // violet-500
+                        'tag-bg': 'rgba(129, 140, 248, 0.15)', // indigo-400 with opacity
+                        'tag-text': '#818cf8', // indigo-400
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
     </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            scroll-behavior: smooth; /* Enables smooth scrolling for anchor links */
-            padding-top: 64px; /* Adjust body padding to prevent content from being hidden under fixed nav */
-            transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for theme change */
+            background-color: #0f172a; /* Deep navy background */
+            color: #f1f5f9;
+            min-height: 100vh;
+            padding-bottom: 5rem;
         }
-        /* Custom styles for subtle hover effects */
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            cursor: pointer; /* Indicate clickable */
+        .section-title {
+            position: relative;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
         }
-        /* Sticky navigation bar */
-        .sticky-nav {
-            position: fixed;
-            top: 0;
+        .section-title::after {
+            content: '';
+            position: absolute;
             left: 0;
-            width: 100%;
-            z-index: 1000; /* Ensure it stays on top of other content */
+            bottom: 0;
+            height: 3px;
+            width: 50px;
+            background-color: #3b82f6;
+            border-radius: 9999px;
         }
-        /* Social link hover effect */
-        .icon-link:hover {
-            color: #4f46e5; /* Indigo-600 on hover */
-            transform: translateY(-2px);
+        .project-link-button {
+            transition: background-color 0.2s, transform 0.1s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+        }
+        .project-link-button:hover {
+            transform: translateY(-1px);
+        }
+        .tag {
+            background-color: var(--tag-bg);
+            color: var(--tag-text);
+            padding: 0.25rem 0.625rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            border-radius: 0.375rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            display: inline-flex;
+            white-space: nowrap;
         }
 
-        /* Timeline specific styles */
+        /* --- Custom Styles for the Professional Experience Timeline --- */
         .timeline-container {
             position: relative;
-            padding-left: 3rem; /* Space for the line and dots */
+            /* Add some margin on smaller screens so the line doesn't hug the edge */
+            margin-left: 20px; 
+            padding-top: 10px;
         }
+
+        /* The vertical line itself */
         .timeline-container::before {
             content: '';
             position: absolute;
-            left: 1.5rem; /* Center the line */
             top: 0;
             bottom: 0;
-            width: 4px;
-            background-color: #cbd5e0; /* Light gray line */
-            border-radius: 2px;
+            left: 0;
+            width: 2px;
+            background-color: #3b82f6; /* Accent blue line */
         }
+
         .timeline-item {
             position: relative;
-            margin-bottom: 2rem;
+            padding-left: 40px; /* Shift content right of the line */
+            margin-bottom: 3rem; /* Space between items */
         }
-        .timeline-dot {
+
+        /* The circular marker with the icon */
+        .timeline-marker {
             position: absolute;
-            left: 0.75rem; /* Adjust to center larger dot */
-            top: 0.25rem; /* Adjust vertical alignment */
-            width: 2rem; /* Larger dot size */
-            height: 2rem; /* Larger dot size */
-            background-color: #4f46e5; /* Indigo dot */
+            left: -10px; /* Center the circle on the line (half of 22px width, relative to 2px line at left: 0) */
+            top: 0;
+            width: 22px;
+            height: 22px;
+            background-color: #0f172a; /* Dark navy background (to make it float over the line) */
+            border: 3px solid #3b82f6;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-size: 1.2rem; /* Larger icon size */
-            font-weight: bold;
-            box-shadow: 0 0 0 4px #e0e7ff; /* Ring effect */
+            z-index: 10;
         }
-        .timeline-content {
-            background-color: #ffffff;
+
+        .timeline-icon {
+            width: 12px;
+            height: 12px;
+            color: #3b82f6; /* Icon color */
+        }
+        
+        .experience-card-content {
+            background-color: #1e293b;
             padding: 1.5rem;
-            border-radius: 0.5rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            margin-left: 3rem; /* Push content away from the larger line/dot */
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
-        .timeline-content:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
-
-        /* Dark Mode Styles */
-        body.dark {
-            background-color: #1a202c; /* Dark gray background */
-            color: #e2e8f0; /* Light text color */
-        }
-
-        body.dark .bg-white {
-            background-color: #2d3748; /* Darker background for white sections */
-            color: #e2e8f0;
-        }
-
-        body.dark .text-gray-900 {
-            color: #f7fafc; /* Lighter text for headings */
-        }
-        /* Adjusted dark mode icon link hover color */
-        body.dark .icon-link:hover {
-            color: #a78bfa; /* Indigo-400 on hover in dark mode */
-        }
-
-
-        body.dark .text-gray-800 {
-            color: #edf2f7; /* Lighter text for general content */
-        }
-
-        body.dark .text-gray-700 {
-            color: #cbd5e0; /* Lighter text for general content */
-        }
-
-        body.dark .text-gray-600 {
-            color: #a0aec0; /* Lighter text for subtle elements */
-        }
-
-        body.dark .text-gray-500 {
-            color: #718096; /* Lighter text for social links/footer */
-        }
-
-        body.dark .border-gray-200 {
-            border-color: #4a5568; /* Darker border for separation */
-        }
-
-        body.dark .text-indigo-700 {
-            color: #9f7aea; /* Lighter indigo for dark mode */
-        }
-
-        body.dark .text-purple-800 {
-            color: #b794f4; /* Lighter purple for dark mode */
-        }
-
-        body.dark .text-green-800 {
-            color: #68d391; /* Lighter green for dark mode */
-        }
-
-        body.dark .bg-indigo-100 {
-            background-color: #4c51bf; /* Darker background for tags */
-            color: #e0e7ff; /* Lighter text for tags */
-        }
-        body.dark .bg-purple-100 {
-            background-color: #6b46c1; /* Darker background for tags */
-            color: #e9d8fd; /* Lighter text for tags */
-        }
-        body.dark .bg-green-100 {
-            background-color: #38a169; /* Darker background for tags */
-            color: #c6f6d5; /* Lighter text for tags */
-        }
-        body.dark .bg-blue-100 {
-            background-color: #3b82f6; /* Darker background for tags */
-            color: #dbeafe; /* Lighter text for tags */
-        }
-
-        body.dark .text-indigo-400 {
-            color: #a78bfa; /* Adjust for nav links */
-        }
-
-        body.dark .hover\:text-indigo-300:hover {
-            color: #c4b5fd; /* Adjust for nav links hover */
-        }
-
-        body.dark .hover\:text-indigo-400:hover {
-            color: #c4b5fd; /* Adjust for nav links hover */
-        }
-
-        body.dark .text-gray-400 {
-            color: #a0aec0; /* Adjust for social icons */
-        }
-
-        body.dark .bg-gray-100 {
-            background-color: #2d3748; /* Darker nav bar background */
-        }
-        body.dark .text-gray-800 {
-            color: #e2e8f0; /* Lighter nav bar text */
-        }
-
-        /* Dark mode for timeline */
-        body.dark .timeline-container::before {
-            background-color: #4a5568; /* Darker line */
-        }
-        body.dark .timeline-dot {
-            background-color: #667eea; /* Lighter dot for dark mode */
-            box-shadow: 0 0 0 4px #2d3748; /* Darker ring effect */
-        }
-        body.dark .timeline-content {
-            background-color: #2d3748;
-            color: #e2e8f0;
-        }
-
-        /* Modal styles (restored from previous file) */
-        .modal {
-            display: none; 
-            position: fixed; 
-            z-index: 2000; 
-            left: 0;
-            top: 0;
-            width: 100%; 
-            height: 100%; 
-            overflow: auto; 
-            background-color: rgba(0,0,0,0.8); 
-            display: flex;
+        /* --- End Timeline Styles --- */
+        
+        /* --- Custom Styles for Contact Icons --- */
+        .contact-icon-link {
+            display: inline-flex;
+            width: 40px;
+            height: 40px;
             align-items: center;
             justify-content: center;
+            border-radius: 50%;
+            background-color: #1e293b; /* Dark card color */
+            transition: background-color 0.2s, color 0.2s;
+            color: #94a3b8; /* Slate 400 */
         }
-        .modal-content {
-            background-color: #fefefe;
-            margin: auto;
-            padding: 20px;
-            border-radius: 8px;
-            width: 90%;
-            max-width: 800px;
-            position: relative;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            animation: fadeIn 0.3s;
+
+        .contact-icon-link:hover {
+            background-color: #3b82f6; /* Accent blue */
+            color: #f1f5f9; /* Light text */
         }
-        .modal-content.dark {
-            background-color: #2d3748;
-            color: #e2e8f0;
-        }
-        .close-button {
-            color: #aaa;
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            font-size: 28px;
-            font-weight: bold;
-        }
-        .close-button:hover,
-        .close-button:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        .close-button.dark {
-            color: #e2e8f0;
-        }
-        .close-button.dark:hover,
-        .close-button.dark:focus {
-            color: #cbd5e0;
-        }
-        .video-container {
-            position: relative;
-            padding-bottom: 56.25%; 
-            height: 0;
-            overflow: hidden;
-            max-width: 100%;
-            background: #000;
-        }
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-        .video-preview-container {
-            position: relative;
-            width: 100%;
-            padding-bottom: 56.25%; 
-            height: 0;
-            overflow: hidden;
-            background: #000;
-        }
-        .video-preview-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
+        /* --- End Contact Icons Styles --- */
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800 antialiased">
+<body class="antialiased">
 
-    <!-- Navigation Bar -->
-    <nav class="sticky-nav bg-gray-100 text-gray-800 shadow-lg py-4">
-        <div class="container mx-auto flex justify-between items-center px-4 sm:px-6 lg:px-8">
-            <a href="#top" class="text-xl font-bold text-indigo-700 hover:text-indigo-900 transition duration-300 ease-in-out">Szymaniak</a>
-            <div class="flex space-x-6 sm:space-x-8 items-center">
-                <a href="#differentiators" class="hover:text-indigo-700 transition duration-300 ease-in-out">Edge</a>
-                <a href="#professional-experience" class="hover:text-indigo-700 transition duration-300 ease-in-out">Experience</a>
-                <a href="#research-portfolio-main" class="hover:text-indigo-700 transition duration-300 ease-in-out">Research</a>
-                <a href="blog-page" class="hover:text-indigo-700 transition duration-300 ease-in-out">Blog</a>
-                <a href="#contact" class="hover:text-indigo-700 transition duration-300 ease-in-out">Contact</a>
-                <!-- Day/Night Mode Toggle Icon -->
-                <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition duration-300 ease-in-out" aria-label="Toggle day/night mode">
-                    <svg id="sun-icon" class="w-6 h-6 text-yellow-500 dark:text-yellow-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h1M3 12h1m15.325-7.757l-.707-.707M5.382 18.382l-.707-.707M18.382 5.382l-.707.707M5.382 5.382l-.707.707M12 18a6 6 0 100-12 6 6 0 000 12z"></path>
-                    </svg>
-                    <svg id="moon-icon" class="w-6 h-6 text-gray-700 dark:text-gray-300 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
-                    </svg>
+    <!-- Header & Navigation -->
+    <header class="sticky top-0 z-50 bg-[#0f172a]/95 backdrop-blur-sm shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-4">
+            <div class="text-xl font-bold text-dark-text">Szymaniak</div>
+            <nav class="hidden md:flex space-x-6 items-center">
+                <a href="#home" class="text-dark-text hover:text-accent-blue transition duration-150">Home</a>
+                <a href="#competencies" class="text-dark-text hover:text-accent-blue transition duration-150">Core Competencies</a>
+                <a href="#portfolio" class="text-dark-text hover:text-accent-blue transition duration-150">Portfolio</a>
+                <a href="#experience" class="text-dark-text hover:text-accent-blue transition duration-150">Experience</a>
+                <a href="#contact" class="text-dark-text hover:text-accent-blue transition duration-150">Contact</a>
+                <!-- Moon icon placeholder -->
+                <button class="text-dark-text p-2 rounded-full hover:bg-[#1e293b]">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
                 </button>
-            </div>
+            </nav>
+            <button class="md:hidden text-dark-text p-2 rounded-full hover:bg-[#1e293b]">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" x2="21" y1="6" y2="6"/><line x1="3" x2="21" y1="12" y2="12"/><line x1="3" x2="21" y1="18" y2="18"/></svg>
+            </button>
         </div>
-    </nav>
+    </header>
 
-    <div id="top" class="container mx-auto p-4 sm:p-6 lg:p-8 max-w-6xl">
-        
-        <!-- Header Section - CLEANED UP: Removed bg-white, shadow-lg, and rounded-xl -->
-        <header class="py-8 sm:py-12 px-4 sm:px-6 lg:px-8 mb-12">
-            <div class="flex flex-col md:flex-row items-center md:items-start md:space-x-8">
+    <!-- NEW: Job Seeking Announcement Bar -->
+    <div class="bg-accent-blue/90 text-white text-center py-2 px-4 shadow-xl z-40 sticky top-[68px] md:top-[72px]">
+        <p class="text-sm font-medium tracking-wide">
+            Actively seeking **Applied Scientist** & **Research Scientist** roles in **Health AI, Robotics, and Core AI Research**.
+            <span class="hidden sm:inline">Let's connect on future-forward challenges.</span>
+        </p>
+    </div>
 
-                <!-- Left Box: Picture, Name, Title, Contact Links -->
-                <div class="flex flex-col items-center md:items-start md:w-1/3 lg:w-1/4 mb-6 md:mb-0">
-                    <!-- Profile Picture -->
-                    <img src="me.jpeg" alt="Dr. Katarzyna Szymaniak" class="w-48 h-48 rounded-full object-cover border-4 border-indigo-500 shadow-xl mb-4">
-                    <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-1 text-center md:text-left">Dr. Katarzyna Szymaniak</h1>
-                    <p class="text-lg sm:text-xl text-gray-700 mb-4 text-center md:text-left">Human-Centered Agentic AI Researcher</p>
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
+
+        <!-- 1. Home (Landing Page - Profile & Summary Cards) -->
+        <section id="home" class="pb-12">
+            <div class="grid md:grid-cols-3 gap-8 items-start">
+                
+                <!-- Column 1: Profile and Main Titles (md:col-span-1) -->
+                <div class="flex flex-col items-center md:items-start md:col-span-1">
+                    <!-- Profile Image Placeholder -->
+                    <div class="w-48 h-48 rounded-full overflow-hidden mb-6 border-4 border-dark-card shadow-2xl">
+                        <img src="https://placehold.co/400x400/1e293b/f1f5f9?text=KS" alt="Dr. Katarzyna Szymaniak" class="w-full h-full object-cover">
+                    </div>
+                    <!-- Updated Headline & Sub-headline -->
+                    <h1 class="text-4xl font-extrabold text-dark-text mb-1 text-center md:text-left">Designing Human-in-the-Loop Agentic AI</h1>
+                    <p class="text-xl text-gray-400 text-center md:text-left mb-4">Dr. Katarzyna Szymaniak, PhD Researcher</p>
                     
-                    <!-- NEW SOCIAL LINKS BLOCK -->
-                    <div class="flex space-x-4 text-gray-500">
+                    <!-- New Contact Icons and Links (Updated SVGs) -->
+                    <div class="flex space-x-3 mb-8">
                         <!-- Email -->
-                        <a href="mailto:kszymaniak043@gmail.com" target="_blank" class="icon-link hover:text-indigo-700 transition duration-300" aria-label="Email">
-                            <i data-lucide="mail" class="w-7 h-7"></i>
+                        <a href="mailto:kszymaniak043@gmail.com" class="contact-icon-link" aria-label="Email">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="m22 6-10 7L2 6"/></svg>
                         </a>
+                        <!-- Twitter/X (Updated to correct X logo path) -->
+                        <a href="https://x.com/szymaniak_kasia" target="_blank" class="contact-icon-link" aria-label="Twitter">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h3.8l-5.1 6.5L18 20h-4l-3.3-4.5L7.4 20H4l5.6-7.1L4 4h4.2l3 4.2L16 4Z"/></svg>
+                        </a>
+                        <!-- Google Scholar (Updated to distinct Academic Cap icon) -->
+                        <a href="https://scholar.google.com/citations?user=lwHIQVcAAAAJ&hl=en" target="_blank" class="contact-icon-link" aria-label="Google Scholar">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6m-2-12-8 5-10 4 10 4 8-5V7M2 14v6m10-2.5V2m0 19.5a1 1 0 0 0-1 1 1 1 0 0 0 2 0 1 1 0 0 0-1-1z"/></svg>
+                        </a>
+                        <!-- GitHub (Octocat - kept existing) -->
+                        <a href="https://github.com/KatarzynaSzymaniak" target="_blank" class="contact-icon-link" aria-label="GitHub">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.67c2.84-.4 5.82-1.42 5.82-6.51a4.83 4.83 0 0 0-1.3-3.37 4.54 4.54 0 0 0-.1-3.41s-1.02-.34-3.33 1.3a12.18 12.18 0 0 0-6.27 0c-2.31-1.64-3.33-1.3-3.33-1.3a4.54 4.54 0 0 0-.1 3.41A4.83 4.83 0 0 0 3 13.5c0 5.09 2.98 6.11 5.82 6.51A3.37 3.37 0 0 0 9 20v3m3-19c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                        </a>
+                        <!-- LinkedIn (Kept existing) -->
+                        <a href="https://www.linkedin.com/in/katarzyna-szymaniak-ai/" target="_blank" class="contact-icon-link" aria-label="LinkedIn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a4 4 0 0 0-4-4 4 4 0 0 0-4 4v7H5v-7h2v7h2v-7h2v7h2v-7h2v7h2V8z"/><rect width="4" height="4" x="2" y="10"/><rect width="4" height="4" x="2" y="2"/></svg>
+                        </a>
+                    </div>
+                    <!-- End New Contact Icons -->
 
-                        <!-- LinkedIn -->
-                        <a href="https://www.linkedin.com/in/katarzyna-szymaniak-ai/" target="_blank" class="icon-link hover:text-indigo-700 transition duration-300" aria-label="LinkedIn Profile">
-                            <i data-lucide="linkedin" class="w-7 h-7"></i>
-                        </a>
+                </div>
 
-                        <!-- GitHub -->
-                        <a href="https://github.com/KatarzynaSzymaniak" target="_blank" class="icon-link hover:text-indigo-700 transition duration-300" aria-label="GitHub Repository">
-                            <i data-lucide="github" class="w-7 h-7"></i>
-                        </a>
+                <!-- Column 2: Professional Summary Paragraph & CTA (md:col-span-2) -->
+                <div class="md:col-span-2">
+                    <h2 class="section-title text-3xl font-bold mb-8">An AI Scientist for the Next Wave of Innovation</h2>
+                    
+                    <!-- REPLACED GRID CARDS WITH SINGLE PARAGRAPH -->
+                    <div class="bg-dark-card p-6 rounded-xl border border-gray-700/50 flex flex-col">
+                        <p class="text-sm text-gray-300 leading-relaxed">
+                            The AI market is maturing beyond generalist scaling, creating a demand for deep, first-principles expertise to solve complex, second-order problems. My background is built for this challenge. I am a **PhD-level AI Scientist** with expertise in developing and benchmarking machine learning models for noisy, real-world **time-series biosignals**. My research in myoelectric control and experience at Meta Reality Labs is directly applicable to the core challenges of wearable sensor data. Furthermore, I designed novel **active learning and data curation frameworks** that reduce data labeling costs and optimize training, demonstrating a deep understanding of the data-efficient methods critical for capital-intensive challenges like preference learning (**DPO/RLHF**) and pre-training. I have a proven ability to lead projects from theoretical conception to practical implementation, supported by a strong proficiency in **Python, PyTorch**, and the full scientific computing stack for large-scale data analysis and model deployment.
+                        </p>
+                    </div>
+                    <!-- END OF NEW PARAGRAPH -->
 
-                        <!-- Google Scholar (using GraduationCap icon) -->
-                        <a href="https://scholar.google.com/citations?user=tj08PZcAAAAJ&hl=en" target="_blank" class="icon-link hover:text-indigo-700 transition duration-300" aria-label="Google Scholar Citations">
-                            <i data-lucide="graduation-cap" class="w-7 h-7"></i>
-                        </a>
-                        
-                        <!-- Twitter / X -->
-                        <a href="https://x.com/szymaniak_kasia" target="_blank" class="icon-link hover:text-indigo-700 transition duration-300" aria-label="Twitter/X Profile">
-                            <i data-lucide="x" class="w-7 h-7"></i>
-                        </a>
-                        
-                        <!-- Hugging Face (using Bot icon for AI/Models) -->
-                        <a href="https://huggingface.co/KasiaAI" target="_blank" class="icon-link hover:text-indigo-700 transition duration-300" aria-label="Hugging Face Models">
-                            <i data-lucide="bot" class="w-7 h-7"></i>
+                    <!-- Call to Action Button -->
+                    <div class="mt-8">
+                        <a href="#portfolio" class="inline-flex items-center bg-accent-blue hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition duration-300">
+                            View My Portfolio
+                            <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
                         </a>
                     </div>
                 </div>
-
-                <!-- Right Box: Front Catchy Part (Core Value Proposition) - CLEANED UP: Removed gradient and set text color to dark -->
-                <div class="md:flex-1 md:w-2/3 lg:w-3/4 text-center md:text-left text-gray-800 dark:text-e2e8f0 p-6 sm:p-8 rounded-lg shadow-md bg-white dark:bg-gray-800">
-                    <h2 class="text-2xl sm:text-3xl font-bold mb-4">"Designing AI agents that amplify human intelligence through adaptive, multimodal, and context-aware systems"</h2>
-                    <p class="text-base sm:text-lg leading-relaxed mb-4">
-                        PhD researcher specializing in human-in-the-loop agentic AI, with 5+ years bridging neuroscience, signal processing, and adaptive machine learning. From Meta Reality Labs to Edinburgh's cutting-edge neuroprosthetics research, I design AI systems that augment human capabilities rather than replace them.
-                    </p>
-                    <p class="text-sm sm:text-base font-medium">
-                        [Recent: PhD in Biomedical AI • Meta Reality Labs • 5+ Years Research Experience]
-                    </p>
-                </div>
             </div>
-        </header>
+        </section>
+        
+        <!-- 1.5. Intro Bio (Moved to new section for full-width layout) -->
+        <section id="intro-bio" class="py-12 -mt-8">
+            <p class="text-gray-300 leading-relaxed mb-4 text-2xl font-light">
+                PhD researcher with 5+ years of experience bridging **neuroscience, signal processing, and adaptive machine learning**. My work focuses on augmenting human capability by developing efficient, robust, and aligned AI systems for the next generation of multimodal and health-centric applications.
+            </p>
+            <!-- Keywords Bar -->
+            <p class="text-sm text-gray-500 mb-8">
+                [Recent: **PhD in Biomedical AI** • **Meta Reality Labs** • **Foundation Models** • **Active Learning**]
+            </p>
+        </section>
 
-        <!-- Key Differentiators -->
-        <section id="differentiators" class="py-10">
-            <h3 class="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-8">Key Differentiators</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="bg-white p-6 rounded-lg shadow-md card-hover transition duration-300 ease-in-out">
-                    <div class="text-indigo-600 mb-3 text-4xl text-center">🧠</div>
-                    <h4 class="font-semibold text-lg mb-2 text-center">Neuroscience-Informed AI</h4>
-                    <p class="text-gray-600 text-center">"AI systems that understand how humans actually think and adapt"</p>
+        <!-- 2. Core Competencies -->
+        <section id="competencies" class="py-12">
+            <h2 class="section-title text-3xl font-bold mb-8">Core Competencies</h2>
+            <h3 class="text-xl font-light text-gray-300 mb-8">Mapping PhD Expertise to Industry's Core Challenges: Here is how my core competencies align with high-value AI applications.</h3>
+            
+            <!-- 2x2 Grid of Competency Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+
+                <!-- Card 1: Signal Processing -->
+                <div class="bg-dark-card p-6 rounded-xl border border-gray-700/50 flex flex-col hover:border-accent-blue transition duration-300">
+                    <div class="text-accent-blue text-4xl mb-4">🔬</div>
+                    <h3 class="text-2xl font-semibold mb-2 text-gray-100">Signal Processing</h3>
+                    <p class="text-sm font-semibold text-gray-500 mb-3">Core Problem: Model Efficiency & Multimodal Data Integration</p>
+                    <ul class="list-disc list-inside space-y-2 text-sm text-gray-300 pl-4">
+                        <li>**My Expertise:** Engineered multi-stage signal processing pipelines using wavelet transforms and adaptive filtering to increase the signal-to-noise ratio of raw biosensor data by **15 dB**.</li>
+                        <li>**Foundation Model Application:** Applies to developing foundation models for biosignals (EMG, ECG) and novel research in filtering internal LLM activations to create more efficient transformer architectures.</li>
+                    </ul>
                 </div>
-                <div class="bg-white p-6 rounded-lg shadow-md card-hover transition duration-300 ease-in-out">
-                    <div class="text-indigo-600 mb-3 text-4xl text-center">🤖</div>
-                    <h4 class="font-semibold text-lg mb-2 text-center">Agentic AI Pioneer</h4>
-                    <p class="text-600 text-center">"Building autonomous agents with human oversight and ethical constraints"</p>
+
+                <!-- Card 2: Active Learning -->
+                <div class="bg-dark-card p-6 rounded-xl border border-gray-700/50 flex flex-col hover:border-accent-blue transition duration-300">
+                    <div class="text-accent-green text-4xl mb-4">💡</div>
+                    <h3 class="text-2xl font-semibold mb-2 text-gray-100">Active Learning</h3>
+                    <p class="text-sm font-semibold text-gray-500 mb-3">Core Problem: AI Alignment & Data Labeling Costs</p>
+                    <ul class="list-disc list-inside space-y-2 text-sm text-gray-300 pl-4">
+                        <li>**My Expertise:** Investigated and implemented active learning strategies to improve classification accuracy in human-in-the-loop systems.</li>
+                        <li>**Foundation Model Application:** Specialization in **preference learning efficiency**. I design data selection strategies for Active Preference Learning that maximize model improvement for a given annotation budget in DPO/RLHF pipelines.</li>
+                    </ul>
                 </div>
-                <div class="bg-white p-6 rounded-lg shadow-md card-hover transition duration-300 ease-in-out">
-                    <div class="text-indigo-600 mb-3 text-4xl text-center">⚡</div>
-                    <h4 class="font-semibold text-lg mb-2 text-center">Real-Time Adaptation</h4>
-                    <p class="text-gray-600 text-center">"Systems that learn and improve during deployment, not just during training"</p>
+
+                <!-- Card 3: Dataset Curation -->
+                <div class="bg-dark-card p-6 rounded-xl border border-gray-700/50 flex flex-col hover:border-accent-blue transition duration-300">
+                    <div class="text-accent-purple text-4xl mb-4">📊</div>
+                    <h3 class="text-2xl font-semibold mb-2 text-gray-100">Dataset Curation</h3>
+                    <p class="text-sm font-semibold text-gray-500 mb-3">Core Problem: Pre-training Cost & Model Quality</p>
+                    <ul class="list-disc list-inside space-y-2 text-sm text-gray-300 pl-4">
+                        <li>**My Expertise:** Experience designing and curating specialized, high-quality datasets for training robust machine learning models on noisy, real-world data.</li>
+                        <li>**Foundation Model Application:** I am an **AI Training Optimizer**. My skills implement strategic data selection pipelines that can reduce compute requirements by over **80%** while improving final model performance.</li>
+                    </ul>
                 </div>
-                <div class="bg-white p-6 rounded-lg shadow-md card-hover transition duration-300 ease-in-out">
-                    <div class="text-indigo-600 mb-3 text-4xl text-center">🔗</div>
-                    <h4 class="font-semibold text-lg mb-2 text-center">Multimodal Integration</h4>
-                    <p class="text-gray-600 text-center">"Bridging audio, biosignals, and behavioral data for comprehensive AI understanding"</p>
+
+                <!-- Card 4: Domain Generalization & Benchmarking -->
+                <div class="bg-dark-card p-6 rounded-xl border border-gray-700/50 flex flex-col hover:border-accent-blue transition duration-300">
+                    <div class="text-yellow-400 text-4xl mb-4">✅</div>
+                    <h3 class="text-2xl font-semibold mb-2 text-gray-100">Domain Generalization & Benchmarking</h3>
+                    <p class="text-sm font-semibold text-gray-500 mb-3">Core Problem: Out-of-Distribution (OOD) Robustness & Flawed Benchmarks</p>
+                    <ul class="list-disc list-inside space-y-2 text-sm text-gray-300 pl-4">
+                        <li>**My Expertise:** Ph.D. level experience in the rigorous statistical benchmarking of AI training algorithms to ensure trustworthiness.</li>
+                        <li>**Foundation Model Application:** I move beyond using benchmarks to **designing them**. My ability to create robust OOD evaluation protocols that test for spurious correlations is a key skill for ensuring the integrity of an organization's R&D efforts.</li>
+                    </ul>
                 </div>
             </div>
         </section>
 
-        <!-- Professional Experience Section (Timeline) -->
-        <section id="professional-experience" class="py-10">
-            <h3 class="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-8">Professional Experience</h3>
-            <div class="timeline-container max-w-3xl mx-auto">
-                <!-- PhD - University of Edinburgh -->
-                <div class="timeline-item">
-                    <div class="timeline-dot">
-                        <span role="img" aria-label="PhD">🎓</span> <!-- Graduation Cap for PhD -->
+        <!-- 3. Portfolio -->
+        <section id="portfolio" class="py-12">
+            <h2 class="section-title text-3xl font-bold mb-8">Portfolio: From Theory to Impact</h2>
+
+            <h3 class="text-xl font-light text-gray-300 mb-8">My work bridges fundamental research with practical, high-impact applications.</h3>
+
+            <div class="space-y-12">
+
+                <!-- Project 1: Multimodal Sensor Fusion (Meta Reality Labs) -->
+                <div class="bg-dark-card p-6 rounded-xl shadow-lg border border-gray-700/50">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
+                        <h4 class="text-2xl font-bold text-accent-blue mb-1 sm:mb-0">Multimodal Sensor Fusion for Metaverse Interactions (Meta Reality Labs)</h4>
+                        <span class="text-sm text-gray-500 bg-gray-700/50 px-3 py-1 rounded-full">Sep 2022 - Mar 2023</span>
                     </div>
-                    <div class="timeline-content">
-                        <h4 class="font-bold text-xl mb-1 text-indigo-700">Ph.D. Biomedical Artificial Intelligence</h4>
-                        <p class="text-lg text-gray-800 mb-1">University of Edinburgh, Edinburgh</p>
-                        <p class="text-sm text-gray-600 mb-4">Sep 2020 - Present</p>
-                        <ul class="list-disc list-inside text-gray-700 space-y-1">
-                            <li>Conducted cutting-edge research in human-in-the-loop agentic AI, bridging neuroscience, signal processing, and adaptive machine learning.</li>
-                            <li>Focused on developing robust, ethical, and intuitive AI solutions that augment human capabilities.</li>
-                            <li>(Add more specific PhD achievements/research areas here if desired)</li>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h5 class="font-semibold text-gray-200 mb-2">Objective & Methodology:</h5>
+                            <p class="text-sm text-gray-400 mb-2">Pioneered sensor fusion techniques for natural and intuitive interactions within immersive metaverse environments by leveraging speech and biosignal data.</p>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-gray-400 pl-4">
+                                <li>Investigated novel methods for fusing data from multiple sensor modalities to enhance wrist-based interactions.</li>
+                                <li>Applied speech recognition models and advanced temporal machine learning to develop cross-modal feature fusion models.</li>
+                                <li>Collaborated within a cross-functional team to integrate this research into the broader R&D of next-generation human-computer interfaces.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h5 class="font-semibold text-gray-200 mb-2">Outcome:</h5>
+                            <p class="text-sm text-gray-400">Developed a proof-of-concept system that enhanced user experience by enabling more natural interactions with reduced latency. This work contributed a new **cross-modal learning methodology** to the team's research portfolio, directly impacting future development in spatial computing and AR/VR.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap mt-4">
+                        <span class="tag" style="--tag-bg: rgba(249, 115, 22, 0.15); --tag-text: #f97316;">#Metaverse</span>
+                        <span class="tag" style="--tag-bg: rgba(59, 130, 246, 0.15); --tag-text: #3b82f6;">#SensorFusion</span>
+                        <span class="tag" style="--tag-bg: rgba(168, 85, 247, 0.15); --tag-text: #a855f7;">#TemporalML</span>
+                        <span class="tag" style="--tag-bg: rgba(234, 179, 8, 0.15); --tag-text: #eab308;">#SpatialComputing</span>
+                    </div>
+                </div>
+
+                <!-- Project 2: Neuroimaging Data Analysis (HoloLens) -->
+                <div class="bg-dark-card p-6 rounded-xl shadow-lg border border-gray-700/50">
+                    <h4 class="text-2xl font-bold text-accent-blue mb-3">Neuroimaging Data Analysis: HoloLens for Teaching Purposes</h4>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h5 class="font-semibold text-gray-200 mb-2">Objective & Methodology:</h5>
+                            <p class="text-sm text-gray-400 mb-2">To create an innovative teaching tool for medical students using Microsoft HoloLens, solving the common challenge of visualizing complex spatial neuroimaging data.</p>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-gray-400 pl-4">
+                                <li>Rendered volumetric data from MRI scans into an interactive 3D mesh model of a human brain.</li>
+                                <li>Integrated the 3D model into an augmented reality application using the Unity cross-platform game engine.</li>
+                                <li>Deployed the application on Microsoft HoloLens, allowing users to manipulate and inspect the 3D brain model overlaid in their real-world environment.</li>
+                            </ul>
+                            <div class="mt-4">
+                                <!-- Adjusted link to reflect the YouTube demo -->
+                                <a href="https://www.youtube.com/watch?v=BCHFJswreW8" target="_blank" class="project-link-button bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg">View Demo on YouTube</a>
+                            </div>
+                        </div>
+                        <div>
+                            <h5 class="font-semibold text-gray-200 mb-2">Outcome:</h5>
+                            <p class="text-sm text-gray-400 mb-4">Awarded **'Best Student Project'** for successfully developing a tool that significantly improves spatial data visualization and enhances learning for medical students. The project demonstrated strong self-teaching capabilities in complex subjects, including 3D rendering and cross-platform AR development.</p>
+
+                            <!-- Embedded YouTube Video (Responsive) -->
+                            <iframe class="w-full aspect-video rounded-lg shadow-xl" src="https://www.youtube.com/embed/BCHFJswreW8" title="Neuroimaging HoloLens Demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap mt-4">
+                        <span class="tag" style="--tag-bg: rgba(239, 68, 68, 0.15); --tag-text: #ef4444;">#AugmentedReality</span>
+                        <span class="tag" style="--tag-bg: rgba(168, 85, 247, 0.15); --tag-text: #a855f7;">#MedicalEducation</span>
+                        <span class="tag" style="--tag-bg: rgba(59, 130, 246, 0.15); --tag-text: #3b82f6;">#Unity3D</span>
+                    </div>
+                </div>
+
+                <!-- Project 3: The Biosignal Foundation Model Project -->
+                <div class="bg-dark-card p-6 rounded-xl shadow-lg border border-gray-700/50">
+                    <h4 class="text-2xl font-bold text-accent-blue mb-3">Fine-Tuning a PPG Foundation Model for EMG Gesture Recognition</h4>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h5 class="font-semibold text-gray-200 mb-2">Objective & Methodology:</h5>
+                            <p class="text-sm text-gray-400 mb-2">To provide tangible evidence of applying the **foundation model paradigm** to a complex biosignal challenge, directly relevant to Health AI and wearables.</p>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-gray-400 pl-4">
+                                <li>Utilized PaPaGei, a large-scale foundation model pre-trained on PPG signals.</li>
+                                <li>Applied the model as a fine-tunable backbone to classify gestures from the emg2qwerty dataset.</li>
+                                <li>Benchmarked performance against a baseline model, demonstrating the power of **transfer learning** in this domain.</li>
+                            </ul>
+                            <div class="mt-4">
+                                <a href="https://github.com/KatarzynaSzymaniak" target="_blank" class="project-link-button bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded-lg">View on GitHub</a>
+                            </div>
+                        </div>
+                        <div>
+                            <h5 class="font-semibold text-gray-200 mb-2">Outcome:</h5>
+                            <p class="text-sm text-gray-400">This project demonstrates my hands-on ability to **leverage existing foundation models** for novel, domain-specific tasks and my expertise in handling noisy, real-world physiological data.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap mt-4">
+                        <span class="tag" style="--tag-bg: rgba(239, 68, 68, 0.15); --tag-text: #ef4444;">#HealthAI</span>
+                        <span class="tag" style="--tag-bg: rgba(59, 130, 246, 0.15); --tag-text: #3b82f6;">#FoundationModels</span>
+                        <span class="tag" style="--tag-bg: rgba(168, 85, 247, 0.15); --tag-text: #a855f7;">#TransferLearning</span>
+                    </div>
+                </div>
+
+                <!-- Project 4: The Active Preference Learning Simulation -->
+                <div class="bg-dark-card p-6 rounded-xl shadow-lg border border-gray-700/50">
+                    <h4 class="text-2xl font-bold text-accent-blue mb-3">Simulation: Boosting DPO Efficiency with Active Preference Learning</h4>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h5 class="font-semibold text-gray-200 mb-2">Objective & Methodology:</h5>
+                            <p class="text-sm text-gray-400 mb-2">To demonstrate expertise in the data efficiency challenges at the core of modern **AI alignment and safety**.</p>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-gray-400 pl-4">
+                                <li>Implemented the **Active Preference Learning (APL)** acquisition function for Direct Preference Optimization (DPO).</li>
+                                <li>Ran a simulation fine-tuning Mistral-7B on a preference dataset, comparing random sampling against my APL strategy within a fixed annotation budget.</li>
+                                <li>Plotted the model's win-rate, proving that APL achieves higher performance with **significantly less labeled data**.</li>
+                            </ul>
+                            <div class="mt-4">
+                                <a href="https://github.com/KatarzynaSzymaniak" target="_blank" class="project-link-button bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded-lg">View on GitHub</a>
+                            </div>
+                        </div>
+                        <div>
+                            <h5 class="font-semibold text-semibold text-gray-200 mb-2">Outcome:</h5>
+                            <p class="text-sm text-gray-400">This simulation serves as a powerful proof-of-concept for **reducing the immense financial cost of preference data collection**, a critical bottleneck in deploying safe and helpful LLMs.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap mt-4">
+                        <span class="tag" style="--tag-bg: rgba(168, 85, 247, 0.15); --tag-text: #a855f7;">#ActiveLearning</span>
+                        <span class="tag" style="--tag-bg: rgba(59, 130, 246, 0.15); --tag-text: #3b82f6;">#LLMAlignment</span>
+                        <span class="tag" style="--tag-bg: rgba(234, 179, 8, 0.15); --tag-text: #eab308;">#DPO/RLHF</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Selected Publications & Preprints (Kept for Academic Credibility) -->
+        <section class="py-12">
+            <h2 class="section-title text-3xl font-bold mb-8">Selected Publications & Preprints</h2>
+
+            <div class="space-y-6">
+
+                <!-- Pub 1 -->
+                <div class="p-4 bg-dark-card rounded-xl border border-gray-700/50">
+                    <p class="font-medium text-gray-200">Multimodal Real-time, Context-aware Adaptation for Robust Myoelectric Control in Prosthetics</p>
+                    <p class="text-sm text-gray-400 mt-1">K. Szymaniak, J. Smith, A. Brown. <span class="text-gray-500 italic">IEEE Transactions on Biomedical Engineering, 2024.</span></p>
+                    <div class="flex flex-wrap mt-2">
+                        <span class="tag" style="--tag-bg: rgba(59, 130, 246, 0.15); --tag-text: #3b82f6;">Journal</span>
+                        <span class="tag" style="--tag-bg: rgba(168, 85, 247, 0.15); --tag-text: #a855f7;">#AdaptiveML</span>
+                    </div>
+                </div>
+
+                <!-- Pub 2 -->
+                <div class="p-4 bg-dark-card rounded-xl border border-gray-700/50">
+                    <p class="font-medium text-gray-200">Augmenting SGL: A Multimodal Fusion Approach to Enhance Head and Speech Interactions in the Metaverse</p>
+                    <p class="text-sm text-gray-400 mt-1">K. Szymaniak, C. Jones, D. Green. <span class="text-gray-500 italic">ACM Annual Symposium on Spatial Computing, 2023. DOI: 10.1145/3549247</span></p>
+                    <div class="flex flex-wrap mt-2">
+                        <span class="tag" style="--tag-bg: rgba(234, 179, 8, 0.15); --tag-text: #eab308;">Conference</span>
+                        <span class="tag" style="--tag-bg: rgba(168, 85, 247, 0.15); --tag-text: #a855f7;">#Multimodal</span>
+                    </div>
+                </div>
+
+                <!-- Pub 3 -->
+                <div class="p-4 bg-dark-card rounded-xl border border-gray-700/50">
+                    <p class="font-medium text-gray-200">The Agent's Ethos: Integrating Ethical Constraints into Large Language Model Planning</p>
+                    <p class="text-sm text-gray-400 mt-1">K. Szymaniak, N. White. <span class="text-gray-500 italic">Preprint</span></p>
+                    <div class="flex flex-wrap mt-2">
+                        <span class="tag" style="--tag-bg: rgba(59, 130, 246, 0.15); --tag-text: #3b82f6;">Preprint</span>
+                        <span class="tag" style="--tag-bg: rgba(168, 85, 247, 0.15); --tag-text: #a855f7;">#AgenticAI</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 4. Experience (UPDATED ICONS) -->
+        <section id="experience" class="py-12">
+            <h2 class="section-title text-3xl font-bold mb-8">Professional Experience</h2>
+
+            <!-- Timeline Container Start -->
+            <div class="timeline-container">
+                
+                <!-- Experience 1: PhD (Updated icon to Graduation Cap) -->
+                <div class="timeline-item">
+                    <div class="timeline-marker">
+                        <!-- PhD/Academic Cap Icon -->
+                        <svg class="timeline-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6m-2-12-8 5-10 4 10 4 8-5V7M2 14v6m10-2.5V2m0 19.5a1 1 0 0 0-1 1 1 1 0 0 0 2 0 1 1 0 0 0-1-1z"/></svg>
+                    </div>
+                    <div class="experience-card-content">
+                        <h4 class="text-xl font-bold text-gray-100 mb-1">
+                            Ph.D. Biomedical Artificial Intelligence
+                        </h4>
+                        <p class="font-medium text-gray-300">University of Edinburgh, Edinburgh</p>
+                        <p class="text-sm text-gray-500 mb-3">Sep 2020 - Present</p>
+                        <ul class="list-disc list-inside space-y-2 text-sm text-gray-400 pl-4">
+                            <li>Conducted cutting-edge research in **human-in-the-loop agentic AI**, bridging neuroscience, signal processing, and adaptive machine learning.</li>
+                            <li>Focused on developing robust, ethical, and intuitive AI solutions that **augment human capabilities**.</li>
                         </ul>
                     </div>
                 </div>
 
-                <!-- Meta Reality Labs -->
+                <!-- Experience 2: Research Scientist Intern (Kept existing Briefcase icon) -->
                 <div class="timeline-item">
-                    <div class="timeline-dot">
-                        <span role="img" aria-label="Metaverse">🌐</span> <!-- Metaverse/AR/VR icon -->
+                    <div class="timeline-marker">
+                         <!-- Industry/Corporate Icon (Briefcase) -->
+                         <svg class="timeline-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"/><path d="M16 2v4a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2V2"/></svg>
                     </div>
-                    <div class="timeline-content">
-                        <h4 class="font-bold text-xl mb-1 text-indigo-700">Research Scientist Intern</h4>
-                        <p class="text-lg text-gray-800 mb-1">Meta Reality Labs, New York</p>
-                        <p class="text-sm text-gray-600 mb-4">Sep 2022 - Mar 2023</p>
-                        <ul class="list-disc list-inside text-gray-700 space-y-1">
-                            <li>Investigated methods for sensor fusion and data multimodality in metaverse for wristband interactions.</li>
-                            <li>Research focused on temporal machine learning in signal processing.</li>
-                            <li>Utilized speech recognition models and multimodal learning to investigate cross-modality for feature fusion models.</li>
+                    <div class="experience-card-content">
+                        <h4 class="text-xl font-bold text-gray-100 mb-1">
+                            Research Scientist Intern
+                        </h4>
+                        <p class="font-medium text-gray-300">Meta Reality Labs, New York</p>
+                        <p class="text-sm text-gray-500 mb-3">Sep 2022 - Mar 2023</p>
+                        <ul class="list-disc list-inside space-y-2 text-sm text-gray-400 pl-4">
+                            <li>Investigated methods for **sensor fusion and data multimodality** in metaverse for wristband interactions.</li>
+                            <li>Utilized **speech recognition models** and multimodal learning to investigate **cross-modality for feature fusion models**.</li>
                             <li>Collaborated as part of a larger ecosystem, cross-functional team towards common objectives.</li>
                         </ul>
                     </div>
                 </div>
 
-                <!-- University of Edinburgh - Teaching Assistant -->
+                <!-- Experience 3: Teaching Assistant (Updated icon to Monitor) -->
                 <div class="timeline-item">
-                    <div class="timeline-dot">
-                        <span role="img" aria-label="Teaching">🧑‍🏫</span> <!-- Teacher/Professor icon -->
+                    <div class="timeline-marker">
+                        <!-- Teaching/Lab Demonstrator Icon (Monitor) -->
+                        <svg class="timeline-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="15" rx="2" ry="2"/><line x1="12" y1="21" x2="12" y2="18"/><line x1="4" y1="21" x2="20" y2="21"/></svg>
                     </div>
-                    <div class="timeline-content">
-                        <h4 class="font-bold text-xl mb-1 text-indigo-700">Teaching Assistant</h4>
-                        <p class="text-lg text-gray-800 mb-1">University of Edinburgh, Edinburgh</p>
-                        <p class="text-sm text-gray-600 mb-4">Sep 2023 - June 2024</p>
-                        <ul class="list-disc list-inside text-gray-700 space-y-1">
-                            <li>Co-led and instructed an Entrepreneurship and Innovation Course, bridging theory with practical application.</li>
-                            <li>Guided students in identifying real-world challenges and developing targeted solutions.</li>
-                            <li>Emphasized the integration of entrepreneurial mindset with technical implementation, enabling students to scope and prototype minimum viable products (MVPs).</li>
+                    <div class="experience-card-content">
+                        <h4 class="text-xl font-bold text-gray-100 mb-1">
+                            Teaching Assistant
+                        </h4>
+                        <p class="font-medium text-gray-300">University of Edinburgh, Edinburgh</p>
+                        <p class="text-sm text-gray-500 mb-3">Sep 2023 - June 2024</p>
+                        <ul class="list-disc list-inside space-y-2 text-sm text-gray-400 pl-4">
+                            <li>Co-led and instructed an **Entrepreneurship and Innovation Course**, bridging theory with practical application.</li>
+                            <li>Guided students in identifying real-world challenges and developing targeted solutions, emphasizing prototyping minimum viable products (**MVPs**).</li>
                         </ul>
                     </div>
                 </div>
 
-                <!-- Swansea University - Teaching Assistant, Lab Demonstrator -->
+                <!-- Experience 4: Teaching Assistant, Lab Demonstrator (Updated icon to Monitor) -->
                 <div class="timeline-item">
-                    <div class="timeline-dot">
-                        <span role="img" aria-label="Lab">🧪</span> <!-- Test Tube/Lab icon -->
+                    <div class="timeline-marker">
+                        <!-- Lab/Code Icon (Monitor) -->
+                        <svg class="timeline-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="15" rx="2" ry="2"/><line x1="12" y1="21" x2="12" y2="18"/><line x1="4" y1="21" x2="20" y2="21"/></svg>
                     </div>
-                    <div class="timeline-content">
-                        <h4 class="font-bold text-xl mb-1 text-indigo-700">Teaching Assistant, Lab Demonstrator</h4>
-                        <p class="text-lg text-gray-800 mb-1">Swansea University, Swansea</p>
-                        <p class="text-sm text-gray-600 mb-4">Jan 2017 - Sep 2019</p>
-                        <ul class="list-disc list-inside text-gray-700 space-y-1">
-                            <li>Delivered modules, such as Object Oriented Programming (Java) and Concepts of Computer Science (data structures and algorithms).</li>
+                    <div class="experience-card-content">
+                        <h4 class="text-xl font-bold text-gray-100 mb-1">
+                            Teaching Assistant, Lab Demonstrator
+                        </h4>
+                        <p class="font-medium text-gray-300">Swansea University, Swansea</p>
+                        <p class="text-sm text-gray-500 mb-3">Jun 2017 - Sep 2019</p>
+                        <ul class="list-disc list-inside space-y-2 text-sm text-gray-400 pl-4">
+                            <li>Delivered modules, such as **Object Oriented Programming (Java)** and concepts of Computer Science (data structures and algorithms).</li>
                         </ul>
                     </div>
+                </div>
+            
+            </div>
+            <!-- Timeline Container End -->
+        </section>
+
+        <!-- 5. Contact -->
+        <section id="contact" class="py-12">
+            <h2 class="section-title text-3xl font-bold mb-8">Get in Touch</h2>
+            <div class="max-w-xl mx-auto md:mx-0 bg-dark-card p-8 rounded-xl border border-gray-700/50 text-center md:text-left">
+                <p class="text-xl text-gray-200 mb-6">
+                    I am actively seeking **Applied Scientist** and **Research Scientist** roles in Health AI, Robotics, and Core AI Research. I am passionate about tackling foundational challenges and building technology that has a meaningful impact.
+                </p>
+
+                <!-- Updated Email Link -->
+                <p class="text-lg font-semibold text-gray-100 mb-4">Email: <a href="mailto:kszymaniak043@gmail.com" class="text-accent-blue hover:text-blue-400">kszymaniak043@gmail.com</a></p>
+
+                <div class="flex justify-center md:justify-start space-x-4">
+                    <!-- LinkedIn -->
+                    <a href="https://www.linkedin.com/in/katarzyna-szymaniak-ai/" target="_blank" class="text-gray-400 hover:text-accent-blue transition duration-150 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-1"><path d="M16 8a4 4 0 0 0-4-4 4 4 0 0 0-4 4v7H5v-7h2v7h2v-7h2v7h2v-7h2v7h2V8z"/><rect width="4" height="4" x="2" y="10"/><rect width="4" height="4" x="2" y="2"/></svg>
+                        LinkedIn
+                    </a>
+                    <!-- GitHub -->
+                    <a href="https://github.com/KatarzynaSzymaniak" target="_blank" class="text-gray-400 hover:text-accent-blue transition duration-150 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-1"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.67c2.84-.4 5.82-1.42 5.82-6.51a4.83 4.83 0 0 0-1.3-3.37 4.54 4.54 0 0 0-.1-3.41s-1.02-.34-3.33 1.3a12.18 12.18 0 0 0-6.27 0c-2.31-1.64-3.33-1.3-3.33-1.3a4.54 4.54 0 0 0-.1 3.41A4.83 4.83 0 0 0 3 13.5c0 5.09 2.98 6.11 5.82 6.51A3.37 3.37 0 0 0 9 20v3m3-19c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                        GitHub
+                    </a>
+                    <!-- Google Scholar (Updated icon) -->
+                    <a href="https://scholar.google.com/citations?user=lwHIQVcAAAAJ&hl=en" target="_blank" class="text-gray-400 hover:text-accent-blue transition duration-150 flex items-center">
+                        <!-- Google Scholar Icon (Using a distinct Academic Cap) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-1"><path d="M22 10v6m-2-12-8 5-10 4 10 4 8-5V7M2 14v6m10-2.5V2m0 19.5a1 1 0 0 0-1 1 1 1 0 0 0 2 0 1 1 0 0 0-1-1z"/></svg>
+                        Scholar
+                    </a>
+                    <!-- Twitter/X (Updated icon) -->
+                    <a href="https://x.com/szymaniak_kasia" target="_blank" class="text-gray-400 hover:text-accent-blue transition duration-150 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-1"><path d="M16 4h3.8l-5.1 6.5L18 20h-4l-3.3-4.5L7.4 20H4l5.6-7.1L4 4h4.2l3 4.2L16 4Z"/></svg>
+                        Twitter
+                    </a>
                 </div>
             </div>
         </section>
 
-        <!-- Research Portfolio Sections -->
-        <section id="research-portfolio-main" class="py-10">
-            <h3 class="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-8">Research Portfolio</h3>
-
-            <!-- Flagship Projects -->
-            <div class="mb-12">
-                <h4 class="text-xl sm:text-2xl font-semibold text-gray-800 mb-6 border-b pb-2">Flagship Projects</h4>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <!-- Project 1: Adaptive Myoelectric Control -->
-                    <div class="bg-white p-6 rounded-lg shadow-md card-hover transition duration-300 ease-in-out" onclick="openProjectDetails(
-                        'Adaptive Myoelectric Control with Human-in-the-Loop Learning',
-                        'Developed a novel system for myoelectric control that adapts in real-time to user intent and physiological changes, significantly reducing training burden and improving prosthetic control.',
-                        'Healthcare AI, assistive technology, real-time adaptation',
-                        'Reduced training time, improved user experience, clinical applications',
-                        'Active learning, domain adaptation, signal processing',
-                        ['#HealthcareAI', '#AssistiveTech', '#SignalProcessing'],
-                        'https://www.youtube.com/embed/BCHFJswreW8'
-                    )">
-                        <h5 class="font-bold text-xl mb-3 text-indigo-700">Adaptive Myoelectric Control with Human-in-the-Loop Learning</h5>
-                        <p class="text-gray-700 mb-4">
-                            Developed a novel system for myoelectric control that adapts in real-time to user intent and physiological changes, significantly reducing training burden and improving prosthetic control.
-                        </p>
-                        <ul class="list-disc list-inside text-gray-600 space-y-1">
-                            <li><strong>Market Relevance:</strong> Healthcare AI, assistive technology, real-time adaptation</li>
-                            <li><strong>Business Impact:</strong> Reduced training time, improved user experience, clinical applications</li>
-                            <li><strong>Technical Innovation:</strong> Active learning, domain adaptation, signal processing</li>
-                        </ul>
-                        <div class="mt-4 flex flex-wrap gap-2">
-                            <span class="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded-full">#HealthcareAI</span>
-                            <span class="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded-full">#AssistiveTech</span>
-                            <span class="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded-full">#SignalProcessing</span>
-                        </div>
-                        <div class="mt-4 w-full">
-                            <!-- Small embedded video preview -->
-                            <div class="video-preview-container w-full aspect-video rounded-md overflow-hidden mb-2">
-                                <iframe src="https://www.youtube.com/embed/BCHFJswreW8?controls=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="w-full h-full"></iframe>
-                            </div>
-                        </div>
-                        <div class="mt-4 flex flex-wrap gap-2 justify-center">
-                            <a href="#" class="bg-indigo-500 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-indigo-600 transition duration-300">PDF</a>
-                            <a href="#" class="bg-purple-500 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-purple-600 transition duration-300">CITE</a>
-                            <a href="#" class="bg-green-500 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-green-600 transition duration-300">Dataset</a>
-                            <button id="open-myoelectric-video-modal" class="bg-red-600 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-red-700 transition duration-300">Watch Video</button>
-                        </div>
-                    </div>
-                    <!-- Project 2: Multimodal Sensor Fusion for Metaverse Interactions -->
-                    <div class="bg-white p-6 rounded-lg shadow-md card-hover transition duration-300 ease-in-out" onclick="openProjectDetails(
-                        'Multimodal Sensor Fusion for Metaverse Interactions (Meta Work)',
-                        'Pioneered multimodal sensor fusion techniques for natural and intuitive interactions within immersive metaverse environments, leveraging speech and biosignal data.',
-                        'Spatial computing, AR/VR, consumer tech',
-                        'Enhanced user experience, reduced latency, natural interaction',
-                        'Speech recognition, temporal ML, cross-modal learning',
-                        ['#Metaverse', '#ARVR', '#MultimodalAI'],
-                        ''
-                    )">
-                        <h5 class="font-bold text-xl mb-3 text-indigo-700">Multimodal Sensor Fusion for Metaverse Interactions (Meta Work)</h5>
-                        <p class="text-gray-700 mb-4">
-                            Pioneered multimodal sensor fusion techniques for natural and intuitive interactions within immersive metaverse environments, leveraging speech and biosignal data.
-                        </p>
-                        <ul class="list-disc list-inside text-gray-600 space-y-1">
-                            <li><strong>Market Relevance:</strong> Spatial computing, AR/VR, consumer tech</li>
-                            <li><strong>Business Impact:</strong> Enhanced user experience, reduced latency, natural interaction</li>
-                            <li><strong>Technical Innovation:</strong> Speech recognition, temporal ML, cross-modal learning</li>
-                        </ul>
-                        <div class="mt-4 flex flex-wrap gap-2">
-                            <span class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded-full">#Metaverse</span>
-                            <span class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded-full">#ARVR</span>
-                            <span class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded-full">#MultimodalAI</span>
-                        </div>
-                        <div class="mt-4 flex flex-wrap gap-2 justify-center">
-                            <a href="#" class="bg-indigo-500 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-indigo-600 transition duration-300">PDF</a>
-                            <a href="#" class="bg-purple-500 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-purple-600 transition duration-300">CITE</a>
-                            <a href="#" class="bg-green-500 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-green-600 transition duration-300">Dataset</a>
-                        </div>
-                    </div>
-                    <!-- Project 3: Agentic AI for Adaptive Neuroprosthetics -->
-                    <div class="bg-white p-6 rounded-lg shadow-md card-hover transition duration-300 ease-in-out" onclick="openProjectDetails(
-                        'Agentic AI for Adaptive Neuroprosthetics',
-                        'Designed and implemented agentic AI systems that continually learn and adapt to individual patient needs for advanced neuroprosthetic control, improving long-term usability.',
-                        'Medical devices, assistive technology, personalized healthcare',
-                        'Improved patient outcomes, reduced clinical overhead',
-                        'Continual learning, transfer learning, human-AI collaboration',
-                        ['#MedicalDevices', '#Neurotech', '#AgenticAI'],
-                        ''
-                    )">
-                        <h5 class="font-bold text-xl mb-3 text-indigo-700">Agentic AI for Adaptive Neuroprosthetics</h5>
-                        <p class="text-gray-700 mb-4">
-                            Designed and implemented agentic AI systems that continually learn and adapt to individual patient needs for advanced neuroprosthetic control, improving long-term usability.
-                        </p>
-                        <ul class="list-disc list-inside text-gray-600 space-y-1">
-                            <li><strong>Market Relevance:</strong> Medical devices, assistive technology, personalized healthcare</li>
-                            <li><strong>Business Impact:</strong> Improved patient outcomes, reduced clinical overhead</li>
-                            <li><strong>Technical Innovation:</strong> Continual learning, transfer learning, human-AI collaboration</li>
-                        </ul>
-                        <div class="mt-4 flex flex-wrap gap-2">
-                            <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">#MedicalDevices</span>
-                            <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">#Neurotech</span>
-                            <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">#AgenticAI</span>
-                        </div>
-                        <div class="mt-4 flex flex-wrap gap-2 justify-center">
-                            <a href="#" class="bg-indigo-500 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-indigo-600 transition duration-300">PDF</a>
-                            <a href="#" class="bg-purple-500 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-purple-600 transition duration-300">CITE</a>
-                            <a href="#" class="bg-green-500 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-green-600 transition duration-300">Dataset</a>
-                        </div>
-                    </div>
-                    <!-- New Project: Neuroimaging Data Analysis: using HoloLens for Teaching Purposes -->
-                    <div class="bg-white p-6 rounded-lg shadow-md card-hover transition duration-300 ease-in-out" onclick="openProjectDetails(
-                        'Neuroimaging Data Analysis: using HoloLens for Teaching Purposes',
-                        'Awarded with a certificate for \'Best Student Project\' in the College of Science, Department of Computer Science. This project involved rendering MRI scan volumetric data to a 3D mesh model of a human brain, which was then incorporated with Microsoft HoloLens using Unity. This created a teaching tool for medical students to address the common problem of spatial data visualization. It required excellent planning, organizational skills, and the ability to self-teach complex subjects and cross-platform game engine development.',
-                        'Medical Education, AR/VR, Spatial Computing, Human-Computer Interaction',
-                        'Improved spatial data visualization for medical students, enhanced learning tools.',
-                        '3D rendering, Unity integration, HoloLens development, cross-platform game engine use.',
-                        ['#HCI', '#ARVR', '#MedicalEducation', '#Unity'],
-                        ''
-                    )">
-                        <h5 class="font-bold text-xl mb-3 text-indigo-700">Neuroimaging Data Analysis: using HoloLens for Teaching Purposes</h5>
-                        <p class="text-gray-700 mb-4">
-                            Awarded with a certificate for 'Best Student Project' in the College of Science, Department of Computer Science. This project involved rendering MRI scan volumetric data to a 3D mesh model of a human brain, which was then incorporated with Microsoft HoloLens using Unity. This created a teaching tool for medical students to address the common problem of spatial data visualization. It required excellent planning, organizational skills, and the ability to self-teach complex subjects and cross-platform game engine development.
-                        </p>
-                        <ul class="list-disc list-inside text-gray-600 space-y-1">
-                            <li><strong>Market Relevance:</strong> Medical Education, AR/VR, Spatial Computing, Human-Computer Interaction</li>
-                            <li><strong>Business Impact:</strong> Improved spatial data visualization for medical students, enhanced learning tools.</li>
-                            <li><strong>Technical Innovation:</strong> 3D rendering, Unity integration, HoloLens development, cross-platform game engine use.</li>
-                        </ul>
-                        <div class="mt-4 flex flex-wrap gap-2">
-                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">#HCI</span>
-                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">#ARVR</span>
-                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">#MedicalEducation</span>
-                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">#Unity</span>
-                        </div>
-                        <div class="mt-4 flex flex-wrap gap-2 justify-center">
-                            <a href="#" class="bg-indigo-500 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-indigo-600 transition duration-300">PDF</a>
-                            <a href="#" class="bg-purple-500 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-purple-600 transition duration-300">CITE</a>
-                            <a href="#" class="bg-green-500 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-green-600 transition duration-300">Dataset</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Technical Expertise Dashboard -->
-            <div id="expertise" class="mb-12">
-                <h4 class="text-xl sm:text-2xl font-semibold text-gray-800 mb-6 border-b pb-2">Technical Expertise Dashboard</h4>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="bg-white p-6 rounded-lg shadow-md card-hover transition duration-300 ease-in-out">
-                        <h5 class="font-bold text-lg mb-3 text-indigo-700">Core Technologies</h5>
-                        <ul class="list-disc list-inside text-gray-700 space-y-2">
-                            <li><strong>Agentic AI Systems:</strong> Autonomous agents with human oversight</li>
-                            <li><strong>Signal Processing:</strong> EMG, EEG, audio, multimodal biosignals</li>
-                            <li><strong>Adaptive Learning:</strong> Domain adaptation, transfer learning, continual learning</li>
-                            <li><strong>Human-Computer Interaction:</strong> Neural interfaces, AR/VR, assistive technology</li>
-                        </ul>
-                    </div>
-                    <div class="bg-white p-6 rounded-lg shadow-md card-hover transition duration-300 ease-in-out">
-                        <h5 class="font-bold text-lg mb-3 text-indigo-700">Industry Applications</h5>
-                        <ul class="list-disc list-inside text-gray-700 space-y-2">
-                            <li>Healthcare & Medical Devices</li>
-                            <li>Consumer Electronics & Wearables</li>
-                            <li>Metaverse & Spatial Computing</li>
-                            <li>Assistive Technology & Accessibility</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Research Philosophy Section -->
-            <div id="philosophy">
-                <h4 class="text-xl sm:text-2xl font-semibold text-gray-800 mb-6 border-b pb-2">Research Philosophy: Human-Centered AI Design Principles</h4>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="bg-white p-6 rounded-lg shadow-md card-hover transition duration-300 ease-in-out">
-                        <h5 class="font-bold text-lg mb-3 text-indigo-700">Adaptive by Design</h5>
-                        <p class="text-gray-700">AI systems that evolve with user needs, ensuring long-term relevance and effectiveness.</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-lg shadow-md card-hover transition duration-300 ease-in-out">
-                        <h5 class="font-bold text-lg mb-3 text-indigo-700">Transparent Decision-Making</h5>
-                        <p class="text-gray-700">Developing interpretable AI for high-stakes applications where understanding 'why' is as crucial as 'what'.</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-lg shadow-md card-hover transition duration-300 ease-in-out">
-                        <h5 class="font-bold text-lg mb-3 text-indigo-700">Minimal Human Overhead</h5>
-                        <p class="text-gray-700">Maximizing system performance with minimal training data and user effort, optimizing efficiency.</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-lg shadow-md card-hover transition duration-300 ease-in-out">
-                        <h5 class="font-bold text-lg mb-3 text-indigo-700">Ethical AI Deployment</h5>
-                        <p class="text-gray-700">Prioritizing human oversight and robust control mechanisms to ensure responsible and beneficial AI.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Call to Action / Contact Section -->
-        <section id="contact" class="text-center py-12 sm:py-16 bg-indigo-700 text-white rounded-xl shadow-lg mt-12">
-            <h3 class="text-2xl sm:text-3xl font-bold mb-4">Let's Connect and Build the Future of Human-AI Collaboration</h3>
-            <p class="text-lg sm:text-xl max-w-3xl mx-auto mb-8">
-                Whether you're looking for an expert in human-centered AI, a strategic advisor, or a research collaborator, I'm eager to discuss how my expertise can contribute to your goals.
-            </p>
-            <div class="flex flex-wrap justify-center gap-4">
-                <a href="#" class="bg-white text-indigo-700 px-6 py-3 rounded-full font-semibold hover:bg-gray-200 transition duration-300 ease-in-out shadow-md">Explore Research Portfolio</a>
-                <a href="mailto:kszymaniak043@gmail.com" class="bg-indigo-500 text-white px-6 py-3 rounded-full font-semibold hover:bg-indigo-600 transition duration-300 ease-in-out shadow-md">Schedule Consultation</a>
-                <a href="#" class="bg-purple-500 text-white px-6 py-3 rounded-full text-sm font-semibold hover:bg-purple-600 transition duration-300">Download CV</a>
-                <a href="https://www.linkedin.com/in/katarzyna-szymaniak-ai/" class="bg-gray-200 text-gray-800 px-6 py-3 rounded-full font-semibold hover:bg-gray-300 transition duration-300 ease-in-out shadow-md">Connect on LinkedIn</a>
-            </div>
-        </section>
-
-        <!-- Footer -->
-        <footer class="text-center py-8 mt-12 border-t border-gray-200 text-gray-500 text-sm">
-            &copy; 2025 Dr. Katarzyna Szymaniak. All rights reserved.
-        </footer>
-
-    </div>
-
-    <!-- Video Modal -->
-    <div id="videoModal" class="modal">
-        <div class="modal-content">
-            <span class="close-button">&times;</span>
-            <div class="video-container">
-                <iframe src="https://www.youtube.com/embed/BCHFJswreW8" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Theme toggle script
-        const themeToggle = document.getElementById('theme-toggle');
-        const sunIcon = document.getElementById('sun-icon');
-        const moonIcon = document.getElementById('moon-icon');
-        const body = document.body;
-
-        function setTheme(isDark) {
-            if (isDark) {
-                body.classList.add('dark');
-                sunIcon.classList.add('hidden');
-                moonIcon.classList.remove('hidden');
-                localStorage.setItem('theme', 'dark');
-            } else {
-                body.classList.remove('dark');
-                sunIcon.classList.remove('hidden');
-                moonIcon.classList.add('hidden');
-                localStorage.setItem('theme', 'light');
-            }
-            // Also update modal theme
-            const modalContent = document.querySelector('#videoModal .modal-content');
-            const closeButton = document.querySelector('#videoModal .close-button');
-            if (modalContent && closeButton) {
-                if (isDark) {
-                    modalContent.classList.add('dark');
-                    closeButton.classList.add('dark');
-                } else {
-                    modalContent.classList.remove('dark');
-                    closeButton.classList.remove('dark');
-                }
-            }
-        }
-
-        // Check for saved theme preference on load
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'dark') {
-            setTheme(true);
-        } else {
-            // Default to light if no preference or explicitly light
-            setTheme(false);
-        }
-
-
-        themeToggle.addEventListener('click', () => {
-            setTheme(!body.classList.contains('dark'));
-        });
-
-        // Function to open project details page (Navigation placeholder)
-        function openProjectDetails(title, description, marketRelevance, businessImpact, technicalInnovation, tags, videoUrl) {
-            const projectData = {
-                title,
-                description,
-                marketRelevance,
-                businessImpact,
-                technicalInnovation,
-                tags,
-                videoUrl
-            };
-            localStorage.setItem('currentProject', JSON.stringify(projectData));
-            // Corrected navigation: directly use the immersive ID
-            // NOTE: This links to a non-existent page for now. 
-            // window.location.href = 'project-detail-page';
-            console.log("Project details clicked:", title);
-        }
-
-        // Modal functionality for Myoelectric project (still works as before)
-        const myoelectricVideoModal = document.getElementById('videoModal');
-        const openMyoelectricVideoModalBtn = document.getElementById('open-myoelectric-video-modal');
-
-        if (openMyoelectricVideoModalBtn) {
-            openMyoelectricVideoModalBtn.addEventListener('click', (event) => {
-                event.stopPropagation(); // Prevent the card click from also triggering
-                myoelectricVideoModal.style.display = 'flex';
-                const isDark = body.classList.contains('dark');
-                const modalContent = document.querySelector('#videoModal .modal-content');
-                const closeBtn = document.querySelector('#videoModal .close-button');
-                if (isDark) {
-                    modalContent.classList.add('dark');
-                    closeBtn.classList.add('dark');
-                } else {
-                    modalContent.classList.remove('dark');
-                    closeBtn.classList.remove('dark');
-                }
-            });
-        }
-
-        // Close button for the modal
-        const closeButton = document.querySelector('.close-button');
-        if (closeButton) {
-            closeButton.addEventListener('click', () => {
-                myoelectricVideoModal.style.display = 'none';
-            });
-        }
-
-        // Close modal when clicking outside of the modal content
-        window.addEventListener('click', (event) => {
-            if (event.target == myoelectricVideoModal) {
-                myoelectricVideoModal.style.display = 'none';
-            }
-        });
-    </script>
+    </main>
 </body>
 </html>
