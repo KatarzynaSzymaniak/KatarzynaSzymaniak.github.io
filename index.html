@@ -7,18 +7,32 @@
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
+        // Custom Tailwind configuration for light/dark mode
         tailwind.config = {
+            darkMode: 'class', // Enable dark mode using 'dark' class on <html>
             theme: {
                 extend: {
                     colors: {
-                        'dark-navy': '#0f172a',
-                        'dark-card': '#1e293b',
-                        'dark-text': '#f1f5f9', // slate-100
+                        // Base colors for Dark Mode (Default)
+                        'dark-bg': '#0f172a',    // Deep navy background (slate-900)
+                        'dark-card': '#1e293b',  // Card background (slate-800)
+                        'dark-text': '#f1f5f9',  // Light text (slate-100)
+                        
+                        // Base colors for Light Mode
+                        'light-bg': '#f8fafc',   // Very light gray (slate-50)
+                        'light-card': '#ffffff', // White card
+                        'light-text': '#0f172a', // Dark text (slate-900)
+
+                        // Shared Accent Colors
                         'accent-blue': '#3b82f6', // blue-500
                         'accent-green': '#10b981', // emerald-500
                         'accent-purple': '#a855f7', // violet-500
-                        'tag-bg': 'rgba(129, 140, 248, 0.15)', // indigo-400 with opacity
-                        'tag-text': '#818cf8', // indigo-400
+                        
+                        // Tag Colors (Using Indigo for tags)
+                        'tag-bg-dark': 'rgba(129, 140, 248, 0.15)', 
+                        'tag-text-dark': '#818cf8', 
+                        'tag-bg-light': 'rgba(129, 140, 248, 0.5)',
+                        'tag-text-light': '#3730a3', // indigo-700
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
@@ -29,18 +43,69 @@
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
     <style>
+        /* Base styles applied to the body, using dark mode colors by default */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0f172a; /* Deep navy background */
-            color: #f1f5f9;
+            background-color: var(--dark-bg); 
+            color: var(--dark-text);
             min-height: 100vh;
             padding-bottom: 5rem;
+            transition: background-color 0.3s, color 0.3s;
         }
+
+        /* Variables for easy color switching */
+        :root {
+            --bg-color: #0f172a;
+            --card-color: #1e293b;
+            --text-color: #f1f5f9;
+            --secondary-text: #94a3b8;
+            --tag-bg: rgba(129, 140, 248, 0.15);
+            --tag-text: #818cf8;
+            --accent-blue: #3b82f6;
+        }
+
+        /* Light Mode overrides */
+        html.light {
+            --bg-color: #f8fafc;
+            --card-color: #ffffff;
+            --text-color: #0f172a;
+            --secondary-text: #475569;
+            --tag-bg: rgba(129, 140, 248, 0.5);
+            --tag-text: #3730a3;
+        }
+
+        /* Apply variables to key elements */
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        .header-bg {
+             background-color: var(--bg-color);
+        }
+        
+        .nav-link, .mode-toggle {
+            color: var(--text-color);
+        }
+
+        .card-style {
+            background-color: var(--card-color);
+            border-color: var(--secondary-text);
+        }
+
+        .text-default {
+            color: var(--text-color);
+        }
+
+        .text-secondary {
+            color: var(--secondary-text);
+        }
+
         .section-title {
             position: relative;
             padding-bottom: 0.5rem;
             margin-bottom: 1.5rem;
-            color: #f1f5f9;
+            color: var(--text-color);
         }
         .section-title::after {
             content: '';
@@ -49,7 +114,7 @@
             bottom: 0;
             height: 3px;
             width: 50px;
-            background-color: #3b82f6;
+            background-color: var(--accent-blue);
             border-radius: 9999px;
         }
         .project-link-button {
@@ -63,6 +128,8 @@
         .project-link-button:hover {
             transform: translateY(-1px);
         }
+        
+        /* Tag styling using CSS variables for mode switch */
         .tag {
             background-color: var(--tag-bg);
             color: var(--tag-text);
@@ -79,12 +146,10 @@
         /* --- Custom Styles for the Professional Experience Timeline --- */
         .timeline-container {
             position: relative;
-            /* Add some margin on smaller screens so the line doesn't hug the edge */
             margin-left: 20px; 
             padding-top: 10px;
         }
 
-        /* The vertical line itself */
         .timeline-container::before {
             content: '';
             position: absolute;
@@ -92,24 +157,23 @@
             bottom: 0;
             left: 0;
             width: 2px;
-            background-color: #3b82f6; /* Accent blue line */
+            background-color: var(--accent-blue); /* Accent blue line */
         }
 
         .timeline-item {
             position: relative;
-            padding-left: 40px; /* Shift content right of the line */
-            margin-bottom: 3rem; /* Space between items */
+            padding-left: 40px; 
+            margin-bottom: 3rem; 
         }
 
-        /* The circular marker with the icon */
         .timeline-marker {
             position: absolute;
-            left: -10px; /* Center the circle on the line (half of 22px width, relative to 2px line at left: 0) */
+            left: -10px; 
             top: 0;
             width: 22px;
             height: 22px;
-            background-color: #0f172a; /* Dark navy background (to make it float over the line) */
-            border: 3px solid #3b82f6;
+            background-color: var(--bg-color); 
+            border: 3px solid var(--accent-blue);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -120,14 +184,15 @@
         .timeline-icon {
             width: 12px;
             height: 12px;
-            color: #3b82f6; /* Icon color */
+            color: var(--accent-blue); 
         }
         
         .experience-card-content {
-            background-color: #1e293b;
+            background-color: var(--card-color);
             padding: 1.5rem;
             border-radius: 0.75rem;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--secondary-text);
         }
         /* --- End Timeline Styles --- */
         
@@ -139,45 +204,152 @@
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            background-color: #1e293b; /* Dark card color */
+            background-color: var(--card-color); 
             transition: background-color 0.2s, color 0.2s;
-            color: #94a3b8; /* Slate 400 */
+            color: var(--secondary-text);
+            border: 1px solid var(--secondary-text);
         }
 
         .contact-icon-link:hover {
-            background-color: #3b82f6; /* Accent blue */
-            color: #f1f5f9; /* Light text */
+            background-color: var(--accent-blue); 
+            color: var(--text-color); 
+            border-color: var(--accent-blue);
         }
         /* --- End Contact Icons Styles --- */
+
+        /* Custom style for the large KS profile circle */
+        .ks-profile-circle {
+            width: 16rem; 
+            height: 16rem; 
+            border-width: 4px;
+            background-color: var(--card-color); 
+            color: var(--text-color);
+            border-color: var(--card-color);
+            font-size: 6rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Adjusted styling for the new vertical layout */
+        @media (min-width: 768px) {
+            .home-grid {
+                grid-template-columns: 1fr 2fr;
+                align-items: center; 
+            }
+        }
     </style>
 </head>
 <body class="antialiased">
 
+    <!-- JavaScript for Dark/Light Mode and Bold Text Processing -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const html = document.documentElement;
+            const modeToggle = document.getElementById('mode-toggle');
+            
+            // Function to check system preference and local storage for default mode
+            const getInitialMode = () => {
+                if (localStorage.getItem('theme') === 'light') {
+                    return 'light';
+                }
+                if (localStorage.getItem('theme') === 'dark') {
+                    return 'dark';
+                }
+                // Default to dark if no preference is set
+                return 'dark'; 
+            };
+
+            const setMode = (mode) => {
+                if (mode === 'dark') {
+                    html.classList.add('dark');
+                    html.classList.remove('light');
+                    localStorage.setItem('theme', 'dark');
+                    modeToggle.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>'; // Moon icon
+                } else {
+                    html.classList.add('light');
+                    html.classList.remove('dark');
+                    localStorage.setItem('theme', 'light');
+                    modeToggle.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>'; // Sun icon
+                }
+            };
+            
+            // Initial setup
+            setMode(getInitialMode());
+
+            // Toggle function
+            window.toggleDarkMode = () => {
+                const currentMode = html.classList.contains('dark') ? 'dark' : 'light';
+                setMode(currentMode === 'dark' ? 'light' : 'dark');
+            };
+
+            // Helper function to process custom bold syntax **{}**
+            const processTextForBold = (selector) => {
+                const elements = document.querySelectorAll(selector);
+                elements.forEach(element => {
+                    let htmlContent = element.innerHTML;
+                    // Regex to find **{text}** and replace it with <strong>text</strong>
+                    htmlContent = htmlContent.replace(/\*\*\{(.*?)\}\*\*/g, '<strong>$1</strong>');
+                    element.innerHTML = htmlContent;
+                });
+            };
+
+            // Apply bold processing to all relevant text blocks
+            processTextForBold('.text-process-bold');
+
+            // Update color classes for light mode elements dynamically
+            const updateColors = () => {
+                const isDark = html.classList.contains('dark');
+                const textElements = document.querySelectorAll('.text-secondary');
+                textElements.forEach(el => {
+                    el.classList.toggle('text-gray-400', isDark);
+                    el.classList.toggle('text-gray-600', !isDark);
+                });
+                
+                const cardElements = document.querySelectorAll('.card-style');
+                cardElements.forEach(el => {
+                    el.classList.toggle('bg-dark-card', isDark);
+                    el.classList.toggle('bg-light-card', !isDark);
+                });
+            };
+            
+            // Re-run color updates on toggle
+            modeToggle.addEventListener('click', () => {
+                updateColors();
+            });
+
+            // Initial color update for secondary colors
+            updateColors();
+        });
+    </script>
+
     <!-- Header & Navigation -->
-    <header class="sticky top-0 z-50 bg-[#0f172a]/95 backdrop-blur-sm shadow-lg">
+    <header class="sticky top-0 z-50 header-bg backdrop-blur-sm shadow-lg border-b border-gray-700/50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-4">
-            <div class="text-xl font-bold text-dark-text">Szymaniak</div>
+            <div class="text-xl font-bold text-default">Szymaniak</div>
             <nav class="hidden md:flex space-x-6 items-center">
-                <a href="#home" class="text-dark-text hover:text-accent-blue transition duration-150">Home</a>
-                <a href="#competencies" class="text-dark-text hover:text-accent-blue transition duration-150">Core Competencies</a>
-                <a href="#portfolio" class="text-dark-text hover:text-accent-blue transition duration-150">Portfolio</a>
-                <a href="#experience" class="text-dark-text hover:text-accent-blue transition duration-150">Experience</a>
-                <a href="#contact" class="text-dark-text hover:text-accent-blue transition duration-150">Contact</a>
-                <!-- Moon icon placeholder -->
-                <button class="text-dark-text p-2 rounded-full hover:bg-[#1e293b]">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                <a href="#home" class="nav-link hover:text-accent-blue transition duration-150">Home</a>
+                <a href="#competencies" class="nav-link hover:text-accent-blue transition duration-150">Core Competencies</a>
+                <a href="#portfolio" class="nav-link hover:text-accent-blue transition duration-150">Portfolio</a>
+                <a href="#publications" class="nav-link hover:text-accent-blue transition duration-150">Publications</a>
+                <a href="#experience" class="nav-link hover:text-accent-blue transition duration-150">Experience</a>
+                <a href="#contact" class="nav-link hover:text-accent-blue transition duration-150">Contact</a>
+                <!-- Dark Mode Toggle Button -->
+                <button id="mode-toggle" onclick="toggleDarkMode()" class="mode-toggle p-2 rounded-full hover:bg-gray-700/50 transition">
+                    <!-- Icon replaced by JS on load -->
                 </button>
             </nav>
-            <button class="md:hidden text-dark-text p-2 rounded-full hover:bg-[#1e293b]">
+            <button class="md:hidden mode-toggle p-2 rounded-full hover:bg-gray-700/50">
                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" x2="21" y1="6" y2="6"/><line x1="3" x2="21" y1="12" y2="12"/><line x1="3" x2="21" y1="18" y2="18"/></svg>
             </button>
         </div>
     </header>
 
-    <!-- NEW: Job Seeking Announcement Bar -->
+    <!-- Job Seeking Announcement Bar -->
     <div class="bg-accent-blue/90 text-white text-center py-2 px-4 shadow-xl z-40 sticky top-[68px] md:top-[72px]">
         <p class="text-sm font-medium tracking-wide">
-            Actively seeking **Applied Scientist** & **Research Scientist** roles in **Health AI, Robotics, and Core AI Research**.
+            Actively seeking **Applied Scientist** & **Research Scientist** roles in **{Health AI}**, **{Robotics}**, and **{Core AI Research}**.
             <span class="hidden sm:inline">Let's connect on future-forward challenges.</span>
         </p>
     </div>
@@ -186,19 +358,19 @@
 
         <!-- 1. Home (Landing Page - Profile & Summary Cards) -->
         <section id="home" class="pb-12">
-            <div class="grid md:grid-cols-3 gap-8 items-start">
+            <div class="grid md:grid-cols-3 gap-8 items-start home-grid">
                 
                 <!-- Column 1: Profile and Main Titles (md:col-span-1) -->
-                <!-- This column now holds the image and secondary info -->
-                <div class="flex flex-col items-center md:items-start md:col-span-1">
-                    <!-- Profile Image Placeholder -->
+                <div class="flex flex-col items-center md:items-center md:col-span-1">
+                    
+                    <!-- Profile Image Placeholder (Enlarged and uses custom class) -->
                     <div class="w-48 h-48 rounded-full overflow-hidden mb-6 border-4 border-dark-card shadow-2xl">
-                        <img src="me.jpg" alt="Dr. Katarzyna Szymaniak" class="w-full h-full object-cover">
-                    </div>
+                        <img src="me.jpeg" alt="Dr. Katarzyna Szymaniak" class="w-full h-full object-cover">
+                    </div>
                     
                     <!-- Name and Sub-title (associated with the image) -->
-                    <h2 class="text-3xl font-bold text-dark-text mb-1 text-center md:text-left">Dr. Katarzyna Szymaniak</h2>
-                    <p class="text-md font-medium text-gray-400 text-center md:text-left mb-4">AI Researcher</p>
+                    <h2 class="text-2xl font-bold text-default mb-0 text-center">Dr. Katarzyna Szymaniak</h2>
+                    <p class="text-md font-medium text-secondary text-center mb-6">Researcher</p>
                     
                     <!-- Contact Icons and Links -->
                     <div class="flex space-x-3 mb-8">
@@ -206,51 +378,48 @@
                         <a href="mailto:kszymaniak043@gmail.com" class="contact-icon-link" aria-label="Email">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="m22 6-10 7L2 6"/></svg>
                         </a>
-                        <!-- Twitter/X (Updated to correct X logo path) -->
+                        <!-- Twitter/X -->
                         <a href="https://x.com/szymaniak_kasia" target="_blank" class="contact-icon-link" aria-label="Twitter">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h3.8l-5.1 6.5L18 20h-4l-3.3-4.5L7.4 20H4l5.6-7.1L4 4h4.2l3 4.2L16 4Z"/></svg>
                         </a>
-                        <!-- Google Scholar (Updated to distinct Academic Cap icon) -->
+                        <!-- Google Scholar -->
                         <a href="https://scholar.google.com/citations?user=lwHIQVcAAAAJ&hl=en" target="_blank" class="contact-icon-link" aria-label="Google Scholar">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6m-2-12-8 5-10 4 10 4 8-5V7M2 14v6m10-2.5V2m0 19.5a1 1 0 0 0-1 1 1 1 0 0 0 2 0 1 1 0 0 0-1-1z"/></svg>
                         </a>
-                        <!-- GitHub (Octocat - kept existing) -->
+                        <!-- GitHub -->
                         <a href="https://github.com/KatarzynaSzymaniak" target="_blank" class="contact-icon-link" aria-label="GitHub">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.67c2.84-.4 5.82-1.42 5.82-6.51a4.83 4.83 0 0 0-1.3-3.37 4.54 4.54 0 0 0-.1-3.41s-1.02-.34-3.33 1.3a12.18 12.18 0 0 0-6.27 0c-2.31-1.64-3.33-1.3-3.33-1.3a4.54 4.54 0 0 0-.1 3.41A4.83 4.83 0 0 0 3 13.5c0 5.09 2.98 6.11 5.82 6.51A3.37 3.37 0 0 0 9 20v3m3-19c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
                         </a>
-                        <!-- LinkedIn (Kept existing) -->
+                        <!-- LinkedIn -->
                         <a href="https://www.linkedin.com/in/katarzyna-szymaniak-ai/" target="_blank" class="contact-icon-link" aria-label="LinkedIn">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a4 4 0 0 0-4-4 4 4 0 0 0-4 4v7H5v-7h2v7h2v-7h2v7h2v-7h2v7h2V8z"/><rect width="4" height="4" x="2" y="10"/><rect width="4" height="4" x="2" y="2"/></svg>
                         </a>
                     </div>
-                    <!-- End New Contact Icons -->
-
                 </div>
 
                 <!-- Column 2: Main Headline, Professional Summary Paragraph & CTA (md:col-span-2) -->
-                <!-- This column now holds the main value proposition -->
                 <div class="md:col-span-2">
                     
-                    <!-- NEW: Main Headline for the right side -->
-                    <h1 class="text-4xl sm:text-5xl font-extrabold text-accent-blue mb-4 text-center md:text-left leading-tight">Designing Human-Centered AI</h1>
+                    <!-- Main Headline (Smaller text: text-3xl) -->
+                    <h1 class="text-3xl sm:text-3xl font-extrabold text-default mb-4 text-center md:text-left leading-tight">Designing Human-Centered AI</h1>
 
-                    <!-- Introductory Paragraph (This is the text the headline now sits above) -->
-                                      <!-- Core Pitch (Inside Card) -->
-                    <div class="bg-dark-card p-6 rounded-xl border border-gray-700/50 flex flex-col">
-                         <p class="text-gray-300 leading-relaxed mb-6 text-xl font-light">
-                        PhD researcher with 5+ years of experience bridging **neuroscience, signal processing, and adaptive machine learning**. My work focuses on augmenting human capability by developing efficient, robust, and aligned AI systems for the next generation of multimodal and health-centric applications.
-                        </p>
+                    <!-- Introductory Paragraph (Smaller text: text-base) -->
+                    <p class="text-secondary leading-relaxed mb-6 text-base font-light text-process-bold">
+                        PhD researcher with 5+ years of experience bridging **{neuroscience}**, **{signal processing}**, and **{adaptive machine learning}**. My work focuses on augmenting human capability by developing efficient, robust, and aligned AI systems for the next generation of multimodal and health-centric applications.
+                    </p>
 
- 
-                        <h2 class="text-xl font-bold text-gray-100 mb-4">An AI Scientist for the Next Wave of Innovation</h2>
-                        <p class="text-sm text-gray-300 leading-relaxed">
-                            The AI market is maturing beyond generalist scaling, creating a demand for deep, first-principles expertise to solve complex, second-order problems. My background is built for this challenge. I am a **PhD-level AI Scientist** with expertise in developing and benchmarking machine learning models for noisy, real-world **time-series biosignals**. My research in myoelectric control and experience at Meta Reality Labs is directly applicable to the core challenges of wearable sensor data. Furthermore, I designed novel **active learning and data curation frameworks** that reduce data labeling costs and optimize training, demonstrating a deep understanding of the data-efficient methods critical for capital-intensive challenges like preference learning (**DPO/RLHF**) and pre-training. I have a proven ability to lead projects from theoretical conception to practical implementation, supported by a strong proficiency in **Python, PyTorch**, and the full scientific computing stack for large-scale data analysis and model deployment.
+                    <!-- Core Pitch (Inside Card) -->
+                    <div class="card-style p-6 rounded-xl border border-gray-700/50 flex flex-col">
+                        <h2 class="text-xl font-bold text-default mb-4">An AI Research Scientist for the Next Wave of Innovation</h2>
+                        <!-- Body text is now text-sm -->
+                        <p class="text-sm text-secondary leading-relaxed text-process-bold">
+                            The AI market is maturing beyond generalist scaling, creating a demand for deep, first-principles expertise to solve complex, second-order problems. My background is built for this challenge. I am a **{PhD-level AI Scientist}** with expertise in developing and benchmarking machine learning models for noisy, real-world **{time-series biosignals}**. My research in myoelectric control and experience at Meta Reality Labs is directly applicable to the core challenges of wearable sensor data. Furthermore, I designed novel **{active learning and data curation frameworks}** that reduce data labeling costs and optimize training, demonstrating a deep understanding of the data-efficient methods critical for capital-intensive challenges like preference learning (**{DPO/RLHF}**) and pre-training. I have a proven ability to lead projects from theoretical conception to practical implementation, supported by a strong proficiency in **{Python}**, **{PyTorch}**, and the full scientific computing stack for large-scale data analysis and model deployment.
                         </p>
                     </div>
                     
-                    <!-- Keywords Bar -->
-                    <p class="text-sm text-gray-500 mt-4 mb-8">
-                        [Recent: **PhD in Biomedical AI** • **Meta Reality Labs** • **Foundation Models** • **Active Learning**]
+                    <!-- Keywords Bar (Smaller text: text-xs) -->
+                    <p class="text-xs text-secondary mt-4 mb-8 text-process-bold">
+                        [Recent: **{PhD in Biomedical AI}** • **{Meta Reality Labs}** • **{Foundation Models}** • **{Active Learning}**]
                     </p>
 
                     <!-- Call to Action Button -->
@@ -263,58 +432,56 @@
                 </div>
             </div>
         </section>
-        
-        <!-- Section 1.5 removed as content was merged into Section 1 -->
 
         <!-- 2. Core Competencies -->
         <section id="competencies" class="py-12">
             <h2 class="section-title text-3xl font-bold mb-8">Core Competencies</h2>
-            <h3 class="text-xl font-light text-gray-300 mb-8">Mapping PhD Expertise to Industry's Core Challenges: Here is how my core competencies align with high-value AI applications.</h3>
+            <h3 class="text-xl font-light text-secondary mb-8">Mapping PhD Expertise to Industry's Core Challenges: Here is how my core competencies align with high-value AI applications.</h3>
             
             <!-- 2x2 Grid of Competency Cards -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
 
                 <!-- Card 1: Signal Processing -->
-                <div class="bg-dark-card p-6 rounded-xl border border-gray-700/50 flex flex-col hover:border-accent-blue transition duration-300">
+                <div class="card-style p-6 rounded-xl border border-gray-700/50 flex flex-col hover:border-accent-blue transition duration-300">
                     <div class="text-accent-blue text-4xl mb-4">🔬</div>
-                    <h3 class="text-2xl font-semibold mb-2 text-gray-100">Signal Processing</h3>
-                    <p class="text-sm font-semibold text-gray-500 mb-3">Core Problem: Model Efficiency & Multimodal Data Integration</p>
-                    <ul class="list-disc list-inside space-y-2 text-sm text-gray-300 pl-4">
-                        <li>**My Expertise:** Engineered multi-stage signal processing pipelines using wavelet transforms and adaptive filtering to increase the signal-to-noise ratio of raw biosensor data by **15 dB**.</li>
-                        <li>**Foundation Model Application:** Applies to developing foundation models for biosignals (EMG, ECG) and novel research in filtering internal LLM activations to create more efficient transformer architectures.</li>
+                    <h3 class="text-2xl font-semibold mb-2 text-default">Signal Processing</h3>
+                    <p class="text-sm font-semibold text-secondary mb-3">Core Problem: Model Efficiency & Multimodal Data Integration</p>
+                    <ul class="list-disc list-inside space-y-2 text-sm text-secondary pl-4 text-process-bold">
+                        <li>**{My Expertise}**: Engineered multi-stage signal processing pipelines using wavelet transforms and adaptive filtering to increase the signal-to-noise ratio of raw biosensor data by **{15 dB}**.</li>
+                        <li>**{Foundation Model Application}**: Applies to developing foundation models for biosignals (EMG, ECG) and novel research in filtering internal LLM activations to create more efficient transformer architectures.</li>
                     </ul>
                 </div>
 
                 <!-- Card 2: Active Learning -->
-                <div class="bg-dark-card p-6 rounded-xl border border-gray-700/50 flex flex-col hover:border-accent-blue transition duration-300">
+                <div class="card-style p-6 rounded-xl border border-gray-700/50 flex flex-col hover:border-accent-blue transition duration-300">
                     <div class="text-accent-green text-4xl mb-4">💡</div>
-                    <h3 class="text-2xl font-semibold mb-2 text-gray-100">Active Learning</h3>
-                    <p class="text-sm font-semibold text-gray-500 mb-3">Core Problem: AI Alignment & Data Labeling Costs</p>
-                    <ul class="list-disc list-inside space-y-2 text-sm text-gray-300 pl-4">
-                        <li>**My Expertise:** Investigated and implemented active learning strategies to improve classification accuracy in human-in-the-loop systems.</li>
-                        <li>**Foundation Model Application:** Specialization in **preference learning efficiency**. I design data selection strategies for Active Preference Learning that maximize model improvement for a given annotation budget in DPO/RLHF pipelines.</li>
+                    <h3 class="text-2xl font-semibold mb-2 text-default">Active Learning</h3>
+                    <p class="text-sm font-semibold text-secondary mb-3">Core Problem: AI Alignment & Data Labeling Costs</p>
+                    <ul class="list-disc list-inside space-y-2 text-sm text-secondary pl-4 text-process-bold">
+                        <li>**{My Expertise}**: Investigated and implemented active learning strategies to improve classification accuracy in human-in-the-loop systems.</li>
+                        <li>**{Foundation Model Application}**: Specialization in **{preference learning efficiency}**. I design data selection strategies for Active Preference Learning that maximize model improvement for a given annotation budget in DPO/RLHF pipelines.</li>
                     </ul>
                 </div>
 
                 <!-- Card 3: Dataset Curation -->
-                <div class="bg-dark-card p-6 rounded-xl border border-gray-700/50 flex flex-col hover:border-accent-blue transition duration-300">
+                <div class="card-style p-6 rounded-xl border border-gray-700/50 flex flex-col hover:border-accent-blue transition duration-300">
                     <div class="text-accent-purple text-4xl mb-4">📊</div>
-                    <h3 class="text-2xl font-semibold mb-2 text-gray-100">Dataset Curation</h3>
-                    <p class="text-sm font-semibold text-gray-500 mb-3">Core Problem: Pre-training Cost & Model Quality</p>
-                    <ul class="list-disc list-inside space-y-2 text-sm text-gray-300 pl-4">
-                        <li>**My Expertise:** Experience designing and curating specialized, high-quality datasets for training robust machine learning models on noisy, real-world data.</li>
-                        <li>**Foundation Model Application:** I am an **AI Training Optimizer** (AI Training Optimizer). My skills implement strategic data selection pipelines that can reduce compute requirements by over **80%** while improving final model performance.</li>
+                    <h3 class="text-2xl font-semibold mb-2 text-default">Dataset Curation</h3>
+                    <p class="text-sm font-semibold text-secondary mb-3">Core Problem: Pre-training Cost & Model Quality</p>
+                    <ul class="list-disc list-inside space-y-2 text-sm text-secondary pl-4 text-process-bold">
+                        <li>**{My Expertise}**: Experience designing and curating specialized, high-quality datasets for training robust machine learning models on noisy, real-world data.</li>
+                        <li>**{Foundation Model Application}**: I am an **{AI Training Optimizer}**. My skills implement strategic data selection pipelines that can reduce compute requirements by over **{80%}** while improving final model performance.</li>
                     </ul>
                 </div>
 
                 <!-- Card 4: Domain Generalization & Benchmarking -->
-                <div class="bg-dark-card p-6 rounded-xl border border-gray-700/50 flex flex-col hover:border-accent-blue transition duration-300">
+                <div class="card-style p-6 rounded-xl border border-gray-700/50 flex flex-col hover:border-accent-blue transition duration-300">
                     <div class="text-yellow-400 text-4xl mb-4">✅</div>
-                    <h3 class="text-2xl font-semibold mb-2 text-gray-100">Domain Generalization & Benchmarking</h3>
-                    <p class="text-sm font-semibold text-gray-500 mb-3">Core Problem: Out-of-Distribution (OOD) Robustness & Flawed Benchmarks</p>
-                    <ul class="list-disc list-inside space-y-2 text-sm text-gray-300 pl-4">
-                        <li>**My Expertise:** Ph.D. level experience in the rigorous statistical benchmarking of AI training algorithms to ensure trustworthiness.</li>
-                        <li>**Foundation Model Application:** I move beyond using benchmarks to **designing them**. My ability to create robust OOD evaluation protocols that test for spurious correlations is a key skill for ensuring the integrity of an organization's R&D efforts.</li>
+                    <h3 class="text-2xl font-semibold mb-2 text-default">Domain Generalization & Benchmarking</h3>
+                    <p class="text-sm font-semibold text-secondary mb-3">Core Problem: Out-of-Distribution (OOD) Robustness & Flawed Benchmarks</p>
+                    <ul class="list-disc list-inside space-y-2 text-sm text-secondary pl-4 text-process-bold">
+                        <li>**{My Expertise}**: Ph.D. level experience in the rigorous statistical benchmarking of AI training algorithms to ensure trustworthiness.</li>
+                        <li>**{Foundation Model Application}**: I move beyond using benchmarks to **{designing them}**. My ability to create robust OOD evaluation protocols that test for spurious correlations is a key skill for ensuring the integrity of an organization's R&D efforts.</li>
                     </ul>
                 </div>
             </div>
@@ -324,30 +491,30 @@
         <section id="portfolio" class="py-12">
             <h2 class="section-title text-3xl font-bold mb-8">Portfolio: From Theory to Impact</h2>
 
-            <h3 class="text-xl font-light text-gray-300 mb-8">My work bridges fundamental research with practical, high-impact applications.</h3>
+            <h3 class="text-xl font-light text-secondary mb-8">My work bridges fundamental research with practical, high-impact applications.</h3>
 
             <div class="space-y-12">
 
                 <!-- Project 1: Multimodal Sensor Fusion (Meta Reality Labs) -->
-                <div class="bg-dark-card p-6 rounded-xl shadow-lg border border-gray-700/50">
+                <div class="card-style p-6 rounded-xl shadow-lg border border-gray-700/50">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
                         <h4 class="text-2xl font-bold text-accent-blue mb-1 sm:mb-0">Multimodal Sensor Fusion for Metaverse Interactions (Meta Reality Labs)</h4>
-                        <span class="text-sm text-gray-500 bg-gray-700/50 px-3 py-1 rounded-full">Sep 2022 - Mar 2023</span>
+                        <span class="text-sm text-secondary bg-gray-700/50 px-3 py-1 rounded-full">Sep 2022 - Mar 2023</span>
                     </div>
                     
                     <div class="grid md:grid-cols-2 gap-6">
                         <div>
-                            <h5 class="font-semibold text-gray-200 mb-2">Objective & Methodology:</h5>
-                            <p class="text-sm text-gray-400 mb-2">Pioneered sensor fusion techniques for natural and intuitive interactions within immersive metaverse environments by leveraging speech and biosignal data.</p>
-                            <ul class="list-disc list-inside space-y-1 text-sm text-gray-400 pl-4">
+                            <h5 class="font-semibold text-default mb-2">Objective & Methodology:</h5>
+                            <p class="text-sm text-secondary mb-2 text-process-bold">Pioneered sensor fusion techniques for natural and intuitive interactions within immersive metaverse environments by leveraging speech and biosignal data.</p>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-secondary pl-4 text-process-bold">
                                 <li>Investigated novel methods for fusing data from multiple sensor modalities to enhance wrist-based interactions.</li>
                                 <li>Applied speech recognition models and advanced temporal machine learning to develop cross-modal feature fusion models.</li>
                                 <li>Collaborated within a cross-functional team to integrate this research into the broader R&D of next-generation human-computer interfaces.</li>
                             </ul>
                         </div>
                         <div>
-                            <h5 class="font-semibold text-gray-200 mb-2">Outcome:</h5>
-                            <p class="text-sm text-gray-400">Developed a proof-of-concept system that enhanced user experience by enabling more natural interactions with reduced latency. This work contributed a new **cross-modal learning methodology** to the team's research portfolio, directly impacting future development in spatial computing and AR/VR.</p>
+                            <h5 class="font-semibold text-default mb-2">Outcome:</h5>
+                            <p class="text-sm text-secondary text-process-bold">Developed a proof-of-concept system that enhanced user experience by enabling more natural interactions with reduced latency. This work contributed a new **{cross-modal learning methodology}** to the team's research portfolio, directly impacting future development in spatial computing and AR/VR.</p>
                         </div>
                     </div>
 
@@ -360,26 +527,25 @@
                 </div>
 
                 <!-- Project 2: Neuroimaging Data Analysis (HoloLens) -->
-                <div class="bg-dark-card p-6 rounded-xl shadow-lg border border-gray-700/50">
+                <div class="card-style p-6 rounded-xl shadow-lg border border-gray-700/50">
                     <h4 class="text-2xl font-bold text-accent-blue mb-3">Neuroimaging Data Analysis: HoloLens for Teaching Purposes</h4>
 
                     <div class="grid md:grid-cols-2 gap-6">
                         <div>
-                            <h5 class="font-semibold text-gray-200 mb-2">Objective & Methodology:</h5>
-                            <p class="text-sm text-gray-400 mb-2">To create an innovative teaching tool for medical students using Microsoft HoloLens, solving the common challenge of visualizing complex spatial neuroimaging data.</p>
-                            <ul class="list-disc list-inside space-y-1 text-sm text-gray-400 pl-4">
+                            <h5 class="font-semibold text-default mb-2">Objective & Methodology:</h5>
+                            <p class="text-sm text-secondary mb-2 text-process-bold">To create an innovative teaching tool for medical students using Microsoft HoloLens, solving the common challenge of visualizing complex spatial neuroimaging data.</p>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-secondary pl-4 text-process-bold">
                                 <li>Rendered volumetric data from MRI scans into an interactive 3D mesh model of a human brain.</li>
                                 <li>Integrated the 3D model into an augmented reality application using the Unity cross-platform game engine.</li>
                                 <li>Deployed the application on Microsoft HoloLens, allowing users to manipulate and inspect the 3D brain model overlaid in their real-world environment.</li>
                             </ul>
                             <div class="mt-4">
-                                <!-- Adjusted link to reflect the YouTube demo -->
                                 <a href="https://www.youtube.com/watch?v=BCHFJswreW8" target="_blank" class="project-link-button bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg">View Demo on YouTube</a>
                             </div>
                         </div>
                         <div>
-                            <h5 class="font-semibold text-gray-200 mb-2">Outcome:</h5>
-                            <p class="text-sm text-gray-400 mb-4">Awarded **'Best Student Project'** for successfully developing a tool that significantly improves spatial data visualization and enhances learning for medical students. The project demonstrated strong self-teaching capabilities in complex subjects, including 3D rendering and cross-platform AR development.</p>
+                            <h5 class="font-semibold text-default mb-2">Outcome:</h5>
+                            <p class="text-sm text-secondary mb-4 text-process-bold">Awarded **{'Best Student Project'}** for successfully developing a tool that significantly improves spatial data visualization and enhances learning for medical students. The project demonstrated strong self-teaching capabilities in complex subjects, including 3D rendering and cross-platform AR development.</p>
 
                             <!-- Embedded YouTube Video (Responsive) -->
                             <iframe class="w-full aspect-video rounded-lg shadow-xl" src="https://www.youtube.com/embed/BCHFJswreW8" title="Neuroimaging HoloLens Demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -394,25 +560,25 @@
                 </div>
 
                 <!-- Project 3: The Biosignal Foundation Model Project -->
-                <div class="bg-dark-card p-6 rounded-xl shadow-lg border border-gray-700/50">
+                <div class="card-style p-6 rounded-xl shadow-lg border border-gray-700/50">
                     <h4 class="text-2xl font-bold text-accent-blue mb-3">Fine-Tuning a PPG Foundation Model for EMG Gesture Recognition</h4>
 
                     <div class="grid md:grid-cols-2 gap-6">
                         <div>
-                            <h5 class="font-semibold text-gray-200 mb-2">Objective & Methodology:</h5>
-                            <p class="text-sm text-gray-400 mb-2">To provide tangible evidence of applying the **foundation model paradigm** to a complex biosignal challenge, directly relevant to Health AI and wearables.</p>
-                            <ul class="list-disc list-inside space-y-1 text-sm text-gray-400 pl-4">
+                            <h5 class="font-semibold text-default mb-2">Objective & Methodology:</h5>
+                            <p class="text-sm text-secondary mb-2 text-process-bold">To provide tangible evidence of applying the **{foundation model paradigm}** to a complex biosignal challenge, directly relevant to **{Health AI}** and wearables.</p>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-secondary pl-4 text-process-bold">
                                 <li>Utilized PaPaGei, a large-scale foundation model pre-trained on PPG signals.</li>
                                 <li>Applied the model as a fine-tunable backbone to classify gestures from the emg2qwerty dataset.</li>
-                                <li>Benchmarked performance against a baseline model, demonstrating the power of **transfer learning** in this domain.</li>
+                                <li>Benchmarked performance against a baseline model, demonstrating the power of **{transfer learning}** in this domain.</li>
                             </ul>
                             <div class="mt-4">
                                 <a href="https://github.com/KatarzynaSzymaniak" target="_blank" class="project-link-button bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded-lg">View on GitHub</a>
                             </div>
                         </div>
                         <div>
-                            <h5 class="font-semibold text-gray-200 mb-2">Outcome:</h5>
-                            <p class="text-sm text-gray-400">This project demonstrates my hands-on ability to **leverage existing foundation models** for novel, domain-specific tasks and my expertise in handling noisy, real-world physiological data.</p>
+                            <h5 class="font-semibold text-default mb-2">Outcome:</h5>
+                            <p class="text-sm text-secondary text-process-bold">This project demonstrates my hands-on ability to **{leverage existing foundation models}** for novel, domain-specific tasks and my expertise in handling noisy, real-world physiological data.</p>
                         </div>
                     </div>
 
@@ -424,25 +590,25 @@
                 </div>
 
                 <!-- Project 4: The Active Preference Learning Simulation -->
-                <div class="bg-dark-card p-6 rounded-xl shadow-lg border border-gray-700/50">
+                <div class="card-style p-6 rounded-xl shadow-lg border border-gray-700/50">
                     <h4 class="text-2xl font-bold text-accent-blue mb-3">Simulation: Boosting DPO Efficiency with Active Preference Learning</h4>
                     
                     <div class="grid md:grid-cols-2 gap-6">
                         <div>
-                            <h5 class="font-semibold text-gray-200 mb-2">Objective & Methodology:</h5>
-                            <p class="text-sm text-gray-400 mb-2">To demonstrate expertise in the data efficiency challenges at the core of modern **AI alignment and safety**.</p>
-                            <ul class="list-disc list-inside space-y-1 text-sm text-gray-400 pl-4">
-                                <li>Implemented the **Active Preference Learning (APL)** acquisition function for Direct Preference Optimization (DPO).</li>
+                            <h5 class="font-semibold text-default mb-2">Objective & Methodology:</h5>
+                            <p class="text-sm text-secondary mb-2 text-process-bold">To demonstrate expertise in the data efficiency challenges at the core of modern **{AI alignment and safety}**.</p>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-secondary pl-4 text-process-bold">
+                                <li>Implemented the **{Active Preference Learning (APL)}** acquisition function for Direct Preference Optimization (DPO).</li>
                                 <li>Ran a simulation fine-tuning Mistral-7B on a preference dataset, comparing random sampling against my APL strategy within a fixed annotation budget.</li>
-                                <li>Plotted the model's win-rate, proving that APL achieves higher performance with **significantly less labeled data**.</li>
+                                <li>Plotted the model's win-rate, proving that APL achieves higher performance with **{significantly less labeled data}**.</li>
                             </ul>
                             <div class="mt-4">
                                 <a href="https://github.com/KatarzynaSzymaniak" target="_blank" class="project-link-button bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded-lg">View on GitHub</a>
                             </div>
                         </div>
                         <div>
-                            <h5 class="font-semibold text-semibold text-gray-200 mb-2">Outcome:</h5>
-                            <p class="text-sm text-gray-400">This simulation serves as a powerful proof-of-concept for **reducing the immense financial cost of preference data collection**, a critical bottleneck in deploying safe and helpful LLMs.</p>
+                            <h5 class="font-semibold text-default mb-2">Outcome:</h5>
+                            <p class="text-sm text-secondary text-process-bold">This simulation serves as a powerful proof-of-concept for **{reducing the immense financial cost of preference data collection}**, a critical bottleneck in deploying safe and helpful LLMs.</p>
                         </div>
                     </div>
 
@@ -454,86 +620,189 @@
                 </div>
             </div>
         </section>
+        
+        <!-- 4. Selected Publications & Preprints (NEW POSITION) -->
+        <section id="publications" class="py-12">
+            <h2 class="section-title text-3xl font-bold mb-8">Selected Publications & Preprints</h2>
+            <h3 class="text-xl font-light text-secondary mb-8">Peer-reviewed research and current preprints that define my core technical expertise.</h3>
 
-                <!-- 4. Experience (UPDATED ICONS) -->
+            <div class="space-y-6">
+
+                <!-- Pub 1 -->
+                <div class="p-4 card-style rounded-xl border border-gray-700/50">
+                    <div>
+                        <p class="font-medium text-default text-lg">Multimodal Real-time, Context-aware Adaptation for Robust Myoelectric Control in Prosthetics</p>
+                        <p class="text-sm text-secondary mt-1 text-process-bold">K. Szymaniak, J. Smith, A. Brown. <span class="text-gray-500 italic">**{IEEE Transactions on Biomedical Engineering, 2024}**.</span></p>
+                    </div>
+                    
+                    <!-- BOTTOM SECTION: Tags (Left) and Links (Right) -->
+                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mt-3 pt-3 border-t border-gray-700/50">
+                        
+                        <!-- TAGS GROUP (Left/Top) -->
+                        <div class="flex flex-wrap mb-2 sm:mb-0 space-x-2">
+                            <span class="tag" style="--tag-bg: rgba(59, 130, 246, 0.15); --tag-text: #3b82f6;">Journal</span>
+                            <span class="tag" style="--tag-bg: rgba(168, 85, 247, 0.15); --tag-text: #a855f7;">#AdaptiveML</span>
+                        </div>
+
+                        <!-- LINKS GROUP (Right/Bottom) -->
+                        <div class="flex flex-wrap space-x-4 justify-start sm:justify-end">
+                            <!-- Paper Link -->
+                            <a href="#placeholder" target="_blank" class="text-sm font-semibold text-accent-blue hover:underline flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+                                Paper PDF
+                            </a>
+                            <!-- Code Link -->
+                            <a href="#placeholder" target="_blank" class="text-sm font-semibold text-gray-500 hover:text-gray-300 flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.67c2.84-.4 5.82-1.42 5.82-6.51a4.83 4.83 0 0 0-1.3-3.37 4.54 4.54 0 0 0-.1-3.41s-1.02-.34-3.33 1.3a12.18 12.18 0 0 0-6.27 0c-2.31-1.64-3.33-1.3-3.33-1.3a4.54 4.54 0 0 0-.1 3.41A4.83 4.83 0 0 0 3 13.5c0 5.09 2.98 6.11 5.82 6.51A3.37 3.37 0 0 0 9 20v3m3-19c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                                GitHub Code
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pub 2 -->
+                <div class="p-4 card-style rounded-xl border border-gray-700/50">
+                    <div>
+                        <p class="font-medium text-default text-lg">Augmenting SGL: A Multimodal Fusion Approach to Enhance Head and Speech Interactions in the Metaverse</p>
+                        <p class="text-sm text-secondary mt-1 text-process-bold">K. Szymaniak, C. Jones, D. Green. <span class="text-gray-500 italic">**{ACM Annual Symposium on Spatial Computing, 2023. DOI: 10.1145/3549247}**</span></p>
+                    </div>
+                    
+                    <!-- BOTTOM SECTION: Tags (Left) and Links (Right) -->
+                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mt-3 pt-3 border-t border-gray-700/50">
+                        
+                        <!-- TAGS GROUP (Left/Top) -->
+                        <div class="flex flex-wrap mb-2 sm:mb-0 space-x-2">
+                            <span class="tag" style="--tag-bg: rgba(234, 179, 8, 0.15); --tag-text: #eab308;">Conference</span>
+                            <span class="tag" style="--tag-bg: rgba(168, 85, 247, 0.15); --tag-text: #a855f7;">#Multimodal</span>
+                        </div>
+
+                        <!-- LINKS GROUP (Right/Bottom) -->
+                        <div class="flex flex-wrap space-x-4 justify-start sm:justify-end">
+                            <!-- Paper Link -->
+                            <a href="#placeholder" target="_blank" class="text-sm font-semibold text-accent-blue hover:underline flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+                                Paper PDF
+                            </a>
+                            <!-- Code Link -->
+                            <a href="#placeholder" target="_blank" class="text-sm font-semibold text-gray-500 hover:text-gray-300 flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.67c2.84-.4 5.82-1.42 5.82-6.51a4.83 4.83 0 0 0-1.3-3.37 4.54 4.54 0 0 0-.1-3.41s-1.02-.34-3.33 1.3a12.18 12.18 0 0 0-6.27 0c-2.31-1.64-3.33-1.3-3.33-1.3a4.54 4.54 0 0 0-.1 3.41A4.83 4.83 0 0 0 3 13.5c0 5.09 2.98 6.11 5.82 6.51A3.37 3.37 0 0 0 9 20v3m3-19c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                                GitHub Code
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pub 3 -->
+                <div class="p-4 card-style rounded-xl border border-gray-700/50">
+                    <div>
+                        <p class="font-medium text-default text-lg">The Agent's Ethos: Integrating Ethical Constraints into Large Language Model Planning</p>
+                        <p class="text-sm text-secondary mt-1 text-process-bold">K. Szymaniak, N. White. <span class="text-gray-500 italic">**{Preprint}**</span></p>
+                    </div>
+                    
+                    <!-- BOTTOM SECTION: Tags (Left) and Links (Right) -->
+                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mt-3 pt-3 border-t border-gray-700/50">
+                        
+                        <!-- TAGS GROUP (Left/Top) -->
+                        <div class="flex flex-wrap mb-2 sm:mb-0 space-x-2">
+                            <span class="tag" style="--tag-bg: rgba(59, 130, 246, 0.15); --tag-text: #3b82f6;">Preprint</span>
+                            <span class="tag" style="--tag-bg: rgba(168, 85, 247, 0.15); --tag-text: #a855f7;">#AgenticAI</span>
+                        </div>
+
+                        <!-- LINKS GROUP (Right/Bottom) -->
+                        <div class="flex flex-wrap space-x-4 justify-start sm:justify-end">
+                             <!-- Paper Link -->
+                            <a href="#placeholder" target="_blank" class="text-sm font-semibold text-accent-blue hover:underline flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+                                Paper PDF
+                            </a>
+                            <!-- Code Link -->
+                            <a href="#placeholder" target="_blank" class="text-sm font-semibold text-gray-500 hover:text-gray-300 flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.67c2.84-.4 5.82-1.42 5.82-6.51a4.83 4.83 0 0 0-1.3-3.37 4.54 4.54 0 0 0-.1-3.41s-1.02-.34-3.33 1.3a12.18 12.18 0 0 0-6.27 0c-2.31-1.64-3.33-1.3-3.33-1.3a4.54 4.54 0 0 0-.1 3.41A4.83 4.83 0 0 0 3 13.5c0 5.09 2.98 6.11 5.82 6.51A3.37 3.37 0 0 0 9 20v3m3-19c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                                GitHub Code
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- 5. Experience (OLD POSITION) -->
         <section id="experience" class="py-12">
             <h2 class="section-title text-3xl font-bold mb-8">Professional Experience</h2>
 
             <!-- Timeline Container Start -->
             <div class="timeline-container">
                 
-                <!-- Experience 1: PhD (Updated icon to Graduation Cap) -->
+                <!-- Experience 1: PhD -->
                 <div class="timeline-item">
                     <div class="timeline-marker">
-                        <!-- PhD/Academic Cap Icon -->
                         <svg class="timeline-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6m-2-12-8 5-10 4 10 4 8-5V7M2 14v6m10-2.5V2m0 19.5a1 1 0 0 0-1 1 1 1 0 0 0 2 0 1 1 0 0 0-1-1z"/></svg>
                     </div>
-                    <div class="experience-card-content">
-                        <h4 class="text-xl font-bold text-gray-100 mb-1">
+                    <div class="experience-card-content text-process-bold">
+                        <h4 class="text-xl font-bold text-default mb-1">
                             Ph.D. Biomedical Artificial Intelligence
                         </h4>
-                        <p class="font-medium text-gray-300">University of Edinburgh, Edinburgh</p>
-                        <p class="text-sm text-gray-500 mb-3">Sep 2020 - Present</p>
-                        <ul class="list-disc list-inside space-y-2 text-sm text-gray-400 pl-4">
-                            <li>Conducted cutting-edge research in **human-in-the-loop agentic AI**, bridging neuroscience, signal processing, and adaptive machine learning.</li>
-                            <li>Focused on developing robust, ethical, and intuitive AI solutions that **augment human capabilities**.</li>
+                        <p class="font-medium text-secondary">University of Edinburgh, Edinburgh</p>
+                        <p class="text-sm text-secondary mb-3">Sep 2020 - Present</p>
+                        <ul class="list-disc list-inside space-y-2 text-sm text-secondary pl-4">
+                            <li>Conducted cutting-edge research in **{human-in-the-loop agentic AI}**, bridging neuroscience, signal processing, and adaptive machine learning.</li>
+                            <li>Focused on developing robust, ethical, and intuitive AI solutions that **{augment human capabilities}**.</li>
                         </ul>
                     </div>
                 </div>
 
-                <!-- Experience 2: Research Scientist Intern (Kept existing Briefcase icon) -->
+                <!-- Experience 2: Research Scientist Intern -->
                 <div class="timeline-item">
                     <div class="timeline-marker">
-                         <!-- Industry/Corporate Icon (Briefcase) -->
                          <svg class="timeline-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"/><path d="M16 2v4a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2V2"/></svg>
                     </div>
-                    <div class="experience-card-content">
-                        <h4 class="text-xl font-bold text-gray-100 mb-1">
+                    <div class="experience-card-content text-process-bold">
+                        <h4 class="text-xl font-bold text-default mb-1">
                             Research Scientist Intern
                         </h4>
-                        <p class="font-medium text-gray-300">Meta Reality Labs, New York</p>
-                        <p class="text-sm text-gray-500 mb-3">Sep 2022 - Mar 2023</p>
-                        <ul class="list-disc list-inside space-y-2 text-sm text-gray-400 pl-4">
-                            <li>Investigated methods for **sensor fusion and data multimodality** in metaverse for wristband interactions.</li>
-                            <li>Utilized **speech recognition models** and multimodal learning to investigate **cross-modality for feature fusion models**.</li>
+                        <p class="font-medium text-secondary">Meta Reality Labs, New York</p>
+                        <p class="text-sm text-secondary mb-3">Sep 2022 - Mar 2023</p>
+                        <ul class="list-disc list-inside space-y-2 text-sm text-secondary pl-4">
+                            <li>Investigated methods for **{sensor fusion and data multimodality}** in metaverse for wristband interactions.</li>
+                            <li>Utilized **{speech recognition models}** and multimodal learning to investigate **{cross-modality for feature fusion models}**.</li>
                             <li>Collaborated as part of a larger ecosystem, cross-functional team towards common objectives.</li>
                         </ul>
                     </div>
                 </div>
 
-                <!-- Experience 3: Teaching Assistant (Updated icon to Monitor) -->
+                <!-- Experience 3: Teaching Assistant -->
                 <div class="timeline-item">
                     <div class="timeline-marker">
-                        <!-- Teaching/Lab Demonstrator Icon (Monitor) -->
                         <svg class="timeline-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="15" rx="2" ry="2"/><line x1="12" y1="21" x2="12" y2="18"/><line x1="4" y1="21" x2="20" y2="21"/></svg>
                     </div>
-                    <div class="experience-card-content">
-                        <h4 class="text-xl font-bold text-gray-100 mb-1">
+                    <div class="experience-card-content text-process-bold">
+                        <h4 class="text-xl font-bold text-default mb-1">
                             Teaching Assistant
                         </h4>
-                        <p class="font-medium text-gray-300">University of Edinburgh, Edinburgh</p>
-                        <p class="text-sm text-gray-500 mb-3">Sep 2023 - June 2024</p>
-                        <ul class="list-disc list-inside space-y-2 text-sm text-gray-400 pl-4">
-                            <li>Co-led and instructed an **Entrepreneurship and Innovation Course**, bridging theory with practical application.</li>
-                            <li>Guided students in identifying real-world challenges and developing targeted solutions, emphasizing prototyping minimum viable products (**MVPs**).</li>
+                        <p class="font-medium text-secondary">University of Edinburgh, Edinburgh</p>
+                        <p class="text-sm text-secondary mb-3">Sep 2023 - June 2024</p>
+                        <ul class="list-disc list-inside space-y-2 text-sm text-secondary pl-4">
+                            <li>Co-led and instructed an **{Entrepreneurship and Innovation Course}**, bridging theory with practical application.</li>
+                            <li>Guided students in identifying real-world challenges and developing targeted solutions, emphasizing prototyping minimum viable products (**{MVPs}**).</li>
                         </ul>
                     </div>
                 </div>
 
-                <!-- Experience 4: Teaching Assistant, Lab Demonstrator (Updated icon to Monitor) -->
+                <!-- Experience 4: Teaching Assistant, Lab Demonstrator -->
                 <div class="timeline-item">
                     <div class="timeline-marker">
-                        <!-- Lab/Code Icon (Monitor) -->
                         <svg class="timeline-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="15" rx="2" ry="2"/><line x1="12" y1="21" x2="12" y2="18"/><line x1="4" y1="21" x2="20" y2="21"/></svg>
                     </div>
-                    <div class="experience-card-content">
-                        <h4 class="text-xl font-bold text-gray-100 mb-1">
+                    <div class="experience-card-content text-process-bold">
+                        <h4 class="text-xl font-bold text-default mb-1">
                             Teaching Assistant, Lab Demonstrator
                         </h4>
-                        <p class="font-medium text-gray-300">Swansea University, Swansea</p>
-                        <p class="text-sm text-gray-500 mb-3">Jun 2017 - Sep 2019</p>
-                        <ul class="list-disc list-inside space-y-2 text-sm text-gray-400 pl-4">
-                            <li>Delivered modules, such as **Object Oriented Programming (Java)** and concepts of Computer Science (data structures and algorithms).</li>
+                        <p class="font-medium text-secondary">Swansea University, Swansea</p>
+                        <p class="text-sm text-secondary mb-3">Jun 2017 - Sep 2019</p>
+                        <ul class="list-disc list-inside space-y-2 text-sm text-secondary pl-4">
+                            <li>Delivered modules, such as **{Object Oriented Programming (Java)}** and concepts of Computer Science (data structures and algorithms).</li>
                         </ul>
                     </div>
                 </div>
@@ -541,84 +810,42 @@
             </div>
             <!-- Timeline Container End -->
         </section>
-        
-        <!-- Selected Publications & Preprints (Kept for Academic Credibility) -->
-        <section class="py-12">
-            <h2 class="section-title text-3xl font-bold mb-8">Selected Publications</h2>
 
-            <div class="space-y-6">
-
-                <!-- Pub 1 -->
-                <div class="p-4 bg-dark-card rounded-xl border border-gray-700/50">
-                    <p class="font-medium text-gray-200">Multimodal Real-time, Context-aware Adaptation for Robust Myoelectric Control in Prosthetics</p>
-                    <p class="text-sm text-gray-400 mt-1">K. Szymaniak, J. Smith, A. Brown. <span class="text-gray-500 italic">IEEE Transactions on Biomedical Engineering, 2024.</span></p>
-                    <div class="flex flex-wrap mt-2">
-                        <span class="tag" style="--tag-bg: rgba(59, 130, 246, 0.15); --tag-text: #3b82f6;">Journal</span>
-                        <span class="tag" style="--tag-bg: rgba(168, 85, 247, 0.15); --tag-text: #a855f7;">#AdaptiveML</span>
-                    </div>
-                </div>
-
-                <!-- Pub 2 -->
-                <div class="p-4 bg-dark-card rounded-xl border border-gray-700/50">
-                    <p class="font-medium text-gray-200">Augmenting SGL: A Multimodal Fusion Approach to Enhance Head and Speech Interactions in the Metaverse</p>
-                    <p class="text-sm text-gray-400 mt-1">K. Szymaniak, C. Jones, D. Green. <span class="text-gray-500 italic">ACM Annual Symposium on Spatial Computing, 2023. DOI: 10.1145/3549247</span></p>
-                    <div class="flex flex-wrap mt-2">
-                        <span class="tag" style="--tag-bg: rgba(234, 179, 8, 0.15); --tag-text: #eab308;">Conference</span>
-                        <span class="tag" style="--tag-bg: rgba(168, 85, 247, 0.15); --tag-text: #a855f7;">#Multimodal</span>
-                    </div>
-                </div>
-
-                <!-- Pub 3 -->
-                <div class="p-4 bg-dark-card rounded-xl border border-gray-700/50">
-                    <p class="font-medium text-gray-200">The Agent's Ethos: Integrating Ethical Constraints into Large Language Model Planning</p>
-                    <p class="text-sm text-gray-400 mt-1">K. Szymaniak, N. White. <span class="text-gray-500 italic">Preprint</span></p>
-                    <div class="flex flex-wrap mt-2">
-                        <span class="tag" style="--tag-bg: rgba(59, 130, 246, 0.15); --tag-text: #3b82f6;">Preprint</span>
-                        <span class="tag" style="--tag-bg: rgba(168, 85, 247, 0.15); --tag-text: #a855f7;">#AgenticAI</span>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-
-
-        <!-- 5. Contact -->
+        <!-- 6. Contact -->
         <section id="contact" class="py-12">
             <h2 class="section-title text-3xl font-bold mb-8 mx-auto text-center">Get in Touch</h2>
-            <div class="max-w-xl mx-auto bg-dark-card p-8 rounded-xl border border-gray-700/50 text-center">
-                <p class="text-xl text-gray-200 mb-6 font-semibold">
+            <div class="max-w-xl mx-auto card-style p-8 rounded-xl border border-gray-700/50 text-center">
+                <p class="text-xl text-default mb-6 font-semibold">
                     Let's collaborate on the next generation of robust and data-efficient AI systems.
                 </p>
-                <p class="text-md text-gray-300 mb-8">
+                <p class="text-md text-secondary mb-8">
                     I am actively seeking **Applied Scientist** and **Research Scientist** roles and am excited to discuss foundational challenges in Health AI, Robotics, and core ML research.
                 </p>
 
                 <!-- Updated Email Link -->
-                <p class="text-lg font-bold text-gray-100 mb-6 flex items-center justify-center">
+                <p class="text-lg font-bold text-default mb-6 flex items-center justify-center">
                      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-3 text-accent-blue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="m22 6-10 7L2 6"/></svg>
                     <a href="mailto:kszymaniak043@gmail.com" class="text-accent-blue hover:text-blue-400 transition">kszymaniak043@gmail.com</a>
                 </p>
 
                 <div class="flex justify-center space-x-4 pt-4 border-t border-gray-700/50">
                     <!-- LinkedIn -->
-                    <a href="https://www.linkedin.com/in/katarzyna-szymaniak-ai/" target="_blank" class="text-gray-400 hover:text-accent-blue transition duration-150 flex items-center">
+                    <a href="https://www.linkedin.com/in/katarzyna-szymaniak-ai/" target="_blank" class="text-secondary hover:text-accent-blue transition duration-150 flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-1"><path d="M16 8a4 4 0 0 0-4-4 4 4 0 0 0-4 4v7H5v-7h2v7h2v-7h2v7h2v-7h2v7h2V8z"/><rect width="4" height="4" x="2" y="10"/><rect width="4" height="4" x="2" y="2"/></svg>
                         LinkedIn
                     </a>
                     <!-- GitHub -->
-                    <a href="https://github.com/KatarzynaSzymaniak" target="_blank" class="text-gray-400 hover:text-accent-blue transition duration-150 flex items-center">
+                    <a href="https://github.com/KatarzynaSzymaniak" target="_blank" class="text-secondary hover:text-accent-blue transition duration-150 flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-1"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.67c2.84-.4 5.82-1.42 5.82-6.51a4.83 4.83 0 0 0-1.3-3.37 4.54 4.54 0 0 0-.1-3.41s-1.02-.34-3.33 1.3a12.18 12.18 0 0 0-6.27 0c-2.31-1.64-3.33-1.3-3.33-1.3a4.54 4.54 0 0 0-.1 3.41A4.83 4.83 0 0 0 3 13.5c0 5.09 2.98 6.11 5.82 6.51A3.37 3.37 0 0 0 9 20v3m3-19c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
                         GitHub
                     </a>
-                    <!-- Google Scholar (Updated icon) -->
-                    <a href="https://scholar.google.com/citations?user=lwHIQVcAAAAJ&hl=en" target="_blank" class="text-gray-400 hover:text-accent-blue transition duration-150 flex items-center">
-                        <!-- Google Scholar Icon (Using a distinct Academic Cap) -->
+                    <!-- Google Scholar -->
+                    <a href="https://scholar.google.com/citations?user=lwHIQVcAAAAJ&hl=en" target="_blank" class="text-secondary hover:text-accent-blue transition duration-150 flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-1"><path d="M22 10v6m-2-12-8 5-10 4 10 4 8-5V7M2 14v6m10-2.5V2m0 19.5a1 1 0 0 0-1 1 1 1 0 0 0 2 0 1 1 0 0 0-1-1z"/></svg>
                         Scholar
                     </a>
-                    <!-- Twitter/X (Updated icon) -->
-                    <a href="https://x.com/szymaniak_kasia" target="_blank" class="text-gray-400 hover:text-accent-blue transition duration-150 flex items-center">
+                    <!-- Twitter/X -->
+                    <a href="https://x.com/szymaniak_kasia" target="_blank" class="text-secondary hover:text-accent-blue transition duration-150 flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-1"><path d="M16 4h3.8l-5.1 6.5L18 20h-4l-3.3-4.5L7.4 20H4l5.6-7.1L4 4h4.2l3 4.2L16 4Z"/></svg>
                         Twitter
                     </a>
