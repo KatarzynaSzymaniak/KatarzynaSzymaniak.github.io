@@ -189,15 +189,18 @@
             <div class="grid md:grid-cols-3 gap-8 items-start">
                 
                 <!-- Column 1: Profile and Main Titles (md:col-span-1) -->
+                <!-- This column now holds the image and secondary info -->
                 <div class="flex flex-col items-center md:items-start md:col-span-1">
                     <!-- Profile Image Placeholder -->
                     <div class="w-48 h-48 rounded-full overflow-hidden mb-6 border-4 border-dark-card shadow-2xl">
-                        <img src="https://placehold.co/400x400/1e293b/f1f5f9?text=KS" alt="Dr. Katarzyna Szymaniak" class="w-full h-full object-cover">
+                        <img src="me.jpg" alt="Dr. Katarzyna Szymaniak" class="w-full h-full object-cover">
                     </div>
-                    <!-- Updated Headline & Sub-headline -->
-                    <p class="text-xl text-gray-400 text-center md:text-left mb-4">Dr. Katarzyna Szymaniak, Researcher</p>
                     
-                    <!-- New Contact Icons and Links (Updated SVGs) -->
+                    <!-- Name and Sub-title (associated with the image) -->
+                    <h2 class="text-3xl font-bold text-dark-text mb-1 text-center md:text-left">Dr. Katarzyna Szymaniak</h2>
+                    <p class="text-md font-medium text-gray-400 text-center md:text-left mb-4">AI Researcher</p>
+                    
+                    <!-- Contact Icons and Links -->
                     <div class="flex space-x-3 mb-8">
                         <!-- Email -->
                         <a href="mailto:kszymaniak043@gmail.com" class="contact-icon-link" aria-label="Email">
@@ -224,32 +227,34 @@
 
                 </div>
 
-                <!-- Column 2: Professional Summary Paragraph & CTA (md:col-span-2) -->
+                <!-- Column 2: Main Headline, Professional Summary Paragraph & CTA (md:col-span-2) -->
+                <!-- This column now holds the main value proposition -->
                 <div class="md:col-span-2">
-                    <h2 class="section-title text-3xl font-bold mb-8">Designing Human-Centered AI</h2>
                     
-                    <!-- REPLACED GRID CARDS WITH SINGLE PARAGRAPH -->
-                    <div class="bg-dark-card p-6 rounded-xl border border-gray-700/50 flex flex-col">
-                        <p class="text-sm text-gray-300 leading-relaxed">
-                            PhD researcher with 5+ years of experience bridging **neuroscience, signal processing, and adaptive machine learning**. My work focuses on augmenting human capability by developing efficient, robust, and aligned AI systems for the next generation of multimodal and health-centric applications.
+                    <!-- NEW: Main Headline for the right side -->
+                    <h1 class="text-4xl sm:text-5xl font-extrabold text-accent-blue mb-4 text-center md:text-left leading-tight">Designing Human-Centered AI</h1>
 
+                    <!-- Introductory Paragraph (This is the text the headline now sits above) -->
+                                      <!-- Core Pitch (Inside Card) -->
+                    <div class="bg-dark-card p-6 rounded-xl border border-gray-700/50 flex flex-col">
+                         <p class="text-gray-300 leading-relaxed mb-6 text-xl font-light">
+                        PhD researcher with 5+ years of experience bridging **neuroscience, signal processing, and adaptive machine learning**. My work focuses on augmenting human capability by developing efficient, robust, and aligned AI systems for the next generation of multimodal and health-centric applications.
                         </p>
-                        
-                        <h3 class="section-title text-3xl font-bold mb-8">An AI Research Scientist for the Next Wave of Innovation</h3>
-                        <p class="text-gray-300 leading-relaxed mb-4 text-2xl font-light">
-                              The AI market is maturing beyond generalist scaling, creating a demand for deep, first-principles expertise to solve complex, second-order problems. My background is built for this challenge. I am a **PhD-level AI Scientist** with expertise in developing and benchmarking machine learning models for noisy, real-world **time-series biosignals**. My research in myoelectric control and experience at Meta Reality Labs is directly applicable to the core challenges of wearable sensor data. Furthermore, I designed novel **active learning and data curation frameworks** that reduce data labeling costs and optimize training, demonstrating a deep understanding of the data-efficient methods critical for capital-intensive challenges like preference learning (**DPO/RLHF**) and pre-training. I have a proven ability to lead projects from theoretical conception to practical implementation, supported by a strong proficiency in **Python, PyTorch**, and the full scientific computing stack for large-scale data analysis and model deployment.
+
+ 
+                        <h2 class="text-xl font-bold text-gray-100 mb-4">An AI Scientist for the Next Wave of Innovation</h2>
+                        <p class="text-sm text-gray-300 leading-relaxed">
+                            The AI market is maturing beyond generalist scaling, creating a demand for deep, first-principles expertise to solve complex, second-order problems. My background is built for this challenge. I am a **PhD-level AI Scientist** with expertise in developing and benchmarking machine learning models for noisy, real-world **time-series biosignals**. My research in myoelectric control and experience at Meta Reality Labs is directly applicable to the core challenges of wearable sensor data. Furthermore, I designed novel **active learning and data curation frameworks** that reduce data labeling costs and optimize training, demonstrating a deep understanding of the data-efficient methods critical for capital-intensive challenges like preference learning (**DPO/RLHF**) and pre-training. I have a proven ability to lead projects from theoretical conception to practical implementation, supported by a strong proficiency in **Python, PyTorch**, and the full scientific computing stack for large-scale data analysis and model deployment.
                         </p>
-                                    
-                      <!-- Keywords Bar -->
-                        <p class="text-sm text-gray-500 mb-8">
-                            [Recent: **PhD in Biomedical AI** • **Meta Reality Labs** • **Foundation Models** • **Active Learning**]
-                        </p>
-                        
                     </div>
-                    <!-- END OF NEW PARAGRAPH -->
+                    
+                    <!-- Keywords Bar -->
+                    <p class="text-sm text-gray-500 mt-4 mb-8">
+                        [Recent: **PhD in Biomedical AI** • **Meta Reality Labs** • **Foundation Models** • **Active Learning**]
+                    </p>
 
                     <!-- Call to Action Button -->
-                    <div class="mt-8">
+                    <div class="mt-8 md:text-left text-center">
                         <a href="#portfolio" class="inline-flex items-center bg-accent-blue hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition duration-300">
                             View My Portfolio
                             <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
@@ -259,6 +264,7 @@
             </div>
         </section>
         
+        <!-- Section 1.5 removed as content was merged into Section 1 -->
 
         <!-- 2. Core Competencies -->
         <section id="competencies" class="py-12">
@@ -297,7 +303,7 @@
                     <p class="text-sm font-semibold text-gray-500 mb-3">Core Problem: Pre-training Cost & Model Quality</p>
                     <ul class="list-disc list-inside space-y-2 text-sm text-gray-300 pl-4">
                         <li>**My Expertise:** Experience designing and curating specialized, high-quality datasets for training robust machine learning models on noisy, real-world data.</li>
-                        <li>**Foundation Model Application:** I am an **AI Training Optimizer**. My skills implement strategic data selection pipelines that can reduce compute requirements by over **80%** while improving final model performance.</li>
+                        <li>**Foundation Model Application:** I am an **AI Training Optimizer** (AI Training Optimizer). My skills implement strategic data selection pipelines that can reduce compute requirements by over **80%** while improving final model performance.</li>
                     </ul>
                 </div>
 
@@ -449,46 +455,7 @@
             </div>
         </section>
 
-        <!-- Selected Publications & Preprints (Kept for Academic Credibility) -->
-        <section class="py-12">
-            <h2 class="section-title text-3xl font-bold mb-8">Selected Publications & Preprints</h2>
-
-            <div class="space-y-6">
-
-                <!-- Pub 1 -->
-                <div class="p-4 bg-dark-card rounded-xl border border-gray-700/50">
-                    <p class="font-medium text-gray-200">Multimodal Real-time, Context-aware Adaptation for Robust Myoelectric Control in Prosthetics</p>
-                    <p class="text-sm text-gray-400 mt-1">K. Szymaniak, J. Smith, A. Brown. <span class="text-gray-500 italic">IEEE Transactions on Biomedical Engineering, 2024.</span></p>
-                    <div class="flex flex-wrap mt-2">
-                        <span class="tag" style="--tag-bg: rgba(59, 130, 246, 0.15); --tag-text: #3b82f6;">Journal</span>
-                        <span class="tag" style="--tag-bg: rgba(168, 85, 247, 0.15); --tag-text: #a855f7;">#AdaptiveML</span>
-                    </div>
-                </div>
-
-                <!-- Pub 2 -->
-                <div class="p-4 bg-dark-card rounded-xl border border-gray-700/50">
-                    <p class="font-medium text-gray-200">Augmenting SGL: A Multimodal Fusion Approach to Enhance Head and Speech Interactions in the Metaverse</p>
-                    <p class="text-sm text-gray-400 mt-1">K. Szymaniak, C. Jones, D. Green. <span class="text-gray-500 italic">ACM Annual Symposium on Spatial Computing, 2023. DOI: 10.1145/3549247</span></p>
-                    <div class="flex flex-wrap mt-2">
-                        <span class="tag" style="--tag-bg: rgba(234, 179, 8, 0.15); --tag-text: #eab308;">Conference</span>
-                        <span class="tag" style="--tag-bg: rgba(168, 85, 247, 0.15); --tag-text: #a855f7;">#Multimodal</span>
-                    </div>
-                </div>
-
-                <!-- Pub 3 -->
-                <div class="p-4 bg-dark-card rounded-xl border border-gray-700/50">
-                    <p class="font-medium text-gray-200">The Agent's Ethos: Integrating Ethical Constraints into Large Language Model Planning</p>
-                    <p class="text-sm text-gray-400 mt-1">K. Szymaniak, N. White. <span class="text-gray-500 italic">Preprint</span></p>
-                    <div class="flex flex-wrap mt-2">
-                        <span class="tag" style="--tag-bg: rgba(59, 130, 246, 0.15); --tag-text: #3b82f6;">Preprint</span>
-                        <span class="tag" style="--tag-bg: rgba(168, 85, 247, 0.15); --tag-text: #a855f7;">#AgenticAI</span>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-        <!-- 4. Experience (UPDATED ICONS) -->
+                <!-- 4. Experience (UPDATED ICONS) -->
         <section id="experience" class="py-12">
             <h2 class="section-title text-3xl font-bold mb-8">Professional Experience</h2>
 
@@ -574,19 +541,66 @@
             </div>
             <!-- Timeline Container End -->
         </section>
+        
+        <!-- Selected Publications & Preprints (Kept for Academic Credibility) -->
+        <section class="py-12">
+            <h2 class="section-title text-3xl font-bold mb-8">Selected Publications</h2>
+
+            <div class="space-y-6">
+
+                <!-- Pub 1 -->
+                <div class="p-4 bg-dark-card rounded-xl border border-gray-700/50">
+                    <p class="font-medium text-gray-200">Multimodal Real-time, Context-aware Adaptation for Robust Myoelectric Control in Prosthetics</p>
+                    <p class="text-sm text-gray-400 mt-1">K. Szymaniak, J. Smith, A. Brown. <span class="text-gray-500 italic">IEEE Transactions on Biomedical Engineering, 2024.</span></p>
+                    <div class="flex flex-wrap mt-2">
+                        <span class="tag" style="--tag-bg: rgba(59, 130, 246, 0.15); --tag-text: #3b82f6;">Journal</span>
+                        <span class="tag" style="--tag-bg: rgba(168, 85, 247, 0.15); --tag-text: #a855f7;">#AdaptiveML</span>
+                    </div>
+                </div>
+
+                <!-- Pub 2 -->
+                <div class="p-4 bg-dark-card rounded-xl border border-gray-700/50">
+                    <p class="font-medium text-gray-200">Augmenting SGL: A Multimodal Fusion Approach to Enhance Head and Speech Interactions in the Metaverse</p>
+                    <p class="text-sm text-gray-400 mt-1">K. Szymaniak, C. Jones, D. Green. <span class="text-gray-500 italic">ACM Annual Symposium on Spatial Computing, 2023. DOI: 10.1145/3549247</span></p>
+                    <div class="flex flex-wrap mt-2">
+                        <span class="tag" style="--tag-bg: rgba(234, 179, 8, 0.15); --tag-text: #eab308;">Conference</span>
+                        <span class="tag" style="--tag-bg: rgba(168, 85, 247, 0.15); --tag-text: #a855f7;">#Multimodal</span>
+                    </div>
+                </div>
+
+                <!-- Pub 3 -->
+                <div class="p-4 bg-dark-card rounded-xl border border-gray-700/50">
+                    <p class="font-medium text-gray-200">The Agent's Ethos: Integrating Ethical Constraints into Large Language Model Planning</p>
+                    <p class="text-sm text-gray-400 mt-1">K. Szymaniak, N. White. <span class="text-gray-500 italic">Preprint</span></p>
+                    <div class="flex flex-wrap mt-2">
+                        <span class="tag" style="--tag-bg: rgba(59, 130, 246, 0.15); --tag-text: #3b82f6;">Preprint</span>
+                        <span class="tag" style="--tag-bg: rgba(168, 85, 247, 0.15); --tag-text: #a855f7;">#AgenticAI</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
 
         <!-- 5. Contact -->
         <section id="contact" class="py-12">
-            <h2 class="section-title text-3xl font-bold mb-8">Get in Touch</h2>
-            <div class="max-w-xl mx-auto md:mx-0 bg-dark-card p-8 rounded-xl border border-gray-700/50 text-center md:text-left">
-                <p class="text-xl text-gray-200 mb-6">
-                    I am actively seeking **Applied Scientist** and **Research Scientist** roles in Health AI, Robotics, and Core AI Research. I am passionate about tackling foundational challenges and building technology that has a meaningful impact.
+            <h2 class="section-title text-3xl font-bold mb-8 mx-auto text-center">Get in Touch</h2>
+            <div class="max-w-xl mx-auto bg-dark-card p-8 rounded-xl border border-gray-700/50 text-center">
+                <p class="text-xl text-gray-200 mb-6 font-semibold">
+                    Let's collaborate on the next generation of robust and data-efficient AI systems.
+                </p>
+                <p class="text-md text-gray-300 mb-8">
+                    I am actively seeking **Applied Scientist** and **Research Scientist** roles and am excited to discuss foundational challenges in Health AI, Robotics, and core ML research.
                 </p>
 
                 <!-- Updated Email Link -->
-                <p class="text-lg font-semibold text-gray-100 mb-4">Email: <a href="mailto:kszymaniak043@gmail.com" class="text-accent-blue hover:text-blue-400">kszymaniak043@gmail.com</a></p>
+                <p class="text-lg font-bold text-gray-100 mb-6 flex items-center justify-center">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-3 text-accent-blue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="m22 6-10 7L2 6"/></svg>
+                    <a href="mailto:kszymaniak043@gmail.com" class="text-accent-blue hover:text-blue-400 transition">kszymaniak043@gmail.com</a>
+                </p>
 
-                <div class="flex justify-center md:justify-start space-x-4">
+                <div class="flex justify-center space-x-4 pt-4 border-t border-gray-700/50">
                     <!-- LinkedIn -->
                     <a href="https://www.linkedin.com/in/katarzyna-szymaniak-ai/" target="_blank" class="text-gray-400 hover:text-accent-blue transition duration-150 flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-1"><path d="M16 8a4 4 0 0 0-4-4 4 4 0 0 0-4 4v7H5v-7h2v7h2v-7h2v7h2v-7h2v7h2V8z"/><rect width="4" height="4" x="2" y="10"/><rect width="4" height="4" x="2" y="2"/></svg>
