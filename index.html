@@ -18,10 +18,10 @@
                         'dark-card': '#1e293b',  // Card background (slate-800)
                         'dark-text': '#f1f5f9',  // Light text (slate-100)
                         
-                        // Base colors for Light Mode
-                        'light-bg': '#f8fafc',   // Very light gray (slate-50)
+                        // Base colors for Light Mode (Refined for better UI)
+                        'light-bg': '#f9fafb',   // Very light gray (off-white)
                         'light-card': '#ffffff', // White card
-                        'light-text': '#0f172a', // Dark text (slate-900)
+                        'light-text': '#1f2937', // Dark gray (gray-900)
 
                         // Shared Accent Colors
                         'accent-blue': '#3b82f6', // blue-500
@@ -31,8 +31,8 @@
                         // Tag Colors (Using Indigo for tags)
                         'tag-bg-dark': 'rgba(129, 140, 248, 0.15)', 
                         'tag-text-dark': '#818cf8', 
-                        'tag-bg-light': 'rgba(129, 140, 248, 0.5)',
-                        'tag-text-light': '#3730a3', // indigo-700
+                        'tag-bg-light': 'rgba(59, 130, 246, 0.1)', // Muted, very light blue
+                        'tag-text-light': '#1d4ed8', // dark blue
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
@@ -53,12 +53,13 @@
             transition: background-color 0.3s, color 0.3s;
         }
 
-        /* Variables for easy color switching */
+        /* Variables for easy color switching (DARK MODE DEFAULTS) */
         :root {
             --bg-color: #0f172a;
             --card-color: #1e293b;
             --text-color: #f1f5f9;
             --secondary-text: #94a3b8;
+            --border-color: #334155; /* slate-700 */
             --tag-bg: rgba(129, 140, 248, 0.15);
             --tag-text: #818cf8;
             --accent-blue: #3b82f6;
@@ -66,12 +67,13 @@
 
         /* Light Mode overrides */
         html.light {
-            --bg-color: #f8fafc;
-            --card-color: #ffffff;
-            --text-color: #0f172a;
-            --secondary-text: #475569;
-            --tag-bg: rgba(129, 140, 248, 0.5);
-            --tag-text: #3730a3;
+            --bg-color: #f9fafb; /* Soft white */
+            --card-color: #ffffff; /* Pure white cards */
+            --text-color: #1f2937; /* Dark gray */
+            --secondary-text: #6b7280; /* Medium gray */
+            --border-color: #e5e7eb; /* gray-200 */
+            --tag-bg: rgba(59, 130, 246, 0.1); /* Very light blue */
+            --tag-text: #1d4ed8; /* Dark blue */
         }
 
         /* Apply variables to key elements */
@@ -90,7 +92,7 @@
 
         .card-style {
             background-color: var(--card-color);
-            border-color: var(--secondary-text);
+            border-color: var(--border-color); /* Uses new variable */
         }
 
         .text-default {
@@ -191,8 +193,8 @@
             background-color: var(--card-color);
             padding: 1.5rem;
             border-radius: 0.75rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            border: 1px solid var(--secondary-text);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); /* Lighter shadow for light mode */
+            border: 1px solid var(--border-color);
         }
         /* --- End Timeline Styles --- */
         
@@ -207,12 +209,12 @@
             background-color: var(--card-color); 
             transition: background-color 0.2s, color 0.2s;
             color: var(--secondary-text);
-            border: 1px solid var(--secondary-text);
+            border: 1px solid var(--border-color);
         }
 
         .contact-icon-link:hover {
             background-color: var(--accent-blue); 
-            color: var(--text-color); 
+            color: #ffffff; /* White text on hover for contrast */
             border-color: var(--accent-blue);
         }
         /* --- End Contact Icons Styles --- */
@@ -241,7 +243,7 @@
         }
     </style>
 </head>
-<body class="antialiased">
+<body class="antialiased dark">
 
     <!-- JavaScript for Dark/Light Mode and Bold Text Processing -->
     <script>
@@ -290,7 +292,7 @@
                 elements.forEach(element => {
                     let htmlContent = element.innerHTML;
                     // Regex to find **{text}** and replace it with <strong>text</strong>
-                    htmlContent = htmlContent.replace(/\*\*\{(.*?)\}\*\*/g, '<strong>$1</strong>');
+                    htmlContent = htmlContent.replace(/\*\*{(.*?)}\*\*/g, '<strong>$1</strong>');
                     element.innerHTML = htmlContent;
                 });
             };
@@ -298,34 +300,13 @@
             // Apply bold processing to all relevant text blocks
             processTextForBold('.text-process-bold');
 
-            // Update color classes for light mode elements dynamically
-            const updateColors = () => {
-                const isDark = html.classList.contains('dark');
-                const textElements = document.querySelectorAll('.text-secondary');
-                textElements.forEach(el => {
-                    el.classList.toggle('text-gray-400', isDark);
-                    el.classList.toggle('text-gray-600', !isDark);
-                });
-                
-                const cardElements = document.querySelectorAll('.card-style');
-                cardElements.forEach(el => {
-                    el.classList.toggle('bg-dark-card', isDark);
-                    el.classList.toggle('bg-light-card', !isDark);
-                });
-            };
-            
-            // Re-run color updates on toggle
-            modeToggle.addEventListener('click', () => {
-                updateColors();
-            });
-
-            // Initial color update for secondary colors
-            updateColors();
+            // Note: We no longer need the explicit updateColors function in JS 
+            // because all dynamic colors are handled by CSS variables based on html.light/dark
         });
     </script>
 
     <!-- Header & Navigation -->
-    <header class="sticky top-0 z-50 header-bg backdrop-blur-sm shadow-lg border-b border-gray-700/50">
+    <header class="sticky top-0 z-50 header-bg backdrop-blur-sm shadow-lg border-b" style="border-color: var(--border-color);">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-4">
             <div class="text-xl font-bold text-default">Szymaniak</div>
             <nav class="hidden md:flex space-x-6 items-center">
@@ -336,7 +317,7 @@
                 <a href="#experience" class="nav-link hover:text-accent-blue transition duration-150">Experience</a>
                 <a href="#contact" class="nav-link hover:text-accent-blue transition duration-150">Contact</a>
                 <!-- Dark Mode Toggle Button -->
-                <button id="mode-toggle" onclick="toggleDarkMode()" class="mode-toggle p-2 rounded-full hover:bg-gray-700/50 transition">
+                <button id="mode-toggle" onclick="toggleDarkMode()" class="mode-toggle p-2 rounded-full hover:bg-gray-700/50 transition" style="background-color: var(--card-color); border: 1px solid var(--border-color);">
                     <!-- Icon replaced by JS on load -->
                 </button>
             </nav>
@@ -364,9 +345,13 @@
                 <div class="flex flex-col items-center md:items-center md:col-span-1">
                     
                     <!-- Profile Image Placeholder (Enlarged and uses custom class) -->
-                    <div class="w-48 h-48 rounded-full overflow-hidden mb-6 border-4 border-dark-card shadow-2xl">
-                        <img src="me.jpeg" alt="Dr. Katarzyna Szymaniak" class="w-full h-full object-cover">
-                    </div>
+                    <div style="width: 100%; text-align: center; margin: 20px 0;">
+                        <img
+                        src="image_769a00.png"
+                        alt="New detailed figure replacing the KS schematic"
+                        style="max-width: 100%; height: auto; display: block; margin: 0 auto; border: 1px solid #ddd; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"
+                        />
+                    </div>
                     
                     <!-- Name and Sub-title (associated with the image) -->
                     <h2 class="text-2xl font-bold text-default mb-0 text-center">Dr. Katarzyna Szymaniak</h2>
@@ -409,7 +394,7 @@
                     </p>
 
                     <!-- Core Pitch (Inside Card) -->
-                    <div class="card-style p-6 rounded-xl border border-gray-700/50 flex flex-col">
+                    <div class="card-style p-6 rounded-xl border" style="border-color: var(--border-color); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
                         <h2 class="text-xl font-bold text-default mb-4">An AI Research Scientist for the Next Wave of Innovation</h2>
                         <!-- Body text is now text-sm -->
                         <p class="text-sm text-secondary leading-relaxed text-process-bold">
@@ -442,7 +427,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
 
                 <!-- Card 1: Signal Processing -->
-                <div class="card-style p-6 rounded-xl border border-gray-700/50 flex flex-col hover:border-accent-blue transition duration-300">
+                <div class="card-style p-6 rounded-xl border" style="border-color: var(--border-color);" flex flex-col hover:border-accent-blue transition duration-300">
                     <div class="text-accent-blue text-4xl mb-4">🔬</div>
                     <h3 class="text-2xl font-semibold mb-2 text-default">Signal Processing</h3>
                     <p class="text-sm font-semibold text-secondary mb-3">Core Problem: Model Efficiency & Multimodal Data Integration</p>
@@ -453,7 +438,7 @@
                 </div>
 
                 <!-- Card 2: Active Learning -->
-                <div class="card-style p-6 rounded-xl border border-gray-700/50 flex flex-col hover:border-accent-blue transition duration-300">
+                <div class="card-style p-6 rounded-xl border" style="border-color: var(--border-color);" flex flex-col hover:border-accent-blue transition duration-300">
                     <div class="text-accent-green text-4xl mb-4">💡</div>
                     <h3 class="text-2xl font-semibold mb-2 text-default">Active Learning</h3>
                     <p class="text-sm font-semibold text-secondary mb-3">Core Problem: AI Alignment & Data Labeling Costs</p>
@@ -464,7 +449,7 @@
                 </div>
 
                 <!-- Card 3: Dataset Curation -->
-                <div class="card-style p-6 rounded-xl border border-gray-700/50 flex flex-col hover:border-accent-blue transition duration-300">
+                <div class="card-style p-6 rounded-xl border" style="border-color: var(--border-color);" flex flex-col hover:border-accent-blue transition duration-300">
                     <div class="text-accent-purple text-4xl mb-4">📊</div>
                     <h3 class="text-2xl font-semibold mb-2 text-default">Dataset Curation</h3>
                     <p class="text-sm font-semibold text-secondary mb-3">Core Problem: Pre-training Cost & Model Quality</p>
@@ -475,7 +460,7 @@
                 </div>
 
                 <!-- Card 4: Domain Generalization & Benchmarking -->
-                <div class="card-style p-6 rounded-xl border border-gray-700/50 flex flex-col hover:border-accent-blue transition duration-300">
+                <div class="card-style p-6 rounded-xl border" style="border-color: var(--border-color);" flex flex-col hover:border-accent-blue transition duration-300">
                     <div class="text-yellow-400 text-4xl mb-4">✅</div>
                     <h3 class="text-2xl font-semibold mb-2 text-default">Domain Generalization & Benchmarking</h3>
                     <p class="text-sm font-semibold text-secondary mb-3">Core Problem: Out-of-Distribution (OOD) Robustness & Flawed Benchmarks</p>
@@ -496,10 +481,10 @@
             <div class="space-y-12">
 
                 <!-- Project 1: Multimodal Sensor Fusion (Meta Reality Labs) -->
-                <div class="card-style p-6 rounded-xl shadow-lg border border-gray-700/50">
+                <div class="card-style p-6 rounded-xl shadow-lg border" style="border-color: var(--border-color);">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
                         <h4 class="text-2xl font-bold text-accent-blue mb-1 sm:mb-0">Multimodal Sensor Fusion for Metaverse Interactions (Meta Reality Labs)</h4>
-                        <span class="text-sm text-secondary bg-gray-700/50 px-3 py-1 rounded-full">Sep 2022 - Mar 2023</span>
+                        <span class="text-sm text-secondary" style="background-color: var(--bg-color); border: 1px solid var(--border-color); padding: 0.25rem 0.75rem; border-radius: 9999px;">Sep 2022 - Mar 2023</span>
                     </div>
                     
                     <div class="grid md:grid-cols-2 gap-6">
@@ -527,7 +512,7 @@
                 </div>
 
                 <!-- Project 2: Neuroimaging Data Analysis (HoloLens) -->
-                <div class="card-style p-6 rounded-xl shadow-lg border border-gray-700/50">
+                <div class="card-style p-6 rounded-xl shadow-lg border" style="border-color: var(--border-color);">
                     <h4 class="text-2xl font-bold text-accent-blue mb-3">Neuroimaging Data Analysis: HoloLens for Teaching Purposes</h4>
 
                     <div class="grid md:grid-cols-2 gap-6">
@@ -560,7 +545,7 @@
                 </div>
 
                 <!-- Project 3: The Biosignal Foundation Model Project -->
-                <div class="card-style p-6 rounded-xl shadow-lg border border-gray-700/50">
+                <div class="card-style p-6 rounded-xl shadow-lg border" style="border-color: var(--border-color);">
                     <h4 class="text-2xl font-bold text-accent-blue mb-3">Fine-Tuning a PPG Foundation Model for EMG Gesture Recognition</h4>
 
                     <div class="grid md:grid-cols-2 gap-6">
@@ -590,7 +575,7 @@
                 </div>
 
                 <!-- Project 4: The Active Preference Learning Simulation -->
-                <div class="card-style p-6 rounded-xl shadow-lg border border-gray-700/50">
+                <div class="card-style p-6 rounded-xl shadow-lg border" style="border-color: var(--border-color);">
                     <h4 class="text-2xl font-bold text-accent-blue mb-3">Simulation: Boosting DPO Efficiency with Active Preference Learning</h4>
                     
                     <div class="grid md:grid-cols-2 gap-6">
@@ -629,14 +614,14 @@
             <div class="space-y-6">
 
                 <!-- Pub 1 -->
-                <div class="p-4 card-style rounded-xl border border-gray-700/50">
+                <div class="p-4 card-style rounded-xl border" style="border-color: var(--border-color);">
                     <div>
                         <p class="font-medium text-default text-lg">Multimodal Real-time, Context-aware Adaptation for Robust Myoelectric Control in Prosthetics</p>
                         <p class="text-sm text-secondary mt-1 text-process-bold">K. Szymaniak, J. Smith, A. Brown. <span class="text-gray-500 italic">**{IEEE Transactions on Biomedical Engineering, 2024}**.</span></p>
                     </div>
                     
                     <!-- BOTTOM SECTION: Tags (Left) and Links (Right) -->
-                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mt-3 pt-3 border-t border-gray-700/50">
+                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mt-3 pt-3 border-t" style="border-color: var(--border-color);">
                         
                         <!-- TAGS GROUP (Left/Top) -->
                         <div class="flex flex-wrap mb-2 sm:mb-0 space-x-2">
@@ -652,7 +637,7 @@
                                 Paper PDF
                             </a>
                             <!-- Code Link -->
-                            <a href="#placeholder" target="_blank" class="text-sm font-semibold text-gray-500 hover:text-gray-300 flex items-center">
+                            <a href="#placeholder" target="_blank" class="text-sm font-semibold text-secondary hover:text-accent-blue flex items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.67c2.84-.4 5.82-1.42 5.82-6.51a4.83 4.83 0 0 0-1.3-3.37 4.54 4.54 0 0 0-.1-3.41s-1.02-.34-3.33 1.3a12.18 12.18 0 0 0-6.27 0c-2.31-1.64-3.33-1.3-3.33-1.3a4.54 4.54 0 0 0-.1 3.41A4.83 4.83 0 0 0 3 13.5c0 5.09 2.98 6.11 5.82 6.51A3.37 3.37 0 0 0 9 20v3m3-19c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
                                 GitHub Code
                             </a>
@@ -661,14 +646,14 @@
                 </div>
 
                 <!-- Pub 2 -->
-                <div class="p-4 card-style rounded-xl border border-gray-700/50">
+                <div class="p-4 card-style rounded-xl border" style="border-color: var(--border-color);">
                     <div>
                         <p class="font-medium text-default text-lg">Augmenting SGL: A Multimodal Fusion Approach to Enhance Head and Speech Interactions in the Metaverse</p>
                         <p class="text-sm text-secondary mt-1 text-process-bold">K. Szymaniak, C. Jones, D. Green. <span class="text-gray-500 italic">**{ACM Annual Symposium on Spatial Computing, 2023. DOI: 10.1145/3549247}**</span></p>
                     </div>
                     
                     <!-- BOTTOM SECTION: Tags (Left) and Links (Right) -->
-                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mt-3 pt-3 border-t border-gray-700/50">
+                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mt-3 pt-3 border-t" style="border-color: var(--border-color);">
                         
                         <!-- TAGS GROUP (Left/Top) -->
                         <div class="flex flex-wrap mb-2 sm:mb-0 space-x-2">
@@ -684,7 +669,7 @@
                                 Paper PDF
                             </a>
                             <!-- Code Link -->
-                            <a href="#placeholder" target="_blank" class="text-sm font-semibold text-gray-500 hover:text-gray-300 flex items-center">
+                            <a href="#placeholder" target="_blank" class="text-sm font-semibold text-secondary hover:text-accent-blue flex items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.67c2.84-.4 5.82-1.42 5.82-6.51a4.83 4.83 0 0 0-1.3-3.37 4.54 4.54 0 0 0-.1-3.41s-1.02-.34-3.33 1.3a12.18 12.18 0 0 0-6.27 0c-2.31-1.64-3.33-1.3-3.33-1.3a4.54 4.54 0 0 0-.1 3.41A4.83 4.83 0 0 0 3 13.5c0 5.09 2.98 6.11 5.82 6.51A3.37 3.37 0 0 0 9 20v3m3-19c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
                                 GitHub Code
                             </a>
@@ -693,14 +678,14 @@
                 </div>
 
                 <!-- Pub 3 -->
-                <div class="p-4 card-style rounded-xl border border-gray-700/50">
+                <div class="p-4 card-style rounded-xl border" style="border-color: var(--border-color);">
                     <div>
                         <p class="font-medium text-default text-lg">The Agent's Ethos: Integrating Ethical Constraints into Large Language Model Planning</p>
                         <p class="text-sm text-secondary mt-1 text-process-bold">K. Szymaniak, N. White. <span class="text-gray-500 italic">**{Preprint}**</span></p>
                     </div>
                     
                     <!-- BOTTOM SECTION: Tags (Left) and Links (Right) -->
-                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mt-3 pt-3 border-t border-gray-700/50">
+                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mt-3 pt-3 border-t" style="border-color: var(--border-color);">
                         
                         <!-- TAGS GROUP (Left/Top) -->
                         <div class="flex flex-wrap mb-2 sm:mb-0 space-x-2">
@@ -716,7 +701,7 @@
                                 Paper PDF
                             </a>
                             <!-- Code Link -->
-                            <a href="#placeholder" target="_blank" class="text-sm font-semibold text-gray-500 hover:text-gray-300 flex items-center">
+                            <a href="#placeholder" target="_blank" class="text-sm font-semibold text-secondary hover:text-accent-blue flex items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.67c2.84-.4 5.82-1.42 5.82-6.51a4.83 4.83 0 0 0-1.3-3.37 4.54 4.54 0 0 0-.1-3.41s-1.02-.34-3.33 1.3a12.18 12.18 0 0 0-6.27 0c-2.31-1.64-3.33-1.3-3.33-1.3a4.54 4.54 0 0 0-.1 3.41A4.83 4.83 0 0 0 3 13.5c0 5.09 2.98 6.11 5.82 6.51A3.37 3.37 0 0 0 9 20v3m3-19c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
                                 GitHub Code
                             </a>
@@ -814,7 +799,7 @@
         <!-- 6. Contact -->
         <section id="contact" class="py-12">
             <h2 class="section-title text-3xl font-bold mb-8 mx-auto text-center">Get in Touch</h2>
-            <div class="max-w-xl mx-auto card-style p-8 rounded-xl border border-gray-700/50 text-center">
+            <div class="max-w-xl mx-auto card-style p-8 rounded-xl border" style="border-color: var(--border-color); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);" text-center>
                 <p class="text-xl text-default mb-6 font-semibold">
                     Let's collaborate on the next generation of robust and data-efficient AI systems.
                 </p>
@@ -828,7 +813,7 @@
                     <a href="mailto:kszymaniak043@gmail.com" class="text-accent-blue hover:text-blue-400 transition">kszymaniak043@gmail.com</a>
                 </p>
 
-                <div class="flex justify-center space-x-4 pt-4 border-t border-gray-700/50">
+                <div class="flex justify-center space-x-4 pt-4 border-t" style="border-color: var(--border-color);">
                     <!-- LinkedIn -->
                     <a href="https://www.linkedin.com/in/katarzyna-szymaniak-ai/" target="_blank" class="text-secondary hover:text-accent-blue transition duration-150 flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-1"><path d="M16 8a4 4 0 0 0-4-4 4 4 0 0 0-4 4v7H5v-7h2v7h2v-7h2v7h2v-7h2v7h2V8z"/><rect width="4" height="4" x="2" y="10"/><rect width="4" height="4" x="2" y="2"/></svg>
