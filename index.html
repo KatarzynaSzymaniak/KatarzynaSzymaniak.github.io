@@ -1,794 +1,1516 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dr. Katarzyna Szymaniak | Research Portfolio</title>
-    <!-- Load Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        // Custom Tailwind configuration for light/dark mode
-        tailwind.config = {
-            darkMode: 'class', // Enable dark mode using 'dark' class on <html>
-            theme: {
-                extend: {
-                    colors: {
-                        // Base colors for Dark Mode (Default)
-                        'dark-bg': '#0f172a',    // Deep navy background (slate-900)
-                        'dark-card': '#1e293b',  // Card background (slate-800)
-                        'dark-text': '#f1f5f9',  // Light text (slate-100)
-                        
-                        // Base colors for Light Mode (Refined for better UI)
-                        'light-bg': '#f9fafb',   // Very light gray (off-white)
-                        'light-card': '#ffffff', // White card
-                        'light-text': '#1f2937', // Dark gray (gray-900)
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Katarzyna Szymaniak — Biomedical AI · Adaptive ML for Biosignals & Wearables</title>
+<meta name="description" content="Dr. Katarzyna Szymaniak — Biomedical AI researcher. PhD, University of Edinburgh. Adaptive machine learning for biosignals, wearables, and the messy distribution shifts of real human bodies." />
+<meta name="author" content="Katarzyna Szymaniak" />
+<meta property="og:title" content="Katarzyna Szymaniak — Biomedical AI Researcher" />
+<meta property="og:description" content="Adaptive machine learning for biosignals, wearables, and the messy distribution shifts of real human bodies." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://katarzynaszymaniak.github.io/" />
+<meta property="og:image" content="https://katarzynaszymaniak.github.io/me.jpeg" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:creator" content="@szymaniak_kasia" />
+<meta name="theme-color" content="#0a0a0c" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0a0c'/%3E%3Cpath d='M6 32 L18 32 L22 18 L30 46 L36 24 L42 38 L46 32 L58 32' stroke='%23d4a574' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,300..900,0..100,0..1&family=DM+Sans:opsz,wght@9..40,300..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  /* ------------------------------------------------------------
+     0. tokens
+     ------------------------------------------------------------ */
+  :root {
+    --bg:           #0a0a0c;
+    --bg-elev:      #101015;
+    --bg-card:      #14141a;
+    --bg-card-hi:   #1a1a22;
+    --fg:           #ece8de;
+    --fg-strong:    #f6f3eb;
+    --fg-muted:     #8a8478;
+    --fg-dim:       #5a544a;
+    --border:       rgba(236, 232, 222, 0.08);
+    --border-strong:rgba(236, 232, 222, 0.16);
+    --accent:       #d4a574;   /* copper / sand — human, warmth */
+    --accent-dim:   #8a6d47;
+    --signal:       #7ae5b8;   /* electric green — biosignal, sparingly */
+    --signal-dim:   #2f6b54;
+    --rust:         #e58a6e;
+    --serif:        'Fraunces', 'Iowan Old Style', 'Apple Garamond', Garamond, 'Times New Roman', serif;
+    --sans:         'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --mono:         'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+    --maxw:         1180px;
+    --gutter:       clamp(20px, 4vw, 56px);
+    --ease:         cubic-bezier(0.22, 1, 0.36, 1);
+  }
 
-                        // Shared Accent Colors
-                        'accent-blue': '#3b82f6', // blue-500
-                        'accent-green': '#10b981', // emerald-500
-                        'accent-purple': '#a855f7', // violet-500
-                        
-                        // Tag Colors (Using Indigo for tags)
-                        'tag-bg-dark': 'rgba(129, 140, 248, 0.15)', 
-                        'tag-text-dark': '#818cf8', 
-                        'tag-bg-light': 'rgba(59, 130, 246, 0.1)', // Muted, very light blue
-                        'tag-text-light': '#1d4ed8', // dark blue
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
-    <style>
-        /* Base styles applied to the body, using dark mode colors by default */
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--dark-bg); 
-            color: var(--dark-text);
-            min-height: 100vh;
-            padding-bottom: 5rem;
-            transition: background-color 0.3s, color 0.3s;
-        }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+  }
 
-        /* Variables for easy color switching (DARK MODE DEFAULTS) */
-        :root {
-            --bg-color: #0f172a;
-            --card-color: #1e293b;
-            --text-color: #f1f5f9;
-            --secondary-text: #94a3b8;
-            --border-color: #334155; /* slate-700 */
-            --tag-bg: rgba(129, 140, 248, 0.15);
-            --tag-text: #818cf8;
-            --accent-blue: #3b82f6;
-        }
+  /* ------------------------------------------------------------
+     1. base
+     ------------------------------------------------------------ */
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    font-feature-settings: "ss01", "cv11";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+  /* film grain overlay */
+  body::before {
+    content: "";
+    position: fixed; inset: 0;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.9  0 0 0 0 0.85  0 0 0 0 0.75  0 0 0 0.035 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    opacity: 0.6;
+    mix-blend-mode: overlay;
+    z-index: 9999;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
 
-        /* Light Mode overrides */
-        html.light {
-            --bg-color: #f9fafb; /* Soft white */
-            --card-color: #ffffff; /* Pure white cards */
-            --text-color: #1f2937; /* Dark gray */
-            --secondary-text: #6b7280; /* Medium gray */
-            --border-color: #e5e7eb; /* gray-200 */
-            --tag-bg: rgba(59, 130, 246, 0.1); /* Very light blue */
-            --tag-text: #1d4ed8; /* Dark blue */
-        }
+  a { color: inherit; text-decoration: none; }
+  img { max-width: 100%; display: block; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
 
-        /* Apply variables to key elements */
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-        }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 var(--gutter); }
 
-        .header-bg {
-             background-color: var(--bg-color);
-        }
-        
-        .nav-link, .mode-toggle {
-            color: var(--text-color);
-        }
+  /* typography */
+  h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; letter-spacing: -0.02em; line-height: 1.05; margin: 0; font-variation-settings: "SOFT" 30, "WONK" 0; }
+  h1 { font-size: clamp(56px, 10vw, 132px); letter-spacing: -0.035em; }
+  h2 { font-size: clamp(36px, 5.5vw, 64px); }
+  h3 { font-size: clamp(22px, 2.6vw, 30px); letter-spacing: -0.015em; }
+  h4 { font-size: 18px; font-family: var(--sans); font-weight: 500; letter-spacing: 0; }
+  p { margin: 0 0 1em; }
 
-        .card-style {
-            background-color: var(--card-color);
-            border-color: var(--border-color); /* Uses new variable */
-        }
+  .serif-italic { font-family: var(--serif); font-style: italic; font-variation-settings: "SOFT" 100, "WONK" 1; }
+  .mono { font-family: var(--mono); font-size: 0.82em; letter-spacing: 0.02em; }
+  .muted { color: var(--fg-muted); }
+  .dim   { color: var(--fg-dim); }
+  .accent { color: var(--accent); }
+  .signal { color: var(--signal); }
 
-        .text-default {
-            color: var(--text-color);
-        }
+  /* curly-brace emphasis (echoes Kasia's own writing style) */
+  .k { color: var(--fg-strong); font-weight: 500; white-space: nowrap; }
+  .k::before, .k::after { color: var(--accent); font-family: var(--mono); font-weight: 400; opacity: 0.65; }
+  .k::before { content: "{"; margin-right: 0.05em; }
+  .k::after  { content: "}"; margin-left: 0.05em; }
 
-        .text-secondary {
-            color: var(--secondary-text);
-        }
+  /* small tag pill */
+  .tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--fg-muted);
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: rgba(255,255,255,0.015);
+  }
+  .tag.accent { color: var(--accent); border-color: rgba(212,165,116,0.35); }
+  .tag.signal { color: var(--signal); border-color: rgba(122,229,184,0.30); }
 
-        .section-title {
-            position: relative;
-            padding-bottom: 0.5rem;
-            margin-bottom: 1.5rem;
-            color: var(--text-color);
-        }
-        .section-title::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            height: 3px;
-            width: 50px;
-            background-color: var(--accent-blue);
-            border-radius: 9999px;
-        }
-        .project-link-button {
-            transition: background-color 0.2s, transform 0.1s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.875rem;
-            line-height: 1.25rem;
-        }
-        .project-link-button:hover {
-            transform: translateY(-1px);
-        }
-        
-        /* Tag styling using CSS variables for mode switch */
-        .tag {
-            background-color: var(--tag-bg);
-            color: var(--tag-text);
-            padding: 0.25rem 0.625rem;
-            font-size: 0.7rem;
-            font-weight: 600;
-            border-radius: 0.375rem;
-            margin-right: 0.5rem;
-            margin-bottom: 0.5rem;
-            display: inline-flex;
-            white-space: nowrap;
-        }
+  /* section header */
+  .section-head {
+    display: flex; align-items: baseline; gap: 18px;
+    margin-bottom: clamp(36px, 5vw, 64px);
+    border-top: 1px solid var(--border);
+    padding-top: clamp(36px, 5vw, 56px);
+  }
+  .section-head .num {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.18em;
+    color: var(--accent); text-transform: uppercase;
+    flex-shrink: 0;
+    padding-top: 0.5em;
+  }
+  .section-head .meta {
+    margin-left: auto;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em;
+    color: var(--fg-dim); text-transform: uppercase;
+    text-align: right;
+  }
+  .section-head h2 .serif-italic { color: var(--accent); }
 
-        /* --- Custom Styles for the Professional Experience Timeline --- */
-        .timeline-container {
-            position: relative;
-            margin-left: 20px; 
-            padding-top: 10px;
-        }
+  section { padding: clamp(60px, 8vw, 120px) 0; }
 
-        .timeline-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            width: 2px;
-            background-color: var(--accent-blue); /* Accent blue line */
-        }
+  /* ------------------------------------------------------------
+     2. nav
+     ------------------------------------------------------------ */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    background: rgba(10,10,12,0.55);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.4s var(--ease), background 0.4s var(--ease);
+  }
+  .nav.scrolled { border-bottom-color: var(--border); background: rgba(10,10,12,0.85); }
+  .nav-inner {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 14px var(--gutter);
+    display: flex; align-items: center; gap: 28px;
+  }
+  .brand {
+    font-family: var(--serif); font-size: 19px; font-weight: 500; letter-spacing: -0.01em;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .brand .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--signal); box-shadow: 0 0 12px var(--signal); animation: pulse 2.4s ease-in-out infinite; }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.85; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.85); }
+  }
+  .nav-links { display: flex; gap: 22px; margin-left: auto; }
+  .nav-links a {
+    font-size: 13px; color: var(--fg-muted);
+    transition: color 0.2s ease;
+    position: relative;
+  }
+  .nav-links a:hover { color: var(--fg); }
+  .nav-cv {
+    font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em;
+    color: var(--accent);
+    border: 1px solid rgba(212,165,116,0.4);
+    padding: 7px 12px; border-radius: 999px;
+    transition: all 0.25s ease;
+  }
+  .nav-cv:hover { background: var(--accent); color: var(--bg); }
+  .nav-burger { display: none; margin-left: auto; }
+  @media (max-width: 900px) {
+    .nav-links { display: none; }
+    .nav-burger { display: flex; align-items: center; gap: 10px; }
+  }
 
-        .timeline-item {
-            position: relative;
-            padding-left: 40px; 
-            margin-bottom: 3rem; 
-        }
+  /* ------------------------------------------------------------
+     3. hero
+     ------------------------------------------------------------ */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    min-height: 100svh;
+    padding: 140px 0 80px;
+    display: flex; flex-direction: column; justify-content: center;
+    overflow: hidden;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 0.8fr;
+    gap: clamp(32px, 5vw, 72px);
+    align-items: end;
+  }
+  @media (max-width: 880px) { .hero-grid { grid-template-columns: 1fr; gap: 40px; } }
 
-        .timeline-marker {
-            position: absolute;
-            left: -10px; 
-            top: 0;
-            width: 22px;
-            height: 22px;
-            background-color: var(--bg-color); 
-            border: 3px solid var(--accent-blue);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10;
-        }
+  .hero-eyebrow {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 32px;
+  }
+  .hero-eyebrow .status {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--fg-muted);
+    padding: 6px 12px;
+    border: 1px solid var(--border-strong);
+    border-radius: 999px;
+    background: rgba(255,255,255,0.02);
+  }
+  .hero-eyebrow .status::before {
+    content: ""; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--signal); box-shadow: 0 0 8px var(--signal);
+    animation: pulse 2s ease-in-out infinite;
+  }
 
-        .timeline-icon {
-            width: 12px;
-            height: 12px;
-            color: var(--accent-blue); 
-        }
-        
-        .experience-card-content {
-            background-color: var(--card-color);
-            padding: 1.5rem;
-            border-radius: 0.75rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); /* Lighter shadow for light mode */
-            border: 1px solid var(--border-color);
-        }
-        /* --- End Timeline Styles --- */
-        
-        /* --- Custom Styles for Contact Icons --- */
-        .contact-icon-link {
-            display: inline-flex;
-            width: 40px;
-            height: 40px;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            background-color: var(--card-color); 
-            transition: background-color 0.2s, color 0.2s;
-            color: var(--secondary-text);
-            border: 1px solid var(--border-color);
-        }
+  .hero h1 {
+    font-variation-settings: "SOFT" 50, "WONK" 0, "opsz" 144;
+    font-weight: 350;
+  }
+  .hero h1 .last { display: block; font-style: italic; color: var(--fg-strong); font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144; font-weight: 300; }
+  .hero-tagline {
+    margin-top: 28px;
+    font-size: clamp(17px, 1.6vw, 21px);
+    color: var(--fg-muted);
+    max-width: 56ch;
+    line-height: 1.5;
+  }
+  .hero-role {
+    margin-top: 18px;
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--accent);
+  }
 
-        .contact-icon-link:hover {
-            background-color: var(--accent-blue); 
-            color: #ffffff; /* White text on hover for contrast */
-            border-color: var(--accent-blue);
-        }
-        /* --- End Contact Icons Styles --- */
+  .hero-side { display: flex; flex-direction: column; gap: 28px; align-items: flex-end; }
+  @media (max-width: 880px) { .hero-side { align-items: flex-start; } }
+  .hero-portrait {
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1px solid var(--border-strong);
+    background: var(--bg-card);
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.5s var(--ease), border-color 0.3s ease;
+  }
+  .hero-portrait:hover { transform: scale(1.02); border-color: var(--accent); }
+  .hero-portrait img { width: 100%; height: 100%; object-fit: cover; }
+  .hero-portrait::after {
+    content: "psst — that's me";
+    position: absolute; bottom: -28px; left: 0; right: 0;
+    text-align: center;
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em;
+    color: var(--fg-dim); text-transform: uppercase;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .hero-portrait:hover::after { opacity: 1; }
 
-        /* Custom style for the large KS profile circle */
-        .ks-profile-circle {
-            width: 16rem; 
-            height: 16rem; 
-            border-width: 4px;
-            background-color: var(--card-color); 
-            color: var(--text-color);
-            border-color: var(--card-color);
-            font-size: 6rem;
-            font-weight: 800;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+  /* social row */
+  .socials {
+    display: flex; gap: 8px; flex-wrap: wrap;
+  }
+  .socials a {
+    width: 38px; height: 38px;
+    display: inline-flex; align-items: center; justify-content: center;
+    border: 1px solid var(--border-strong);
+    border-radius: 50%;
+    color: var(--fg-muted);
+    transition: all 0.25s ease;
+  }
+  .socials a:hover { color: var(--bg); background: var(--accent); border-color: var(--accent); transform: translateY(-2px); }
+  .socials svg { width: 16px; height: 16px; }
 
-        /* Adjusted styling for the new vertical layout */
-        @media (min-width: 768px) {
-            .home-grid {
-                grid-template-columns: 1fr 2fr;
-                align-items: center; 
-            }
-        }
-    </style>
+  /* cta row */
+  .cta-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 36px; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 12px 20px;
+    border-radius: 999px;
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+    border: 1px solid var(--border-strong);
+    transition: all 0.25s ease;
+  }
+  .btn:hover { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+  .btn.primary { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+  .btn.primary:hover { background: var(--fg-strong); color: var(--bg); border-color: var(--fg-strong); }
+  .btn .arrow { transition: transform 0.25s ease; }
+  .btn:hover .arrow { transform: translateX(3px); }
+
+  /* the EMG band - signature element */
+  .emg-band {
+    position: absolute; left: 0; right: 0; bottom: 5%;
+    height: 120px;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.85;
+    mask-image: linear-gradient(to right, transparent 0%, #000 12%, #000 88%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 12%, #000 88%, transparent 100%);
+  }
+  .emg-band svg { width: 100%; height: 100%; }
+  .emg-trace {
+    fill: none;
+    stroke: var(--signal);
+    stroke-width: 1.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 0 6px rgba(122,229,184,0.35));
+  }
+  .emg-grid line { stroke: var(--border); stroke-width: 0.5; }
+  .emg-label {
+    font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em;
+    fill: var(--fg-dim); text-transform: uppercase;
+  }
+
+  /* scroll cue */
+  .scroll-cue {
+    position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%);
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--fg-dim);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+  }
+  .scroll-cue::after {
+    content: ""; width: 1px; height: 22px;
+    background: linear-gradient(to bottom, var(--fg-dim), transparent);
+    animation: scrollLine 2.2s ease-in-out infinite;
+  }
+  @keyframes scrollLine {
+    0% { transform: translateY(-100%); opacity: 0; }
+    50% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(100%); opacity: 0; }
+  }
+
+  /* ------------------------------------------------------------
+     4. about
+     ------------------------------------------------------------ */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: clamp(36px, 5vw, 72px);
+  }
+  @media (max-width: 880px) { .about-grid { grid-template-columns: 1fr; } }
+  .about-lead {
+    font-family: var(--serif); font-size: clamp(24px, 2.6vw, 34px);
+    line-height: 1.25; color: var(--fg-strong);
+    font-weight: 350; letter-spacing: -0.015em;
+    font-variation-settings: "SOFT" 30;
+  }
+  .about-body { color: var(--fg); font-size: 17px; line-height: 1.7; }
+  .about-body p { margin-bottom: 1.2em; }
+  .about-body p:last-child { margin-bottom: 0; }
+
+  .drivers {
+    margin-top: 56px;
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px 36px;
+    border-top: 1px solid var(--border);
+    padding-top: 36px;
+  }
+  @media (max-width: 700px) { .drivers { grid-template-columns: 1fr; } }
+  .driver {
+    padding: 18px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex; gap: 16px; align-items: flex-start;
+  }
+  .driver:last-child, .driver:nth-last-child(2) { border-bottom: 0; }
+  @media (max-width: 700px) { .driver:nth-last-child(2) { border-bottom: 1px solid var(--border); } }
+  .driver .marker {
+    font-family: var(--mono); font-size: 11px; color: var(--accent); letter-spacing: 0.1em;
+    padding-top: 4px; flex-shrink: 0;
+  }
+  .driver h4 { margin-bottom: 4px; }
+  .driver p { font-size: 14px; color: var(--fg-muted); margin: 0; line-height: 1.55; }
+
+  /* ------------------------------------------------------------
+     5. research agenda cards
+     ------------------------------------------------------------ */
+  .agenda-intro {
+    font-family: var(--serif); font-size: clamp(22px, 2.4vw, 30px);
+    color: var(--fg); line-height: 1.35;
+    max-width: 60ch;
+    margin-bottom: 48px;
+    font-weight: 350;
+    font-variation-settings: "SOFT" 30;
+  }
+  .agenda-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+  .agenda-card {
+    background: var(--bg);
+    padding: 28px 24px;
+    transition: background 0.3s ease;
+    position: relative;
+  }
+  .agenda-card:hover { background: var(--bg-card); }
+  .agenda-card .ix {
+    position: absolute; top: 16px; right: 18px;
+    font-family: var(--mono); font-size: 10px; color: var(--fg-dim); letter-spacing: 0.1em;
+  }
+  .agenda-card h4 {
+    font-family: var(--serif); font-weight: 400; font-size: 22px; line-height: 1.2;
+    margin-bottom: 10px;
+    color: var(--fg-strong);
+    font-variation-settings: "SOFT" 30;
+  }
+  .agenda-card p {
+    font-size: 14px; line-height: 1.6; color: var(--fg-muted);
+    margin: 0;
+  }
+  .agenda-card .glyph {
+    font-family: var(--mono); color: var(--accent); font-size: 14px; margin-right: 8px;
+  }
+
+  /* ------------------------------------------------------------
+     6. publications
+     ------------------------------------------------------------ */
+  .pub-list { display: flex; flex-direction: column; }
+  .pub {
+    display: grid;
+    grid-template-columns: 110px 1fr auto;
+    gap: 24px;
+    padding: 26px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: start;
+    transition: background 0.3s ease;
+    position: relative;
+  }
+  .pub:first-child { border-top: 1px solid var(--border); }
+  @media (max-width: 720px) {
+    .pub { grid-template-columns: 1fr; gap: 8px; }
+  }
+  .pub .venue {
+    font-family: var(--mono); font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.12em; color: var(--accent);
+    padding-top: 4px;
+  }
+  .pub h4 {
+    font-family: var(--serif); font-weight: 400; font-size: 22px; line-height: 1.3;
+    color: var(--fg-strong); margin-bottom: 6px;
+    letter-spacing: -0.01em;
+    font-variation-settings: "SOFT" 30;
+  }
+  .pub .authors { font-size: 13px; color: var(--fg-muted); margin-bottom: 8px; }
+  .pub .authors b { color: var(--fg); font-weight: 600; }
+  .pub .summary { font-size: 14px; color: var(--fg-muted); line-height: 1.6; max-width: 70ch; }
+  .pub .links { display: flex; gap: 8px; align-self: start; padding-top: 6px; flex-wrap: wrap; }
+  .pub .links a {
+    font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em;
+    padding: 5px 10px;
+    border: 1px solid var(--border-strong); border-radius: 4px;
+    color: var(--fg-muted);
+    transition: all 0.2s ease;
+  }
+  .pub .links a:hover { color: var(--bg); background: var(--fg); border-color: var(--fg); }
+  .pub .links a.placeholder { opacity: 0.5; cursor: default; }
+  .pub .links a.placeholder:hover { color: var(--fg-muted); background: transparent; border-color: var(--border-strong); }
+
+  /* ------------------------------------------------------------
+     7. projects
+     ------------------------------------------------------------ */
+  .proj-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+  @media (max-width: 800px) { .proj-grid { grid-template-columns: 1fr; } }
+  .proj {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 32px;
+    border-radius: 4px;
+    display: flex; flex-direction: column;
+    transition: border-color 0.3s ease, transform 0.3s var(--ease);
+    position: relative;
+    overflow: hidden;
+  }
+  .proj::before {
+    content: ""; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 50% at 100% 0%, rgba(212,165,116,0.07), transparent 60%);
+    opacity: 0; transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
+  .proj:hover { border-color: rgba(212,165,116,0.4); transform: translateY(-2px); }
+  .proj:hover::before { opacity: 1; }
+  .proj .tag-row { display: flex; gap: 6px; margin-bottom: 20px; flex-wrap: wrap; }
+  .proj h3 { margin-bottom: 12px; }
+  .proj .blurb { font-size: 14px; line-height: 1.65; color: var(--fg-muted); margin-bottom: 18px; }
+  .proj .meta {
+    margin-top: auto; padding-top: 18px;
+    border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--fg-dim);
+  }
+  .proj .meta a { color: var(--accent); transition: color 0.2s ease; }
+  .proj .meta a:hover { color: var(--fg-strong); }
+  .proj .meta a::after { content: " →"; transition: margin 0.2s ease; display: inline-block; }
+  .proj .meta a:hover::after { margin-left: 4px; }
+
+  /* ------------------------------------------------------------
+     8. experience timeline
+     ------------------------------------------------------------ */
+  .timeline { position: relative; }
+  .tl-item {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 32px;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .tl-item:first-child { border-top: 1px solid var(--border); }
+  @media (max-width: 700px) {
+    .tl-item { grid-template-columns: 1fr; gap: 8px; }
+  }
+  .tl-date {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--accent);
+    padding-top: 6px;
+  }
+  .tl-body h4 {
+    font-family: var(--serif); font-size: 22px; font-weight: 400; line-height: 1.25;
+    color: var(--fg-strong); margin-bottom: 4px;
+    font-variation-settings: "SOFT" 30;
+  }
+  .tl-body .org {
+    font-size: 13px; color: var(--fg-muted); margin-bottom: 12px;
+    font-family: var(--mono); letter-spacing: 0.06em;
+  }
+  .tl-body .descr { font-size: 14px; line-height: 1.65; color: var(--fg-muted); max-width: 70ch; }
+
+  /* ------------------------------------------------------------
+     9. teaching / outreach
+     ------------------------------------------------------------ */
+  .outreach-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+  .outreach-card {
+    background: var(--bg);
+    padding: 28px 24px;
+    transition: background 0.3s ease;
+  }
+  .outreach-card:hover { background: var(--bg-card); }
+  .outreach-card .kind {
+    font-family: var(--mono); font-size: 10px; text-transform: uppercase;
+    letter-spacing: 0.16em; color: var(--accent);
+    margin-bottom: 14px;
+  }
+  .outreach-card h4 {
+    font-family: var(--serif); font-size: 19px; font-weight: 400;
+    line-height: 1.25;
+    color: var(--fg-strong);
+    margin-bottom: 8px;
+    font-variation-settings: "SOFT" 30;
+  }
+  .outreach-card p { font-size: 13px; color: var(--fg-muted); line-height: 1.55; margin: 0; }
+
+  .collab-strip {
+    margin-top: 56px;
+    padding-top: 36px;
+    border-top: 1px solid var(--border);
+  }
+  .collab-strip h4 {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--fg-dim); margin-bottom: 18px;
+  }
+  .collab-list {
+    display: flex; flex-wrap: wrap; gap: 8px 28px;
+    font-family: var(--serif); font-size: 22px; color: var(--fg-muted);
+    font-variation-settings: "SOFT" 50;
+  }
+  .collab-list span { transition: color 0.3s ease; }
+  .collab-list span:hover { color: var(--accent); cursor: default; }
+
+  /* ------------------------------------------------------------
+     10. contact
+     ------------------------------------------------------------ */
+  .contact {
+    text-align: left;
+    padding-bottom: 0;
+  }
+  .contact-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: clamp(36px, 6vw, 80px);
+    align-items: end;
+  }
+  @media (max-width: 800px) { .contact-grid { grid-template-columns: 1fr; } }
+  .contact-headline {
+    font-family: var(--serif);
+    font-size: clamp(40px, 6vw, 78px);
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+    font-weight: 350;
+    font-variation-settings: "SOFT" 30;
+  }
+  .contact-headline .accent-italic {
+    font-style: italic; color: var(--accent);
+    font-variation-settings: "SOFT" 100, "WONK" 1;
+    font-weight: 300;
+  }
+  .contact-meta { font-size: 14px; color: var(--fg-muted); line-height: 1.7; }
+  .contact-meta a { color: var(--fg); border-bottom: 1px solid var(--border-strong); padding-bottom: 1px; transition: all 0.2s ease; }
+  .contact-meta a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+  .contact-meta strong { color: var(--fg-strong); font-weight: 600; }
+  .contact .email-big {
+    margin-top: 32px;
+    font-family: var(--mono); font-size: clamp(18px, 2.4vw, 28px);
+    color: var(--accent);
+    display: inline-block;
+    border-bottom: 1px solid rgba(212,165,116,0.35);
+    padding-bottom: 4px;
+    transition: all 0.2s ease;
+  }
+  .contact .email-big:hover { border-bottom-color: var(--accent); letter-spacing: 0.01em; }
+
+  /* footer */
+  footer {
+    padding: 48px var(--gutter) 36px;
+    border-top: 1px solid var(--border);
+    margin-top: 100px;
+    text-align: center;
+  }
+  footer .colophon {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--fg-dim);
+    max-width: 600px; margin: 0 auto;
+    line-height: 1.8;
+  }
+  footer .colophon b { color: var(--fg-muted); font-weight: 500; }
+
+  /* reveal on scroll */
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.9s var(--ease), transform 0.9s var(--ease); }
+  .reveal.in { opacity: 1; transform: none; }
+  .reveal-stagger > * { opacity: 0; transform: translateY(16px); transition: opacity 0.7s var(--ease), transform 0.7s var(--ease); }
+  .reveal-stagger.in > * { opacity: 1; transform: none; }
+  .reveal-stagger.in > *:nth-child(2) { transition-delay: 60ms; }
+  .reveal-stagger.in > *:nth-child(3) { transition-delay: 120ms; }
+  .reveal-stagger.in > *:nth-child(4) { transition-delay: 180ms; }
+  .reveal-stagger.in > *:nth-child(5) { transition-delay: 240ms; }
+  .reveal-stagger.in > *:nth-child(6) { transition-delay: 300ms; }
+  .reveal-stagger.in > *:nth-child(7) { transition-delay: 360ms; }
+  .reveal-stagger.in > *:nth-child(8) { transition-delay: 420ms; }
+  .reveal-stagger.in > *:nth-child(9) { transition-delay: 480ms; }
+  .reveal-stagger.in > *:nth-child(10) { transition-delay: 540ms; }
+</style>
 </head>
-<body class="antialiased dark">
+<body>
 
-    <!-- JavaScript for Dark/Light Mode and Bold Text Processing -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const html = document.documentElement;
-            const modeToggle = document.getElementById('mode-toggle');
-            
-            // Function to check system preference and local storage for default mode
-            const getInitialMode = () => {
-                if (localStorage.getItem('theme') === 'light') {
-                    return 'light';
-                }
-                if (localStorage.getItem('theme') === 'dark') {
-                    return 'dark';
-                }
-                // Default to dark if no preference is set
-                return 'dark'; 
-            };
+<!-- ============================================================
+     NAV
+============================================================ -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#top" class="brand"><span class="dot"></span> Szymaniak</a>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#research">Research</a>
+      <a href="#papers">Papers</a>
+      <a href="#projects">Projects</a>
+      <a href="#experience">Experience</a>
+      <a href="#teaching">Teaching</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <a href="KatarzynaSzymaniakCV.pdf" class="nav-cv" target="_blank" rel="noopener">CV ↓</a>
+    <div class="nav-burger"><a href="#contact" class="nav-cv">Contact</a></div>
+  </div>
+</nav>
 
-            const setMode = (mode) => {
-                if (mode === 'dark') {
-                    html.classList.add('dark');
-                    html.classList.remove('light');
-                    localStorage.setItem('theme', 'dark');
-                    modeToggle.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>'; // Moon icon
-                } else {
-                    html.classList.add('light');
-                    html.classList.remove('dark');
-                    localStorage.setItem('theme', 'light');
-                    modeToggle.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>'; // Sun icon
-                }
-            };
-            
-            // Initial setup
-            setMode(getInitialMode());
+<!-- ============================================================
+     HERO
+============================================================ -->
+<header class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="hero-eyebrow reveal-stagger">
+        <span class="status">Available — Research Scientist · Applied Scientist</span>
+      </div>
 
-            // Toggle function
-            window.toggleDarkMode = () => {
-                const currentMode = html.classList.contains('dark') ? 'dark' : 'light';
-                setMode(currentMode === 'dark' ? 'light' : 'dark');
-            };
+      <h1 class="reveal">
+        Katarzyna<br/>
+        Szymaniak<span class="last">— in signals.</span>
+      </h1>
 
-            // Helper function to process custom bold syntax **{}**
-            const processTextForBold = (selector) => {
-                const elements = document.querySelectorAll(selector);
-                elements.forEach(element => {
-                    let htmlContent = element.innerHTML;
-                    // Regex to find **{text}** and replace it with <strong>text</strong>
-                    htmlContent = htmlContent.replace(/\*\*{(.*?)}\*\*/g, '<strong>$1</strong>');
-                    element.innerHTML = htmlContent;
-                });
-            };
+      <p class="hero-tagline reveal">
+        Biomedical AI researcher working on <span class="k">adaptive machine learning</span>
+        for the messy, drifting signals that real human bodies produce —
+        EMG, EEG, and the wearables that try to read them.
+      </p>
 
-            // Apply bold processing to all relevant text blocks
-            processTextForBold('.text-process-bold');
+      <div class="hero-role reveal">PhD · University of Edinburgh · 2025</div>
 
-            // Note: We no longer need the explicit updateColors function in JS 
-            // because all dynamic colors are handled by CSS variables based on html.light/dark
-        });
-    </script>
-
-    <!-- Header & Navigation -->
-    <header class="sticky top-0 z-50 header-bg backdrop-blur-sm shadow-lg border-b" style="border-color: var(--border-color);">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-4">
-            <div class="text-xl font-bold text-default">Szymaniak</div>
-            <nav class="hidden md:flex space-x-6 items-center">
-                <a href="#home" class="nav-link hover:text-accent-blue transition duration-150">Home</a>
-                <a href="#competencies" class="nav-link hover:text-accent-blue transition duration-150">Core Competencies</a>
-                <a href="#portfolio" class="nav-link hover:text-accent-blue transition duration-150">Portfolio</a>
-                <a href="#publications" class="nav-link hover:text-accent-blue transition duration-150">Publications</a>
-                <a href="#experience" class="nav-link hover:text-accent-blue transition duration-150">Experience</a>
-                <a href="#contact" class="nav-link hover:text-accent-blue transition duration-150">Contact</a>
-                <!-- Dark Mode Toggle Button -->
-                <button id="mode-toggle" onclick="toggleDarkMode()" class="mode-toggle p-2 rounded-full hover:bg-gray-700/50 transition" style="background-color: var(--card-color); border: 1px solid var(--border-color);">
-                    <!-- Icon replaced by JS on load -->
-                </button>
-            </nav>
-            <button class="md:hidden mode-toggle p-2 rounded-full hover:bg-gray-700/50">
-                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" x2="21" y1="6" y2="6"/><line x1="3" x2="21" y1="12" y2="12"/><line x1="3" x2="21" y1="18" y2="18"/></svg>
-            </button>
-        </div>
-    </header>
-
-    <!-- Job Seeking Announcement Bar -->
-    <div class="bg-accent-blue/90 text-white text-center py-2 px-4 shadow-xl z-40 sticky top-[68px] md:top-[72px]">
-        <p class="text-sm font-medium tracking-wide">
-            Actively seeking **Applied Scientist** & **Research Scientist** roles in **{Health AI}**, **{Robotics}**, and **{Core AI Research}**.
-            <span class="hidden sm:inline">Let's connect on future-forward challenges.</span>
-        </p>
+      <div class="cta-row reveal">
+        <a href="#research" class="btn primary">Explore the work <span class="arrow">→</span></a>
+        <a href="mailto:kszymaniak043@gmail.com" class="btn">Get in touch</a>
+      </div>
     </div>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
+    <aside class="hero-side reveal">
+      <div class="hero-portrait" id="portrait" title="Click for the other version">
+        <img src="me.jpeg" alt="Katarzyna Szymaniak" id="portraitImg" />
+      </div>
+      <div class="socials" aria-label="Social links">
+        <a href="mailto:kszymaniak043@gmail.com" title="Email" aria-label="Email">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+        </a>
+        <a href="https://scholar.google.com/citations?user=lwHIQVcAAAAJ&hl=en" target="_blank" rel="noopener" title="Google Scholar" aria-label="Google Scholar">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 1 9l11 7 9-5.7V17h2V9zM4 13.5V18l8 5 8-5v-4.5l-8 5z"/></svg>
+        </a>
+        <a href="https://github.com/KatarzynaSzymaniak" target="_blank" rel="noopener" title="GitHub" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.6.5 11.9c0 5 3.3 9.3 7.8 10.8.6.1.8-.2.8-.6v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.5-.3-5.2-1.3-5.2-5.7 0-1.3.4-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.2 1.2.9-.3 1.9-.4 2.9-.4s2 .1 2.9.4c2.2-1.5 3.2-1.2 3.2-1.2.6 1.7.2 2.9.1 3.2.7.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.2 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.8-5.8 7.8-10.8C23.5 5.6 18.3.5 12 .5z"/></svg>
+        </a>
+        <a href="https://www.linkedin.com/in/katarzyna-szymaniak-ai/" target="_blank" rel="noopener" title="LinkedIn" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 2h-17A1.5 1.5 0 0 0 2 3.5v17A1.5 1.5 0 0 0 3.5 22h17a1.5 1.5 0 0 0 1.5-1.5v-17A1.5 1.5 0 0 0 20.5 2zM8 19H5V9h3v10zM6.5 7.7a1.7 1.7 0 1 1 0-3.4 1.7 1.7 0 0 1 0 3.4zM19 19h-3v-5.3c0-1.3-.5-2.1-1.6-2.1-1.2 0-1.9.8-1.9 2.1V19h-3V9h2.9v1.3c.4-.8 1.5-1.6 3-1.6 2.2 0 3.6 1.4 3.6 4.3V19z"/></svg>
+        </a>
+        <a href="https://x.com/szymaniak_kasia" target="_blank" rel="noopener" title="Twitter / X" aria-label="Twitter">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+      </div>
+    </aside>
+  </div>
 
-        <!-- 1. Home (Landing Page - Profile & Summary Cards) -->
-        <section id="home" class="pb-12">
-            <div class="grid md:grid-cols-3 gap-8 items-start home-grid">
-                
-                <!-- Column 1: Profile and Main Titles (md:col-span-1) -->
-                <div class="flex flex-col items-center md:items-center md:col-span-1">
-                    
-                    <!-- Profile Image Placeholder (Enlarged and uses custom class) -->
-                    <div style="width: 100%; text-align: center; margin: 20px 0;">
-                        <img
-                        src="me.jpeg"
-                        alt="New detailed circular figure replacing the KS schematic"
-                        style="width: 250px; height: 250px; border-radius: 50%; object-fit: cover; display: block; margin: 0 auto; border: 3px solid #3b82f6; box-shadow: 0 6px 12px rgba(0,0,0,0.2);"
-                        />
-                    </div>
-                    
-                    <!-- Name and Sub-title (associated with the image) -->
-                    <h2 class="text-2xl font-bold text-default mb-0 text-center">Dr. Katarzyna Szymaniak</h2>
-                    <p class="text-md font-medium text-secondary text-center mb-6">Researcher</p>
-                    
-                    <!-- Contact Icons and Links -->
-                    <div class="flex space-x-3 mb-8">
-                        <!-- Email -->
-                        <a href="mailto:kszymaniak043@gmail.com" class="contact-icon-link" aria-label="Email">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="m22 6-10 7L2 6"/></svg>
-                        </a>
-                        <!-- Twitter/X -->
-                        <a href="https://x.com/szymaniak_kasia" target="_blank" class="contact-icon-link" aria-label="Twitter">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h3.8l-5.1 6.5L18 20h-4l-3.3-4.5L7.4 20H4l5.6-7.1L4 4h4.2l3 4.2L16 4Z"/></svg>
-                        </a>
-                        <!-- Google Scholar -->
-                        <a href="https://scholar.google.com/citations?user=lwHIQVcAAAAJ&hl=en" target="_blank" class="contact-icon-link" aria-label="Google Scholar">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6m-2-12-8 5-10 4 10 4 8-5V7M2 14v6m10-2.5V2m0 19.5a1 1 0 0 0-1 1 1 1 0 0 0 2 0 1 1 0 0 0-1-1z"/></svg>
-                        </a>
-                        <!-- GitHub -->
-                        <a href="https://github.com/KatarzynaSzymaniak" target="_blank" class="contact-icon-link" aria-label="GitHub">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.67c2.84-.4 5.82-1.42 5.82-6.51a4.83 4.83 0 0 0-1.3-3.37 4.54 4.54 0 0 0-.1-3.41s-1.02-.34-3.33 1.3a12.18 12.18 0 0 0-6.27 0c-2.31-1.64-3.33-1.3-3.33-1.3a4.54 4.54 0 0 0-.1 3.41A4.83 4.83 0 0 0 3 13.5c0 5.09 2.98 6.11 5.82 6.51A3.37 3.37 0 0 0 9 20v3m3-19c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
-                        </a>
-                        <!-- LinkedIn -->
-                        <a href="https://www.linkedin.com/in/katarzyna-szymaniak-ai/" target="_blank" class="contact-icon-link" aria-label="LinkedIn">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a4 4 0 0 0-4-4 4 4 0 0 0-4 4v7H5v-7h2v7h2v-7h2v7h2v-7h2v7h2V8z"/><rect width="4" height="4" x="2" y="10"/><rect width="4" height="4" x="2" y="2"/></svg>
-                        </a>
-                    </div>
-                </div>
+  <!-- live EMG band -->
+  <div class="emg-band" aria-hidden="true">
+    <svg viewBox="0 0 1400 120" preserveAspectRatio="none" id="emgSvg">
+      <g class="emg-grid">
+        <line x1="0" y1="30" x2="1400" y2="30"/>
+        <line x1="0" y1="60" x2="1400" y2="60"/>
+        <line x1="0" y1="90" x2="1400" y2="90"/>
+      </g>
+      <text x="14" y="14" class="emg-label">CH1 · EMG · 1000 Hz</text>
+      <text x="1330" y="14" class="emg-label" text-anchor="end">LIVE</text>
+      <path id="emgPath" class="emg-trace" d=""/>
+    </svg>
+  </div>
 
-                <!-- Column 2: Main Headline, Professional Summary Paragraph & CTA (md:col-span-2) -->
-                <div class="md:col-span-2">
-                    
-                    <!-- Main Headline (Smaller text: text-3xl) -->
-                    <h1 class="text-3xl sm:text-3xl font-extrabold text-default mb-4 text-center md:text-left leading-tight">Adaptive ML for Real-World Signals</h1>
+  <div class="scroll-cue">Scroll</div>
+</header>
 
-                    <!-- Introductory Paragraph (Smaller text: text-base) -->
-                    <p class="text-secondary leading-relaxed mb-6 text-base font-light text-process-bold">
-                        PhD researcher with 5+ years working at the intersection of biosignal processing, multimodal sensor fusion, and adaptive machine learning. 
-                        I build models that stay robust when the data drifts — across users, sessions, devices, and modalities.
-                    </p>
+<!-- ============================================================
+     ABOUT
+============================================================ -->
+<section id="about">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">01 — About</div>
+      <h2>Who <span class="serif-italic">I am</span></h2>
+      <div class="meta">2025</div>
+    </div>
 
-                <div class="card-style p-6 rounded-xl border" style="border-color: var(--border-color); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
-                    <p class="text-sm text-secondary leading-relaxed text-process-bold" style="margin-bottom: 1.4em;">
-                        My research targets the core failure modes of deployed ML on continuous sensor data: non-stationarity, cross-user and cross-session distribution shift, label scarcity under real-world annotation budgets, and signal corruption from noise, motion artefacts, and environmental variability. These are shared bottlenecks across biosignal processing, wearable sensing, and audio — speaker variability, domain mismatch, acoustic noise robustness, and low-resource adaptation are structurally the same problems in a different modality.
-                    </p>
-                    <p class="text-sm text-secondary leading-relaxed text-process-bold" style="margin-bottom: 1.4em;">
-                        My PhD at Edinburgh developed domain generalisation and active learning methods for EMG-based myoelectric control, with published work on cross-position robustness benchmarking, human-in-the-loop recalibration, and open datasets for distribution-shift evaluation. At Meta Reality Labs, I built multimodal sensor fusion models for continuous wristband interactions, fine-tuning foundation models on novel biosignal tasks under real-time latency constraints. I currently work on extending these methods to audio and foundation-model adaptation.
-                    </p>
-                    <p class="text-sm text-secondary leading-relaxed text-process-bold">
-                        I work end-to-end — from experimental design and data curation through model development to deployment optimisation.
-                    </p>
-                </div>
-                    
-                    <!-- Keywords Bar (Smaller text: text-xs) -->
-                    <p class="text-xs text-secondary mt-4 mb-8 text-process-bold">
-                        [Recent: **{PhD in Biomedical AI}** • **{Meta Reality Labs}** • **{Foundation Models}** • **{Active Learning}**]
-                    </p>
+    <div class="about-grid">
+      <p class="about-lead reveal">
+        Most ML works when the world holds still.
+        The body doesn't hold still — so my work is about
+        the models that <span class="serif-italic">keep up</span>.
+      </p>
 
-                    <!-- Call to Action Button -->
-                    <div class="mt-8 md:text-left text-center">
-                        <a href="#portfolio" class="inline-flex items-center bg-accent-blue hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition duration-300">
-                            View My Portfolio
-                            <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section>
+      <div class="about-body reveal">
+        <p>
+          I'm a biomedical AI researcher with a PhD from the University of Edinburgh
+          (December 2025), supervised by Prof. Kianoush Nazarpour. My thesis —
+          <em>Mitigating Confounding Factors in Myoelectric Control Through Adaptive
+          Modelling and Learning</em> — sits exactly where deep learning meets the
+          inconvenient reality of biosignals: electrodes shift, postures change,
+          users adapt to the model while the model is trying to adapt to them.
+        </p>
+        <p>
+          Before finishing the PhD I worked on <span class="k">multimodal sensor fusion</span>
+          at Meta Reality Labs in New York, building wristband interaction models that
+          had to run with low latency in genuinely out-of-distribution conditions.
+          That experience hardened a thesis I'd been forming since my MRes work on
+          calcium-imaging in freely-behaving mice: the interesting problems in physiological
+          ML aren't accuracy on a clean test set. They're <span class="serif-italic">distribution
+          shift, data efficiency, and adaptation</span> — and they show up the moment you put a
+          sensor on a real person.
+        </p>
+        <p>
+          I'm looking for the next place to do this work in earnest — Health AI,
+          neural interfaces, foundation models for biosignals, or any research group
+          that takes <span class="k">real-world robustness</span> seriously.
+        </p>
+      </div>
+    </div>
 
-        
-        <!-- 3. Portfolio -->
-        <section id="portfolio" class="py-12">
-            <h2 class="section-title text-3xl font-bold mb-8">Portfolio: From Theory to Impact</h2>
+    <div class="drivers reveal-stagger">
+      <div class="driver">
+        <span class="marker">→</span>
+        <div>
+          <h4>Adaptation over accuracy</h4>
+          <p>Static benchmarks tell us about a frozen world. The models that ship are the ones that keep working in the second week.</p>
+        </div>
+      </div>
+      <div class="driver">
+        <span class="marker">→</span>
+        <div>
+          <h4>Cheap labels, sharp questions</h4>
+          <p>Annotation budgets are the real constraint in clinical ML. Active learning and curation are first-class research, not engineering chores.</p>
+        </div>
+      </div>
+      <div class="driver">
+        <span class="marker">→</span>
+        <div>
+          <h4>Signals before scale</h4>
+          <p>EMG, EEG, ECG, IMU — each has its own physics. Architectures that respect the signal generalise farther than those that ignore it.</p>
+        </div>
+      </div>
+      <div class="driver">
+        <span class="marker">→</span>
+        <div>
+          <h4>The body in the loop</h4>
+          <p>The wearer adapts too. Co-adaptation is the design problem nobody warns you about — and the one most worth solving.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-            <h3 class="text-xl font-light text-secondary mb-8">My work bridges fundamental research with practical, high-impact applications.</h3>
+<!-- ============================================================
+     RESEARCH AGENDA
+============================================================ -->
+<section id="research">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">02 — Research</div>
+      <h2>What I <span class="serif-italic">think about</span></h2>
+      <div class="meta">Agenda · 2026 →</div>
+    </div>
 
-            <div class="space-y-12">
+    <p class="agenda-intro reveal">
+      A research agenda for the post-scaling era of physiological ML.
+      Below: the questions I want to spend the next decade on, organised
+      from <em>signal</em> to <em>system</em> to <em>person</em>.
+    </p>
 
-                <!-- Project 1: Multimodal Sensor Fusion (Meta Reality Labs) -->
-                <div class="card-style p-6 rounded-xl shadow-lg border" style="border-color: var(--border-color);">
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
-                        <h4 class="text-2xl font-bold text-accent-blue mb-1 sm:mb-0">Multimodal Sensor Fusion for Metaverse Interactions (Meta Reality Labs)</h4>
-                        <span class="text-sm text-secondary" style="background-color: var(--bg-color); border: 1px solid var(--border-color); padding: 0.25rem 0.75rem; border-radius: 9999px;">Sep 2022 - Mar 2023</span>
-                    </div>
-                    
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div>
-                            <h5 class="font-semibold text-default mb-2">Objective & Methodology:</h5>
-                            <p class="text-sm text-secondary mb-2 text-process-bold">Pioneered sensor fusion techniques for natural and intuitive interactions within immersive metaverse environments by leveraging speech and biosignal data.</p>
-                            <ul class="list-disc list-inside space-y-1 text-sm text-secondary pl-4 text-process-bold">
-                                <li>Investigated novel methods for fusing data from multiple sensor modalities to enhance wrist-based interactions.</li>
-                                <li>Applied speech recognition models and advanced temporal machine learning to develop cross-modal feature fusion models.</li>
-                                <li>Collaborated within a cross-functional team to integrate this research into the broader R&D of next-generation human-computer interfaces.</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h5 class="font-semibold text-default mb-2">Outcome:</h5>
-                            <p class="text-sm text-secondary text-process-bold">Developed a proof-of-concept system that enhanced user experience by enabling more natural interactions with reduced latency. This work contributed a new **{cross-modal learning methodology}** to the team's research portfolio, directly impacting future development in spatial computing and AR/VR.</p>
-                        </div>
-                    </div>
+    <div class="agenda-grid reveal-stagger">
+      <div class="agenda-card">
+        <span class="ix">01</span>
+        <h4><span class="glyph">≈</span>Distribution Shift in the Wild</h4>
+        <p>Biosignals drift across days, electrodes, postures, sweat, and mood. The interesting science is identifying which shifts matter and building models that don't quietly fail when reality moves.</p>
+      </div>
+      <div class="agenda-card">
+        <span class="ix">02</span>
+        <h4><span class="glyph">∮</span>Foundation Models for Biosignals</h4>
+        <p>PPG, EMG, ECG, EEG. What does pretraining on heterogeneous bodies actually give us, and what's the right tokenisation for a noisy, non-stationary, low-SNR signal?</p>
+      </div>
+      <div class="agenda-card">
+        <span class="ix">03</span>
+        <h4><span class="glyph">↻</span>Adaptive &amp; Continual Learning</h4>
+        <p>From session-level recalibration to lifelong adaptation. Closing the loop between the model and the wearer without catastrophic forgetting or runaway drift.</p>
+      </div>
+      <div class="agenda-card">
+        <span class="ix">04</span>
+        <h4><span class="glyph">?</span>Active &amp; Preference Learning</h4>
+        <p>When labelling is expensive — clinic time, expert annotation, RLHF — what is the smallest budget that still moves the model? Acquisition functions as first-class research objects.</p>
+      </div>
+      <div class="agenda-card">
+        <span class="ix">05</span>
+        <h4><span class="glyph">⊕</span>Multimodal Sensor Fusion</h4>
+        <p>EMG + IMU + audio + vision. Different noise floors, different sampling rates, different latencies. Fusion that respects the asymmetries rather than averaging them away.</p>
+      </div>
+      <div class="agenda-card">
+        <span class="ix">06</span>
+        <h4><span class="glyph">⊢</span>Domain Generalisation</h4>
+        <p>Most biosignal benchmarks measure within-session accuracy. Deployment doesn't. I'm interested in OOD-by-design evaluation, not OOD as a post-hoc surprise.</p>
+      </div>
+      <div class="agenda-card">
+        <span class="ix">07</span>
+        <h4><span class="glyph">∂</span>Physics-Informed ML</h4>
+        <p>Skin, muscle, electrode placement and impedance all have a physics. Architectures that encode it as inductive bias generalise farther than those that brute-force it from data.</p>
+      </div>
+      <div class="agenda-card">
+        <span class="ix">08</span>
+        <h4><span class="glyph">⇋</span>Human-in-the-Loop Systems</h4>
+        <p>The wearer is not a passive data source. They learn the model while the model learns them. Co-adaptation has its own dynamics and its own failure modes.</p>
+      </div>
+      <div class="agenda-card">
+        <span class="ix">09</span>
+        <h4><span class="glyph">⟶</span>From Lab to Limb</h4>
+        <p>Translational work for prosthetic and rehabilitation users. The last 20% of distribution shift kills more devices than any other failure mode, and it lives in people's homes.</p>
+      </div>
+      <div class="agenda-card">
+        <span class="ix">10</span>
+        <h4><span class="glyph">∿</span>Time Series at the Edge</h4>
+        <p>Low-power, low-latency inference on wristbands, patches, and implants. The constraints aren't an afterthought — they're often the most interesting part of the problem.</p>
+      </div>
+      <div class="agenda-card">
+        <span class="ix">11</span>
+        <h4><span class="glyph">⌬</span>Robust Benchmarking</h4>
+        <p>Designing evaluation protocols that surface failure modes before deployment does. Statistical rigour and cross-subject splits as a design principle, not a footnote.</p>
+      </div>
+      <div class="agenda-card">
+        <span class="ix">12</span>
+        <h4><span class="glyph">♡</span>Human-Centred AI</h4>
+        <p>The reason for all of the above. Augmenting human capability — clinical, assistive, expressive — rather than automating around it.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-                    <div class="flex flex-wrap mt-4">
-                        <span class="tag" style="--tag-bg: rgba(249, 115, 22, 0.15); --tag-text: #f97316;">#Metaverse</span>
-                        <span class="tag" style="--tag-bg: rgba(59, 130, 246, 0.15); --tag-text: #3b82f6;">#SensorFusion</span>
-                        <span class="tag" style="--tag-bg: rgba(168, 85, 247, 0.15); --tag-text: #a855f7;">#TemporalML</span>
-                        <span class="tag" style="--tag-bg: rgba(234, 179, 8, 0.15); --tag-text: #eab308;">#SpatialComputing</span>
-                    </div>
-                </div>
+<!-- ============================================================
+     PUBLICATIONS
+============================================================ -->
+<section id="papers">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">03 — Papers</div>
+      <h2>Selected <span class="serif-italic">publications</span></h2>
+      <div class="meta">
+        <a href="https://scholar.google.com/citations?user=lwHIQVcAAAAJ&hl=en" target="_blank" rel="noopener" style="color:var(--accent);">Full list on Scholar →</a>
+      </div>
+    </div>
 
-                <!-- Project 2: Neuroimaging Data Analysis (HoloLens) -->
-                <div class="card-style p-6 rounded-xl shadow-lg border" style="border-color: var(--border-color);">
-                    <h4 class="text-2xl font-bold text-accent-blue mb-3">Neuroimaging Data Analysis: HoloLens for Teaching Purposes</h4>
+    <div class="pub-list">
 
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div>
-                            <h5 class="font-semibold text-default mb-2">Objective & Methodology:</h5>
-                            <p class="text-sm text-secondary mb-2 text-process-bold">To create an innovative teaching tool for medical students using Microsoft HoloLens, solving the common challenge of visualizing complex spatial neuroimaging data.</p>
-                            <ul class="list-disc list-inside space-y-1 text-sm text-secondary pl-4 text-process-bold">
-                                <li>Rendered volumetric data from MRI scans into an interactive 3D mesh model of a human brain.</li>
-                                <li>Integrated the 3D model into an augmented reality application using the Unity cross-platform game engine.</li>
-                                <li>Deployed the application on Microsoft HoloLens, allowing users to manipulate and inspect the 3D brain model overlaid in their real-world environment.</li>
-                            </ul>
-                            <div class="mt-4">
-                                <a href="https://www.youtube.com/watch?v=BCHFJswreW8" target="_blank" class="project-link-button bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg">View Demo on YouTube</a>
-                            </div>
-                        </div>
-                        <div>
-                            <h5 class="font-semibold text-default mb-2">Outcome:</h5>
-                            <p class="text-sm text-secondary mb-4 text-process-bold">Awarded **{'Best Student Project'}** for successfully developing a tool that significantly improves spatial data visualization and enhances learning for medical students. The project demonstrated strong self-teaching capabilities in complex subjects, including 3D rendering and cross-platform AR development.</p>
+      <article class="pub">
+        <div class="venue">EurIPS Workshop 2025<br/><span class="muted" style="font-size:10px;letter-spacing:0.05em;">to EMBC 2026</span></div>
+        <div>
+          <h4>Position: Domain Generalisation in Myoelectric Control</h4>
+          <div class="authors"><b>K. Szymaniak</b>, H. Gouk</div>
+          <p class="summary">Position paper benchmarking domain generalisation methods for robust myoelectric control across varying arm positions and contexts in EMG-based control. Accepted at the EurIPS Workshop on the Science of Benchmarking and Evaluating AI.</p>
+          <div class="tag-row" style="margin-top:10px;">
+            <span class="tag">Distribution Shift</span>
+            <span class="tag">Benchmarking</span>
+            <span class="tag">EMG</span>
+          </div>
+        </div>
+        <div class="links">
+          <a href="#" class="placeholder">PDF</a>
+          <a href="#" class="placeholder">Code</a>
+        </div>
+      </article>
 
-                            <!-- Embedded YouTube Video (Responsive) -->
-                            <iframe class="w-full aspect-video rounded-lg shadow-xl" src="https://www.youtube.com/embed/BCHFJswreW8" title="Neuroimaging HoloLens Demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                        </div>
-                    </div>
+      <article class="pub">
+        <div class="venue">IEEE TNSRE 2025</div>
+        <div>
+          <h4>Deep Feature Learning from Electromyographic Signals for Gesture Recognition Systems</h4>
+          <div class="authors"><b>K. Szymaniak</b>, et al.</div>
+          <p class="summary">Position paper on deep learning approaches for EMG-based gesture recognition with improved feature representations. Published in IEEE Transactions on Neural Systems and Rehabilitation Engineering.</p>
+          <div class="tag-row" style="margin-top:10px;">
+            <span class="tag">Deep Learning</span>
+            <span class="tag">Feature Representation</span>
+            <span class="tag">Gesture Recognition</span>
+          </div>
+        </div>
+        <div class="links">
+          <a href="#" class="placeholder">PDF</a>
+          <a href="#" class="placeholder">DOI</a>
+        </div>
+      </article>
 
-                    <div class="flex flex-wrap mt-4">
-                        <span class="tag" style="--tag-bg: rgba(239, 68, 68, 0.15); --tag-text: #ef4444;">#AugmentedReality</span>
-                        <span class="tag" style="--tag-bg: rgba(168, 85, 247, 0.15); --tag-text: #a855f7;">#MedicalEducation</span>
-                        <span class="tag" style="--tag-bg: rgba(59, 130, 246, 0.15); --tag-text: #3b82f6;">#Unity3D</span>
-                    </div>
-                </div>
+      <article class="pub">
+        <div class="venue">Nature Sci. Data 2025</div>
+        <div>
+          <h4>It's GREAT: Gesture REcognition for Arm Translation</h4>
+          <div class="authors"><b>K. Szymaniak</b>, K. Nazarpour</div>
+          <p class="summary">End-to-end experimental study investigating arm translation and distribution shifts in time-series biosignal data, with applications to adaptive prosthetic control. Includes an open dataset.</p>
+          <div class="tag-row" style="margin-top:10px;">
+            <span class="tag">Open Dataset</span>
+            <span class="tag">Arm Translation</span>
+            <span class="tag">Myoelectric Control</span>
+          </div>
+        </div>
+        <div class="links">
+          <a href="#" class="placeholder">Paper</a>
+          <a href="#" class="placeholder">Dataset</a>
+          <a href="#" class="placeholder">Code</a>
+        </div>
+      </article>
 
-                <!-- Project 3: The Biosignal Foundation Model Project -->
-                <div class="card-style p-6 rounded-xl shadow-lg border" style="border-color: var(--border-color);">
-                    <h4 class="text-2xl font-bold text-accent-blue mb-3">Fine-Tuning a PPG Foundation Model for EMG Gesture Recognition</h4>
+      <article class="pub">
+        <div class="venue">Front. Neurorobotics 2022</div>
+        <div>
+          <h4>Recalibration of Myoelectric Control with Active Learning</h4>
+          <div class="authors"><b>K. Szymaniak</b>, A. Krasoulis, K. Nazarpour</div>
+          <p class="summary">A human-in-the-loop active learning framework for long-term adaptation of myoelectric prostheses, defining optimal query strategies for robust EMG-based control.</p>
+          <div class="tag-row" style="margin-top:10px;">
+            <span class="tag">Active Learning</span>
+            <span class="tag">HITL</span>
+            <span class="tag">Clinical</span>
+          </div>
+        </div>
+        <div class="links">
+          <a href="#" class="placeholder">PDF</a>
+          <a href="#" class="placeholder">DOI</a>
+        </div>
+      </article>
 
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div>
-                            <h5 class="font-semibold text-default mb-2">Objective & Methodology:</h5>
-                            <p class="text-sm text-secondary mb-2 text-process-bold">To provide tangible evidence of applying the **{foundation model paradigm}** to a complex biosignal challenge, directly relevant to **{Health AI}** and wearables.</p>
-                            <ul class="list-disc list-inside space-y-1 text-sm text-secondary pl-4 text-process-bold">
-                                <li>Utilized PaPaGei, a large-scale foundation model pre-trained on PPG signals.</li>
-                                <li>Applied the model as a fine-tunable backbone to classify gestures from the emg2qwerty dataset.</li>
-                                <li>Benchmarked performance against a baseline model, demonstrating the power of **{transfer learning}** in this domain.</li>
-                            </ul>
-                            <div class="mt-4">
-                                <a href="https://github.com/KatarzynaSzymaniak" target="_blank" class="project-link-button bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded-lg">View on GitHub</a>
-                            </div>
-                        </div>
-                        <div>
-                            <h5 class="font-semibold text-default mb-2">Outcome:</h5>
-                            <p class="text-sm text-secondary text-process-bold">This project demonstrates my hands-on ability to **{leverage existing foundation models}** for novel, domain-specific tasks and my expertise in handling noisy, real-world physiological data.</p>
-                        </div>
-                    </div>
+      <article class="pub">
+        <div class="venue">MRes Thesis 2020</div>
+        <div>
+          <h4>Predicting Behaviour through Brain Data Analysis</h4>
+          <div class="authors"><b>K. Szymaniak</b>, mentor: O. Mac Aodha</div>
+          <p class="summary">Applied deep learning to in vivo calcium imaging data from freely-behaving mice, predicting spatial navigation and exploratory behaviour through neuron activation mapping inspired by class activation techniques.</p>
+          <div class="tag-row" style="margin-top:10px;">
+            <span class="tag">Calcium Imaging</span>
+            <span class="tag">Computer Vision</span>
+            <span class="tag">Neuroscience</span>
+          </div>
+        </div>
+        <div class="links">
+          <a href="#" class="placeholder">Report</a>
+        </div>
+      </article>
 
-                    <div class="flex flex-wrap mt-4">
-                        <span class="tag" style="--tag-bg: rgba(239, 68, 68, 0.15); --tag-text: #ef4444;">#HealthAI</span>
-                        <span class="tag" style="--tag-bg: rgba(59, 130, 246, 0.15); --tag-text: #3b82f6;">#FoundationModels</span>
-                        <span class="tag" style="--tag-bg: rgba(168, 85, 247, 0.15); --tag-text: #a855f7;">#TransferLearning</span>
-                    </div>
-                </div>
+      <article class="pub">
+        <div class="venue">MRes Thesis 2019</div>
+        <div>
+          <h4>EEG Sequential Data Analysis in Decision Making</h4>
+          <div class="authors"><b>K. Szymaniak</b>, mentors: J. Deng, X. Xie</div>
+          <p class="summary">Sequential deep learning approaches for EEG signal analysis, addressing time dependencies, non-stationarity, cross-channel connectivity, and memory mechanisms in brain–computer interfaces.</p>
+          <div class="tag-row" style="margin-top:10px;">
+            <span class="tag">EEG</span>
+            <span class="tag">BCI</span>
+            <span class="tag">Sequence Models</span>
+          </div>
+        </div>
+        <div class="links">
+          <a href="#" class="placeholder">Report</a>
+        </div>
+      </article>
 
-                <!-- Project 4: The Active Preference Learning Simulation -->
-                <div class="card-style p-6 rounded-xl shadow-lg border" style="border-color: var(--border-color);">
-                    <h4 class="text-2xl font-bold text-accent-blue mb-3">Simulation: Boosting DPO Efficiency with Active Preference Learning</h4>
-                    
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div>
-                            <h5 class="font-semibold text-default mb-2">Objective & Methodology:</h5>
-                            <p class="text-sm text-secondary mb-2 text-process-bold">To demonstrate expertise in the data efficiency challenges at the core of modern **{AI alignment and safety}**.</p>
-                            <ul class="list-disc list-inside space-y-1 text-sm text-secondary pl-4 text-process-bold">
-                                <li>Implemented the **{Active Preference Learning (APL)}** acquisition function for Direct Preference Optimization (DPO).</li>
-                                <li>Ran a simulation fine-tuning Mistral-7B on a preference dataset, comparing random sampling against my APL strategy within a fixed annotation budget.</li>
-                                <li>Plotted the model's win-rate, proving that APL achieves higher performance with **{significantly less labeled data}**.</li>
-                            </ul>
-                            <div class="mt-4">
-                                <a href="https://github.com/KatarzynaSzymaniak" target="_blank" class="project-link-button bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded-lg">View on GitHub</a>
-                            </div>
-                        </div>
-                        <div>
-                            <h5 class="font-semibold text-default mb-2">Outcome:</h5>
-                            <p class="text-sm text-secondary text-process-bold">This simulation serves as a powerful proof-of-concept for **{reducing the immense financial cost of preference data collection}**, a critical bottleneck in deploying safe and helpful LLMs.</p>
-                        </div>
-                    </div>
+      <article class="pub">
+        <div class="venue">Project · 2018 <br/><span class="muted" style="font-size:10px;letter-spacing:0.05em;">Best Student Project</span></div>
+        <div>
+          <h4>Neuroimaging Data Analysis: HoloLens for Medical Education</h4>
+          <div class="authors"><b>K. Szymaniak</b></div>
+          <p class="summary">3D visualisation tool for MRI brain scans using Unity and Microsoft HoloLens, designed to improve spatial data comprehension for medical students. Awarded <em>Best Student Project</em>, Department of Computer Science, Swansea University.</p>
+          <div class="tag-row" style="margin-top:10px;">
+            <span class="tag">Mixed Reality</span>
+            <span class="tag">Volume Rendering</span>
+            <span class="tag">HCI</span>
+          </div>
+        </div>
+        <div class="links">
+          <a href="https://www.youtube.com/watch?v=BCHFJswreW8" target="_blank" rel="noopener">Demo</a>
+        </div>
+      </article>
 
-                    <div class="flex flex-wrap mt-4">
-                        <span class="tag" style="--tag-bg: rgba(168, 85, 247, 0.15); --tag-text: #a855f7;">#ActiveLearning</span>
-                        <span class="tag" style="--tag-bg: rgba(59, 130, 246, 0.15); --tag-text: #3b82f6;">#LLMAlignment</span>
-                        <span class="tag" style="--tag-bg: rgba(234, 179, 8, 0.15); --tag-text: #eab308;">#DPO/RLHF</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- 4. Selected Publications & Preprints (NEW POSITION) -->
-        <section id="publications" class="py-12">
-            <h2 class="section-title text-3xl font-bold mb-8">Selected Publications & Preprints</h2>
-            <h3 class="text-xl font-light text-secondary mb-8">Peer-reviewed research and current preprints that define my core technical expertise.</h3>
+    </div>
+  </div>
+</section>
 
-            <div class="space-y-6">
+<!-- ============================================================
+     PROJECTS
+============================================================ -->
+<section id="projects">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">04 — Projects</div>
+      <h2>Selected <span class="serif-italic">projects</span></h2>
+      <div class="meta">Hands-on · 2022 →</div>
+    </div>
 
-                <!-- Pub 1 -->
-                <div class="p-4 card-style rounded-xl border" style="border-color: var(--border-color);">
-                    <div>
-                        <p class="font-medium text-default text-lg">Multimodal Real-time, Context-aware Adaptation for Robust Myoelectric Control in Prosthetics</p>
-                        <p class="text-sm text-secondary mt-1 text-process-bold">K. Szymaniak, J. Smith, A. Brown. <span class="text-gray-500 italic">**{IEEE Transactions on Biomedical Engineering, 2024}**.</span></p>
-                    </div>
-                    
-                    <!-- BOTTOM SECTION: Tags (Left) and Links (Right) -->
-                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mt-3 pt-3 border-t" style="border-color: var(--border-color);">
-                        
-                        <!-- TAGS GROUP (Left/Top) -->
-                        <div class="flex flex-wrap mb-2 sm:mb-0 space-x-2">
-                            <span class="tag" style="--tag-bg: rgba(59, 130, 246, 0.15); --tag-text: #3b82f6;">Journal</span>
-                            <span class="tag" style="--tag-bg: rgba(168, 85, 247, 0.15); --tag-text: #a855f7;">#AdaptiveML</span>
-                        </div>
+    <div class="proj-grid reveal-stagger">
 
-                        <!-- LINKS GROUP (Right/Bottom) -->
-                        <div class="flex flex-wrap space-x-4 justify-start sm:justify-end">
-                            <!-- Paper Link -->
-                            <a href="#placeholder" target="_blank" class="text-sm font-semibold text-accent-blue hover:underline flex items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
-                                Paper PDF
-                            </a>
-                            <!-- Code Link -->
-                            <a href="#placeholder" target="_blank" class="text-sm font-semibold text-secondary hover:text-accent-blue flex items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.67c2.84-.4 5.82-1.42 5.82-6.51a4.83 4.83 0 0 0-1.3-3.37 4.54 4.54 0 0 0-.1-3.41s-1.02-.34-3.33 1.3a12.18 12.18 0 0 0-6.27 0c-2.31-1.64-3.33-1.3-3.33-1.3a4.54 4.54 0 0 0-.1 3.41A4.83 4.83 0 0 0 3 13.5c0 5.09 2.98 6.11 5.82 6.51A3.37 3.37 0 0 0 9 20v3m3-19c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
-                                GitHub Code
-                            </a>
-                        </div>
-                    </div>
-                </div>
+      <article class="proj">
+        <div class="tag-row">
+          <span class="tag accent">Industry</span>
+          <span class="tag">Meta Reality Labs</span>
+          <span class="tag">2022–2023</span>
+        </div>
+        <h3>Multimodal Sensor Fusion for Wristband Interactions</h3>
+        <p class="blurb">
+          End-to-end ML pipeline for continuous navigation tasks via wristband biosignals,
+          including supervised fine-tuning of foundation models, data curation, and
+          deployment optimisation. Real-time inference for continuous gesture
+          recognition with reduced latency, adapting off-the-shelf models to novel
+          biosignal tasks for next-generation AR/VR input.
+        </p>
+        <div class="meta">
+          <span>RESEARCH INTERN</span>
+          <span>NEW YORK, USA</span>
+        </div>
+      </article>
 
-                <!-- Pub 2 -->
-                <div class="p-4 card-style rounded-xl border" style="border-color: var(--border-color);">
-                    <div>
-                        <p class="font-medium text-default text-lg">Augmenting SGL: A Multimodal Fusion Approach to Enhance Head and Speech Interactions in the Metaverse</p>
-                        <p class="text-sm text-secondary mt-1 text-process-bold">K. Szymaniak, C. Jones, D. Green. <span class="text-gray-500 italic">**{ACM Annual Symposium on Spatial Computing, 2023. DOI: 10.1145/3549247}**</span></p>
-                    </div>
-                    
-                    <!-- BOTTOM SECTION: Tags (Left) and Links (Right) -->
-                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mt-3 pt-3 border-t" style="border-color: var(--border-color);">
-                        
-                        <!-- TAGS GROUP (Left/Top) -->
-                        <div class="flex flex-wrap mb-2 sm:mb-0 space-x-2">
-                            <span class="tag" style="--tag-bg: rgba(234, 179, 8, 0.15); --tag-text: #eab308;">Conference</span>
-                            <span class="tag" style="--tag-bg: rgba(168, 85, 247, 0.15); --tag-text: #a855f7;">#Multimodal</span>
-                        </div>
+      <article class="proj">
+        <div class="tag-row">
+          <span class="tag signal">Open Source</span>
+          <span class="tag">Foundation Models</span>
+          <span class="tag">EMG</span>
+        </div>
+        <h3>Fine-tuning a PPG Foundation Model for EMG Gesture Recognition</h3>
+        <p class="blurb">
+          A working proof that the foundation-model paradigm can cross biosignal
+          modalities. PaPaGei (a large-scale PPG foundation model) used as a
+          fine-tunable backbone for classifying gestures from the
+          <span class="mono">emg2qwerty</span> dataset, benchmarked against a from-scratch baseline.
+          Transfer learning across physiological signals — the part nobody
+          quite knows the price tag of yet.
+        </p>
+        <div class="meta">
+          <span>2025</span>
+          <a href="https://github.com/KatarzynaSzymaniak" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </article>
 
-                        <!-- LINKS GROUP (Right/Bottom) -->
-                        <div class="flex flex-wrap space-x-4 justify-start sm:justify-end">
-                            <!-- Paper Link -->
-                            <a href="#placeholder" target="_blank" class="text-sm font-semibold text-accent-blue hover:underline flex items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
-                                Paper PDF
-                            </a>
-                            <!-- Code Link -->
-                            <a href="#placeholder" target="_blank" class="text-sm font-semibold text-secondary hover:text-accent-blue flex items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.67c2.84-.4 5.82-1.42 5.82-6.51a4.83 4.83 0 0 0-1.3-3.37 4.54 4.54 0 0 0-.1-3.41s-1.02-.34-3.33 1.3a12.18 12.18 0 0 0-6.27 0c-2.31-1.64-3.33-1.3-3.33-1.3a4.54 4.54 0 0 0-.1 3.41A4.83 4.83 0 0 0 3 13.5c0 5.09 2.98 6.11 5.82 6.51A3.37 3.37 0 0 0 9 20v3m3-19c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
-                                GitHub Code
-                            </a>
-                        </div>
-                    </div>
-                </div>
+      <article class="proj">
+        <div class="tag-row">
+          <span class="tag signal">Open Source</span>
+          <span class="tag">Active Learning</span>
+          <span class="tag">DPO / RLHF</span>
+        </div>
+        <h3>Active Preference Learning for DPO Efficiency</h3>
+        <p class="blurb">
+          Simulation fine-tuning <span class="mono">Mistral-7B</span> with an Active Preference
+          Learning acquisition function for DPO, compared against random sampling
+          under a fixed annotation budget. Win-rate plots show APL reaching higher
+          performance with substantially less labelled preference data — same
+          adaptive-data thesis from EMG, ported to language model alignment.
+        </p>
+        <div class="meta">
+          <span>2025</span>
+          <a href="https://github.com/KatarzynaSzymaniak" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </article>
 
-                <!-- Pub 3 -->
-                <div class="p-4 card-style rounded-xl border" style="border-color: var(--border-color);">
-                    <div>
-                        <p class="font-medium text-default text-lg">The Agent's Ethos: Integrating Ethical Constraints into Large Language Model Planning</p>
-                        <p class="text-sm text-secondary mt-1 text-process-bold">K. Szymaniak, N. White. <span class="text-gray-500 italic">**{Preprint}**</span></p>
-                    </div>
-                    
-                    <!-- BOTTOM SECTION: Tags (Left) and Links (Right) -->
-                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mt-3 pt-3 border-t" style="border-color: var(--border-color);">
-                        
-                        <!-- TAGS GROUP (Left/Top) -->
-                        <div class="flex flex-wrap mb-2 sm:mb-0 space-x-2">
-                            <span class="tag" style="--tag-bg: rgba(59, 130, 246, 0.15); --tag-text: #3b82f6;">Preprint</span>
-                            <span class="tag" style="--tag-bg: rgba(168, 85, 247, 0.15); --tag-text: #a855f7;">#AgenticAI</span>
-                        </div>
+      <article class="proj">
+        <div class="tag-row">
+          <span class="tag accent">Award</span>
+          <span class="tag">Mixed Reality</span>
+          <span class="tag">2018</span>
+        </div>
+        <h3>HoloLens for Neuroimaging in Medical Education</h3>
+        <p class="blurb">
+          Volumetric MRI rendered as an interactive 3D mesh in Unity, deployed to
+          Microsoft HoloLens so medical students can manipulate brain anatomy in
+          their physical environment. Awarded <em>Best Student Project</em>,
+          Department of Computer Science, Swansea University.
+        </p>
+        <div class="meta">
+          <span>BEST STUDENT PROJECT</span>
+          <a href="https://www.youtube.com/watch?v=BCHFJswreW8" target="_blank" rel="noopener">Demo</a>
+        </div>
+      </article>
 
-                        <!-- LINKS GROUP (Right/Bottom) -->
-                        <div class="flex flex-wrap space-x-4 justify-start sm:justify-end">
-                             <!-- Paper Link -->
-                            <a href="#placeholder" target="_blank" class="text-sm font-semibold text-accent-blue hover:underline flex items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
-                                Paper PDF
-                            </a>
-                            <!-- Code Link -->
-                            <a href="#placeholder" target="_blank" class="text-sm font-semibold text-secondary hover:text-accent-blue flex items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.67c2.84-.4 5.82-1.42 5.82-6.51a4.83 4.83 0 0 0-1.3-3.37 4.54 4.54 0 0 0-.1-3.41s-1.02-.34-3.33 1.3a12.18 12.18 0 0 0-6.27 0c-2.31-1.64-3.33-1.3-3.33-1.3a4.54 4.54 0 0 0-.1 3.41A4.83 4.83 0 0 0 3 13.5c0 5.09 2.98 6.11 5.82 6.51A3.37 3.37 0 0 0 9 20v3m3-19c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
-                                GitHub Code
-                            </a>
-                        </div>
-                    </div>
-                </div>
+    </div>
+  </div>
+</section>
 
-            </div>
-        </section>
+<!-- ============================================================
+     EXPERIENCE
+============================================================ -->
+<section id="experience">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">05 — Experience</div>
+      <h2>The <span class="serif-italic">trajectory</span></h2>
+      <div class="meta">2016 → 2025</div>
+    </div>
 
+    <div class="timeline">
 
-        <!-- 5. Experience (OLD POSITION) -->
-        <section id="experience" class="py-12">
-            <h2 class="section-title text-3xl font-bold mb-8">Professional Experience</h2>
+      <div class="tl-item">
+        <div class="tl-date">Sep 2020 — Dec 2025</div>
+        <div class="tl-body">
+          <h4>PhD, Biomedical Artificial Intelligence</h4>
+          <div class="org">University of Edinburgh · Edinburgh Neuroprosthetics Lab · Supervisor: Prof. Kianoush Nazarpour</div>
+          <p class="descr">
+            Thesis: <em>Mitigating Confounding Factors in Myoelectric Control Through
+            Adaptive Modelling and Learning</em>. Successfully defended December 2025.
+            Focus on distribution shift, active learning, and domain generalisation
+            in EMG-based control of upper-limb prostheses.
+          </p>
+        </div>
+      </div>
 
-            <!-- Timeline Container Start -->
-            <div class="timeline-container">
-                
-                <!-- Experience 1: PhD -->
-                <div class="timeline-item">
-                    <div class="timeline-marker">
-                        <svg class="timeline-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6m-2-12-8 5-10 4 10 4 8-5V7M2 14v6m10-2.5V2m0 19.5a1 1 0 0 0-1 1 1 1 0 0 0 2 0 1 1 0 0 0-1-1z"/></svg>
-                    </div>
-                    <div class="experience-card-content text-process-bold">
-                        <h4 class="text-xl font-bold text-default mb-1">
-                            Ph.D. Biomedical Artificial Intelligence
-                        </h4>
-                        <p class="font-medium text-secondary">University of Edinburgh, Edinburgh</p>
-                        <p class="text-sm text-secondary mb-3">Sep 2020 - Present</p>
-                        <ul class="list-disc list-inside space-y-2 text-sm text-secondary pl-4">
-                            <li>Conducted cutting-edge research in **{human-in-the-loop agentic AI}**, bridging neuroscience, signal processing, and adaptive machine learning.</li>
-                            <li>Focused on developing robust, ethical, and intuitive AI solutions that **{augment human capabilities}**.</li>
-                        </ul>
-                    </div>
-                </div>
+      <div class="tl-item">
+        <div class="tl-date">Sep 2023 — Jun 2024</div>
+        <div class="tl-body">
+          <h4>Teaching Assistant — Entrepreneurship &amp; Innovation</h4>
+          <div class="org">University of Edinburgh</div>
+          <p class="descr">
+            Co-led a course bridging technical AI implementation with entrepreneurial
+            problem-solving. Guided students in developing MVP solutions for real-world
+            health and technology challenges.
+          </p>
+        </div>
+      </div>
 
-                <!-- Experience 2: Research Scientist Intern -->
-                <div class="timeline-item">
-                    <div class="timeline-marker">
-                         <svg class="timeline-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"/><path d="M16 2v4a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2V2"/></svg>
-                    </div>
-                    <div class="experience-card-content text-process-bold">
-                        <h4 class="text-xl font-bold text-default mb-1">
-                            Research Scientist Intern
-                        </h4>
-                        <p class="font-medium text-secondary">Meta Reality Labs, New York</p>
-                        <p class="text-sm text-secondary mb-3">Sep 2022 - Mar 2023</p>
-                        <ul class="list-disc list-inside space-y-2 text-sm text-secondary pl-4">
-                            <li>Investigated methods for **{sensor fusion and data multimodality}** in metaverse for wristband interactions.</li>
-                            <li>Utilized **{speech recognition models}** and multimodal learning to investigate **{cross-modality for feature fusion models}**.</li>
-                            <li>Collaborated as part of a larger ecosystem, cross-functional team towards common objectives.</li>
-                        </ul>
-                    </div>
-                </div>
+      <div class="tl-item">
+        <div class="tl-date">Sep 2022 — Mar 2023</div>
+        <div class="tl-body">
+          <h4>Research Scientist Intern</h4>
+          <div class="org">Meta Reality Labs · New York</div>
+          <p class="descr">
+            Developed large-scale multimodal sensor fusion models for continuous
+            navigation tasks in wristband-based interactions. End-to-end ML pipeline
+            including data curation, SFT of foundation models, and deployment
+            optimisation — contributing to next-generation AR/VR input systems.
+          </p>
+        </div>
+      </div>
 
-                <!-- Experience 3: Teaching Assistant -->
-                <div class="timeline-item">
-                    <div class="timeline-marker">
-                        <svg class="timeline-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="15" rx="2" ry="2"/><line x1="12" y1="21" x2="12" y2="18"/><line x1="4" y1="21" x2="20" y2="21"/></svg>
-                    </div>
-                    <div class="experience-card-content text-process-bold">
-                        <h4 class="text-xl font-bold text-default mb-1">
-                            Teaching Assistant
-                        </h4>
-                        <p class="font-medium text-secondary">University of Edinburgh, Edinburgh</p>
-                        <p class="text-sm text-secondary mb-3">Sep 2023 - June 2024</p>
-                        <ul class="list-disc list-inside space-y-2 text-sm text-secondary pl-4">
-                            <li>Co-led and instructed an **{Entrepreneurship and Innovation Course}**, bridging theory with practical application.</li>
-                            <li>Guided students in identifying real-world challenges and developing targeted solutions, emphasizing prototyping minimum viable products (**{MVPs}**).</li>
-                        </ul>
-                    </div>
-                </div>
+      <div class="tl-item">
+        <div class="tl-date">2022</div>
+        <div class="tl-body">
+          <h4>Oxford Machine Learning Summer School</h4>
+          <div class="org">University of Oxford</div>
+          <p class="descr">Intensive ML training across modern deep learning, probabilistic methods, and large-scale systems.</p>
+        </div>
+      </div>
 
-                <!-- Experience 4: Teaching Assistant, Lab Demonstrator -->
-                <div class="timeline-item">
-                    <div class="timeline-marker">
-                        <svg class="timeline-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="15" rx="2" ry="2"/><line x1="12" y1="21" x2="12" y2="18"/><line x1="4" y1="21" x2="20" y2="21"/></svg>
-                    </div>
-                    <div class="experience-card-content text-process-bold">
-                        <h4 class="text-xl font-bold text-default mb-1">
-                            Teaching Assistant, Lab Demonstrator
-                        </h4>
-                        <p class="font-medium text-secondary">Swansea University, Swansea</p>
-                        <p class="text-sm text-secondary mb-3">Jun 2017 - Sep 2019</p>
-                        <ul class="list-disc list-inside space-y-2 text-sm text-secondary pl-4">
-                            <li>Delivered modules, such as **{Object Oriented Programming (Java)}** and concepts of Computer Science (data structures and algorithms).</li>
-                        </ul>
-                    </div>
-                </div>
-            
-            </div>
-            <!-- Timeline Container End -->
-        </section>
+      <div class="tl-item">
+        <div class="tl-date">2019 — 2020</div>
+        <div class="tl-body">
+          <h4>MRes, Biomedical Artificial Intelligence</h4>
+          <div class="org">University of Edinburgh</div>
+          <p class="descr">
+            Computer vision and deep learning applied to <em>in vivo</em> calcium
+            imaging of freely-behaving mice (with Prof. Oisin Mac Aodha &amp; the
+            Centre for Discovery Brain Sciences) — neuron activation mapping for
+            behaviour prediction.
+          </p>
+        </div>
+      </div>
 
-        <!-- 6. Contact -->
-        <section id="contact" class="py-12">
-            <h2 class="section-title text-3xl font-bold mb-8 mx-auto text-center">Get in Touch</h2>
-            <div class="max-w-xl mx-auto card-style p-8 rounded-xl border" style="border-color: var(--border-color); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);" text-center>
-                <p class="text-xl text-default mb-6 font-semibold">
-                    Let's collaborate on the next generation of robust and data-efficient AI systems.
-                </p>
-                <p class="text-md text-secondary mb-8">
-                    I am actively seeking **Applied Scientist** and **Research Scientist** roles and am excited to discuss foundational challenges in Health AI, Robotics, and core ML research.
-                </p>
+      <div class="tl-item">
+        <div class="tl-date">2018 — 2019</div>
+        <div class="tl-body">
+          <h4>MRes, Visual Computing</h4>
+          <div class="org">Swansea University · SeanseaVision Lab</div>
+          <p class="descr">
+            Sequential deep learning for EEG analysis in decision-making contexts
+            — time dependencies, non-stationarity, and cross-channel connectivity
+            for brain–computer interfaces.
+          </p>
+        </div>
+      </div>
 
-                <!-- Updated Email Link -->
-                <p class="text-lg font-bold text-default mb-6 flex items-center justify-center">
-                     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-3 text-accent-blue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="m22 6-10 7L2 6"/></svg>
-                    <a href="mailto:kszymaniak043@gmail.com" class="text-accent-blue hover:text-blue-400 transition">kszymaniak043@gmail.com</a>
-                </p>
+      <div class="tl-item">
+        <div class="tl-date">Jan 2017 — Sep 2019</div>
+        <div class="tl-body">
+          <h4>Teaching Assistant &amp; Lab Demonstrator</h4>
+          <div class="org">Swansea University · Department of Computer Science</div>
+          <p class="descr">
+            Object-Oriented Programming (Java), data structures, and algorithms —
+            for first- and second-year undergraduates.
+          </p>
+        </div>
+      </div>
 
-                <div class="flex justify-center space-x-4 pt-4 border-t" style="border-color: var(--border-color);">
-                    <!-- LinkedIn -->
-                    <a href="https://www.linkedin.com/in/katarzyna-szymaniak-ai/" target="_blank" class="text-secondary hover:text-accent-blue transition duration-150 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-1"><path d="M16 8a4 4 0 0 0-4-4 4 4 0 0 0-4 4v7H5v-7h2v7h2v-7h2v7h2v-7h2v7h2V8z"/><rect width="4" height="4" x="2" y="10"/><rect width="4" height="4" x="2" y="2"/></svg>
-                        LinkedIn
-                    </a>
-                    <!-- GitHub -->
-                    <a href="https://github.com/KatarzynaSzymaniak" target="_blank" class="text-secondary hover:text-accent-blue transition duration-150 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-1"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.67c2.84-.4 5.82-1.42 5.82-6.51a4.83 4.83 0 0 0-1.3-3.37 4.54 4.54 0 0 0-.1-3.41s-1.02-.34-3.33 1.3a12.18 12.18 0 0 0-6.27 0c-2.31-1.64-3.33-1.3-3.33-1.3a4.54 4.54 0 0 0-.1 3.41A4.83 4.83 0 0 0 3 13.5c0 5.09 2.98 6.11 5.82 6.51A3.37 3.37 0 0 0 9 20v3m3-19c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
-                        GitHub
-                    </a>
-                    <!-- Google Scholar -->
-                    <a href="https://scholar.google.com/citations?user=lwHIQVcAAAAJ&hl=en" target="_blank" class="text-secondary hover:text-accent-blue transition duration-150 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-1"><path d="M22 10v6m-2-12-8 5-10 4 10 4 8-5V7M2 14v6m10-2.5V2m0 19.5a1 1 0 0 0-1 1 1 1 0 0 0 2 0 1 1 0 0 0-1-1z"/></svg>
-                        Scholar
-                    </a>
-                    <!-- Twitter/X -->
-                    <a href="https://x.com/szymaniak_kasia" target="_blank" class="text-secondary hover:text-accent-blue transition duration-150 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-1"><path d="M16 4h3.8l-5.1 6.5L18 20h-4l-3.3-4.5L7.4 20H4l5.6-7.1L4 4h4.2l3 4.2L16 4Z"/></svg>
-                        Twitter
-                    </a>
-                </div>
-            </div>
-        </section>
+      <div class="tl-item">
+        <div class="tl-date">2015 — 2018</div>
+        <div class="tl-body">
+          <h4>BSc (Hons), Computer Science · First Class</h4>
+          <div class="org">Swansea University</div>
+          <p class="descr">
+            Final-year project: HoloLens for medical neuroimaging education
+            (Best Student Project, College of Science Award).
+          </p>
+        </div>
+      </div>
 
-    </main>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     TEACHING / OUTREACH
+============================================================ -->
+<section id="teaching">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">06 — Outreach</div>
+      <h2>Workshops, <span class="serif-italic">organising</span> &amp; collaborations</h2>
+      <div class="meta">2021 →</div>
+    </div>
+
+    <div class="outreach-grid reveal-stagger">
+      <div class="outreach-card">
+        <div class="kind">Co-organiser · 2021</div>
+        <h4>Women in Machine Learning Workshop @ NeurIPS</h4>
+        <p>Co-organised the WiML workshop, the largest community gathering for women researchers in machine learning, co-located with NeurIPS.</p>
+      </div>
+      <div class="outreach-card">
+        <div class="kind">Co-organiser</div>
+        <h4>Co-Design: Edinburgh Movement &amp; Rehabilitation Hub</h4>
+        <p>Co-organised a workshop bringing together clinicians, end-users, and ML researchers to scope adaptive, human-centred rehabilitation technology.</p>
+      </div>
+      <div class="outreach-card">
+        <div class="kind">Co-organiser</div>
+        <h4>Co-Creation in Neuroprosthetics</h4>
+        <p>Workshop on participatory design for neuroprosthetic systems, foregrounding the lived experience of prosthesis users alongside technical research.</p>
+      </div>
+      <div class="outreach-card">
+        <div class="kind">Teaching · 2023–2024</div>
+        <h4>Entrepreneurship &amp; Innovation (TA)</h4>
+        <p>Co-taught a course on bridging technical AI implementation with MVP product development for health and technology contexts.</p>
+      </div>
+    </div>
+
+    <div class="collab-strip reveal">
+      <h4>Collaborations &amp; affiliations</h4>
+      <div class="collab-list">
+        <span>Edinburgh Neuroprosthetics</span>
+        <span>·</span>
+        <span>Centre for Discovery Brain Sciences</span>
+        <span>·</span>
+        <span>ccBrain Lab, Cardiff</span>
+        <span>·</span>
+        <span>Samsung Research</span>
+        <span>·</span>
+        <span>Neuranics</span>
+        <span>·</span>
+        <span>Meta Reality Labs</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CONTACT
+============================================================ -->
+<section id="contact" class="contact">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">07 — Contact</div>
+      <h2>Let's <span class="serif-italic">talk</span></h2>
+      <div class="meta">Open · 2026 →</div>
+    </div>
+
+    <div class="contact-grid">
+      <div>
+        <p class="contact-headline">
+          The next role.<br/>
+          A <span class="accent-italic">collaboration.</span><br/>
+          A good problem.
+        </p>
+      </div>
+      <div class="contact-meta">
+        <p>
+          I'm actively looking for <strong>Research Scientist</strong> and
+          <strong>Applied Scientist</strong> roles in Health AI, neural interfaces,
+          wearables, and foundation models for physiological data — in
+          industry or applied research labs.
+        </p>
+        <p>
+          Particularly excited by groups that take real-world robustness,
+          adaptation, and clinical translation seriously rather than as
+          ablations at the end of a paper.
+        </p>
+        <p>
+          Edinburgh-based, comfortable relocating, fluent in long-haul flights
+          and longer biosignal pipelines.
+        </p>
+        <a href="mailto:kszymaniak043@gmail.com" class="email-big">kszymaniak043@gmail.com</a>
+        <div class="cta-row" style="margin-top: 28px;">
+          <a href="KatarzynaSzymaniakCV.pdf" target="_blank" rel="noopener" class="btn primary">Download CV <span class="arrow">↓</span></a>
+          <a href="https://www.linkedin.com/in/katarzyna-szymaniak-ai/" target="_blank" rel="noopener" class="btn">LinkedIn</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+============================================================ -->
+<footer>
+  <div class="colophon">
+    <b>© 2026 Katarzyna Szymaniak.</b><br/>
+    Set in <em style="font-family:var(--serif);font-size:13px;">Fraunces</em>,
+    DM Sans, and JetBrains Mono.<br/>
+    Hand-built. No frameworks. Coffee &amp; biosignals.
+  </div>
+</footer>
+
+<!-- ============================================================
+     SCRIPTS
+============================================================ -->
+<script>
+  // -------- nav scroll state
+  const nav = document.getElementById('nav');
+  let lastY = 0;
+  const onScroll = () => {
+    const y = window.scrollY;
+    nav.classList.toggle('scrolled', y > 40);
+    lastY = y;
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // -------- reveal on scroll
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+  document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => io.observe(el));
+
+  // -------- live EMG waveform
+  // generates a synthetic EMG-ish trace that scrolls; mixes pink noise w/ occasional bursts.
+  // It's not a real EMG model — just visually evocative and rhythmically right.
+  (function emg() {
+    const path = document.getElementById('emgPath');
+    if (!path) return;
+    const W = 1400, H = 120;
+    const CENTRE = H / 2;
+    const SAMPLES = 700;        // points across the band
+    const DX = W / SAMPLES;
+    const BUFFER = new Array(SAMPLES).fill(CENTRE);
+
+    // gentle pink-ish noise (smoothed white)
+    let lastNoise = 0;
+    function noise() {
+      const w = (Math.random() - 0.5) * 2;
+      lastNoise = lastNoise * 0.72 + w * 0.28;
+      return lastNoise;
+    }
+
+    // burst envelope (Hann-like)
+    let burst = null;
+    function maybeStartBurst() {
+      if (burst) return;
+      if (Math.random() < 0.018) {       // burst probability per frame
+        burst = {
+          t: 0,
+          len: 14 + Math.floor(Math.random() * 22),
+          amp: 22 + Math.random() * 26,
+          freq: 0.55 + Math.random() * 0.45
+        };
+      }
+    }
+    function burstSample() {
+      if (!burst) return 0;
+      const u = burst.t / burst.len;
+      const env = 0.5 - 0.5 * Math.cos(Math.PI * 2 * u); // Hann
+      const carrier = Math.sin(burst.t * burst.freq * Math.PI);
+      const sub = Math.sin(burst.t * burst.freq * Math.PI * 2.7) * 0.4;
+      const v = burst.amp * env * (carrier + sub);
+      burst.t += 1;
+      if (burst.t > burst.len) burst = null;
+      return v;
+    }
+
+    let frame = 0;
+    function tick() {
+      maybeStartBurst();
+      // slow baseline drift
+      const drift = Math.sin(frame * 0.006) * 3;
+      const baseline = noise() * 4;
+      const b = burstSample();
+      // shift buffer left, append new value
+      BUFFER.shift();
+      BUFFER.push(CENTRE + drift + baseline + b);
+
+      // build d
+      let d = 'M 0 ' + BUFFER[0].toFixed(2);
+      for (let i = 1; i < SAMPLES; i++) {
+        d += ' L ' + (i * DX).toFixed(2) + ' ' + BUFFER[i].toFixed(2);
+      }
+      path.setAttribute('d', d);
+      frame++;
+      requestAnimationFrame(tick);
+    }
+    // respect reduced motion
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) {
+      // draw a single static trace
+      for (let i = 0; i < SAMPLES; i++) BUFFER[i] = CENTRE + Math.sin(i * 0.08) * 6 + (Math.random()-0.5) * 3;
+      let d = 'M 0 ' + BUFFER[0].toFixed(2);
+      for (let i = 1; i < SAMPLES; i++) d += ' L ' + (i * DX).toFixed(2) + ' ' + BUFFER[i].toFixed(2);
+      path.setAttribute('d', d);
+    } else {
+      tick();
+    }
+  })();
+
+  // -------- portrait click easter egg
+  // toggles a subtle filter to give a "you've found me" beat. Replace src logic if a second photo exists.
+  (function portrait() {
+    const wrap = document.getElementById('portrait');
+    const img = document.getElementById('portraitImg');
+    if (!wrap || !img) return;
+    let toggled = false;
+    wrap.addEventListener('click', () => {
+      toggled = !toggled;
+      img.style.transition = 'filter 0.5s ease';
+      img.style.filter = toggled
+        ? 'grayscale(1) contrast(1.15) brightness(1.05) sepia(0.15)'
+        : 'none';
+    });
+  })();
+
+  // -------- year in footer (drift-safe)
+  // (kept as static '© 2026' above; if you want auto, replace with new Date().getFullYear())
+</script>
+
 </body>
 </html>
