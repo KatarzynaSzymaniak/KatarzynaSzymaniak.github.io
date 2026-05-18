@@ -255,11 +255,14 @@
   }
 
   .hero-side {
-    display: flex; flex-direction: column; gap: 32px;
+    display: flex; flex-direction: column; gap: 28px;
     align-items: stretch;
     align-self: start;
-    padding-top: 8px;
+    /* matches eyebrow pill height (~30px) + its margin-bottom (32px) so the
+       portrait's top edge sits level with the H1, not with the pill. */
+    padding-top: 68px;
   }
+  @media (max-width: 880px) { .hero-side { padding-top: 0; } }
   @media (max-width: 880px) { .hero-side { align-items: stretch; max-width: 420px; } }
   .hero-portrait {
     width: 100%;
@@ -327,7 +330,7 @@
 
   /* the EMG band - signature element */
   .emg-band {
-    position: absolute; left: 0; right: 0; bottom: -1%;
+    position: absolute; left: 0; right: 0; bottom: -5%;
     height: 110px;
     z-index: -1;
     pointer-events: none;
