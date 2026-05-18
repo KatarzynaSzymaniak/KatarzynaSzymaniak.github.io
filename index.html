@@ -386,21 +386,25 @@
                 <div class="md:col-span-2">
                     
                     <!-- Main Headline (Smaller text: text-3xl) -->
-                    <h1 class="text-3xl sm:text-3xl font-extrabold text-default mb-4 text-center md:text-left leading-tight">Designing Human-Centered AI</h1>
+                    <h1 class="text-3xl sm:text-3xl font-extrabold text-default mb-4 text-center md:text-left leading-tight">Adaptive ML for Real-World Signals</h1>
 
                     <!-- Introductory Paragraph (Smaller text: text-base) -->
                     <p class="text-secondary leading-relaxed mb-6 text-base font-light text-process-bold">
-                        PhD researcher with 5+ years of experience bridging **{neuroscience}**, **{signal processing}**, and **{adaptive machine learning}**. My work focuses on augmenting human capability by developing efficient, robust, and aligned AI systems for the next generation of multimodal and health-centric applications.
+                        PhD researcher with 5+ years working at the intersection of biosignal processing, multimodal sensor fusion, and adaptive machine learning. 
+                        I build models that stay robust when the data drifts — across users, sessions, devices, and modalities.
                     </p>
 
-                    <!-- Core Pitch (Inside Card) -->
-                    <div class="card-style p-6 rounded-xl border" style="border-color: var(--border-color); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
-                        <h2 class="text-xl font-bold text-default mb-4">An AI Research Scientist for the Next Wave of Innovation</h2>
-                        <!-- Body text is now text-sm -->
-                        <p class="text-sm text-secondary leading-relaxed text-process-bold">
-                            The AI market is maturing beyond generalist scaling, creating a demand for deep, first-principles expertise to solve complex, second-order problems. My background is built for this challenge. I am a **{PhD-level AI Scientist}** with expertise in developing and benchmarking machine learning models for noisy, real-world **{time-series biosignals}**. My research in myoelectric control and experience at Meta Reality Labs is directly applicable to the core challenges of wearable sensor data. Furthermore, I designed novel **{active learning and data curation frameworks}** that reduce data labeling costs and optimize training, demonstrating a deep understanding of the data-efficient methods critical for capital-intensive challenges like preference learning (**{DPO/RLHF}**) and pre-training. I have a proven ability to lead projects from theoretical conception to practical implementation, supported by a strong proficiency in **{Python}**, **{PyTorch}**, and the full scientific computing stack for large-scale data analysis and model deployment.
-                        </p>
-                    </div>
+                <div class="card-style p-6 rounded-xl border" style="border-color: var(--border-color); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
+                    <p class="text-sm text-secondary leading-relaxed text-process-bold" style="margin-bottom: 1.4em;">
+                        My research targets the core failure modes of deployed ML on continuous sensor data: non-stationarity, cross-user and cross-session distribution shift, label scarcity under real-world annotation budgets, and signal corruption from noise, motion artefacts, and environmental variability. These are shared bottlenecks across biosignal processing, wearable sensing, and audio — speaker variability, domain mismatch, acoustic noise robustness, and low-resource adaptation are structurally the same problems in a different modality.
+                    </p>
+                    <p class="text-sm text-secondary leading-relaxed text-process-bold" style="margin-bottom: 1.4em;">
+                        My PhD at Edinburgh developed domain generalisation and active learning methods for EMG-based myoelectric control, with published work on cross-position robustness benchmarking, human-in-the-loop recalibration, and open datasets for distribution-shift evaluation. At Meta Reality Labs, I built multimodal sensor fusion models for continuous wristband interactions, fine-tuning foundation models on novel biosignal tasks under real-time latency constraints. I currently work on extending these methods to audio and foundation-model adaptation.
+                    </p>
+                    <p class="text-sm text-secondary leading-relaxed text-process-bold">
+                        I work end-to-end — from experimental design and data curation through model development to deployment optimisation.
+                    </p>
+                </div>
                     
                     <!-- Keywords Bar (Smaller text: text-xs) -->
                     <p class="text-xs text-secondary mt-4 mb-8 text-process-bold">
@@ -418,60 +422,7 @@
             </div>
         </section>
 
-        <!-- 2. Core Competencies -->
-        <section id="competencies" class="py-12">
-            <h2 class="section-title text-3xl font-bold mb-8">Core Competencies</h2>
-            <h3 class="text-xl font-light text-secondary mb-8">Mapping PhD Expertise to Industry's Core Challenges: Here is how my core competencies align with high-value AI applications.</h3>
-            
-            <!-- 2x2 Grid of Competency Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-
-                <!-- Card 1: Signal Processing -->
-                <div class="card-style p-6 rounded-xl border" style="border-color: var(--border-color);" flex flex-col hover:border-accent-blue transition duration-300">
-                    <div class="text-accent-blue text-4xl mb-4">🔬</div>
-                    <h3 class="text-2xl font-semibold mb-2 text-default">Signal Processing</h3>
-                    <p class="text-sm font-semibold text-secondary mb-3">Core Problem: Model Efficiency & Multimodal Data Integration</p>
-                    <ul class="list-disc list-inside space-y-2 text-sm text-secondary pl-4 text-process-bold">
-                        <li>**{My Expertise}**: Engineered multi-stage signal processing pipelines using wavelet transforms and adaptive filtering to increase the signal-to-noise ratio of raw biosensor data by **{15 dB}**.</li>
-                        <li>**{Foundation Model Application}**: Applies to developing foundation models for biosignals (EMG, ECG) and novel research in filtering internal LLM activations to create more efficient transformer architectures.</li>
-                    </ul>
-                </div>
-
-                <!-- Card 2: Active Learning -->
-                <div class="card-style p-6 rounded-xl border" style="border-color: var(--border-color);" flex flex-col hover:border-accent-blue transition duration-300">
-                    <div class="text-accent-green text-4xl mb-4">💡</div>
-                    <h3 class="text-2xl font-semibold mb-2 text-default">Active Learning</h3>
-                    <p class="text-sm font-semibold text-secondary mb-3">Core Problem: AI Alignment & Data Labeling Costs</p>
-                    <ul class="list-disc list-inside space-y-2 text-sm text-secondary pl-4 text-process-bold">
-                        <li>**{My Expertise}**: Investigated and implemented active learning strategies to improve classification accuracy in human-in-the-loop systems.</li>
-                        <li>**{Foundation Model Application}**: Specialization in **{preference learning efficiency}**. I design data selection strategies for Active Preference Learning that maximize model improvement for a given annotation budget in DPO/RLHF pipelines.</li>
-                    </ul>
-                </div>
-
-                <!-- Card 3: Dataset Curation -->
-                <div class="card-style p-6 rounded-xl border" style="border-color: var(--border-color);" flex flex-col hover:border-accent-blue transition duration-300">
-                    <div class="text-accent-purple text-4xl mb-4">📊</div>
-                    <h3 class="text-2xl font-semibold mb-2 text-default">Dataset Curation</h3>
-                    <p class="text-sm font-semibold text-secondary mb-3">Core Problem: Pre-training Cost & Model Quality</p>
-                    <ul class="list-disc list-inside space-y-2 text-sm text-secondary pl-4 text-process-bold">
-                        <li>**{My Expertise}**: Experience designing and curating specialized, high-quality datasets for training robust machine learning models on noisy, real-world data.</li>
-                        <li>**{Foundation Model Application}**: I am an **{AI Training Optimizer}**. My skills implement strategic data selection pipelines that can reduce compute requirements by over **{80%}** while improving final model performance.</li>
-                    </ul>
-                </div>
-
-                <!-- Card 4: Domain Generalization & Benchmarking -->
-                <div class="card-style p-6 rounded-xl border" style="border-color: var(--border-color);" flex flex-col hover:border-accent-blue transition duration-300">
-                    <div class="text-yellow-400 text-4xl mb-4">✅</div>
-                    <h3 class="text-2xl font-semibold mb-2 text-default">Domain Generalization & Benchmarking</h3>
-                    <p class="text-sm font-semibold text-secondary mb-3">Core Problem: Out-of-Distribution (OOD) Robustness & Flawed Benchmarks</p>
-                    <ul class="list-disc list-inside space-y-2 text-sm text-secondary pl-4 text-process-bold">
-                        <li>**{My Expertise}**: Ph.D. level experience in the rigorous statistical benchmarking of AI training algorithms to ensure trustworthiness.</li>
-                        <li>**{Foundation Model Application}**: I move beyond using benchmarks to **{designing them}**. My ability to create robust OOD evaluation protocols that test for spurious correlations is a key skill for ensuring the integrity of an organization's R&D efforts.</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
+        
         <!-- 3. Portfolio -->
         <section id="portfolio" class="py-12">
             <h2 class="section-title text-3xl font-bold mb-8">Portfolio: From Theory to Impact</h2>
