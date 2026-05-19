@@ -85,7 +85,7 @@
   /* smooth color crossfade when toggling */
   html { transition: background-color 0.5s var(--ease); }
   body, .nav, .nav-cv, .btn, .agenda-card, .proj, .outreach-card,
-  .hero-portrait, .pub .links a, .socials a {
+  .hero-portrait, .pub .links a, .socials a, .thread, .writing-item {
     transition: background-color 0.4s var(--ease), color 0.4s var(--ease),
                 border-color 0.4s var(--ease);
   }
@@ -206,7 +206,7 @@
     max-width: var(--maxw);
     margin: 0 auto;
     padding: 14px var(--gutter);
-    display: flex; align-items: center; gap: 28px;
+    display: flex; align-items: center; gap: 24px;
   }
   .brand {
     font-family: var(--serif); font-size: 19px; font-weight: 500; letter-spacing: -0.01em;
@@ -217,9 +217,9 @@
     0%, 100% { opacity: 0.85; transform: scale(1); }
     50% { opacity: 0.4; transform: scale(0.85); }
   }
-  .nav-links { display: flex; gap: 34px; margin-left: auto; }
+  .nav-links { display: flex; gap: 26px; margin-left: auto; }
   .nav-links a {
-    font-size: 18px; color: var(--fg-muted);
+    font-size: 17px; color: var(--fg-muted);
     transition: color 0.2s ease;
     position: relative;
     font-weight: 400;
@@ -227,14 +227,14 @@
   }
   .nav-links a:hover { color: var(--fg); }
   .nav-cv {
-    font-family: var(--mono); font-size: 14px; text-transform: uppercase; letter-spacing: 0.12em;
+    font-family: var(--mono); font-size: 13px; text-transform: uppercase; letter-spacing: 0.12em;
     color: var(--accent);
     border: 1px solid color-mix(in oklab, var(--accent) 42%, transparent);
-    padding: 10px 18px; border-radius: 999px;
+    padding: 9px 16px; border-radius: 999px;
     transition: all 0.25s ease;
   }
-  .brand { font-size: 24px; }
-  .nav-inner { padding: 18px var(--gutter); gap: 28px; }
+  .brand { font-size: 22px; }
+  .nav-inner { padding: 18px var(--gutter); }
   .nav-cv:hover { background: var(--accent); color: var(--bg); border-color: var(--accent); }
 
   /* theme toggle — sun/moon swap, lives next to CV */
@@ -257,7 +257,7 @@
   [data-theme="light"] .theme-toggle .sun  { opacity: 1; transform: rotate(0deg) scale(1); }
 
   .nav-burger { display: none; margin-left: auto; gap: 10px; }
-  @media (max-width: 900px) {
+  @media (max-width: 1024px) {
     .nav-links { display: none; }
     .nav-burger { display: flex; align-items: center; gap: 10px; }
   }
@@ -391,6 +391,7 @@
   .btn.primary:hover { background: var(--fg-strong); color: var(--bg); border-color: var(--fg-strong); }
   .btn .arrow { transition: transform 0.25s ease; }
   .btn:hover .arrow { transform: translateX(3px); }
+  .btn svg.btn-icon { width: 14px; height: 14px; }
 
   /* the EMG band - signature element. Sits inside the hero's extra
      bottom padding so the full waveform is visible above the next section. */
@@ -475,6 +476,81 @@
   }
   .driver h4 { margin-bottom: 4px; }
   .driver p { font-size: 14px; color: var(--fg-muted); margin: 0; line-height: 1.55; }
+
+  /* ------------------------------------------------------------
+     4b. NOW — current work
+     ------------------------------------------------------------ */
+  .now-lead {
+    font-family: var(--serif);
+    font-size: clamp(22px, 2.5vw, 30px);
+    line-height: 1.4;
+    color: var(--fg);
+    font-weight: 350;
+    font-variation-settings: "SOFT" 30;
+    max-width: 72ch;
+    margin-bottom: 56px;
+  }
+  .now-lead em { color: var(--fg-strong); font-style: italic; }
+
+  .now-threads {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-bottom: 48px;
+  }
+  @media (max-width: 800px) { .now-threads { grid-template-columns: 1fr; } }
+
+  .thread {
+    position: relative;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 32px 30px 28px;
+    overflow: hidden;
+  }
+  .thread::before {
+    content: "";
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 1px;
+    background: linear-gradient(to right, var(--accent) 0%, var(--accent) 30%, transparent 100%);
+    opacity: 0;
+    transition: opacity 0.4s var(--ease);
+  }
+  .thread:hover { border-color: color-mix(in oklab, var(--accent) 42%, transparent); }
+  .thread:hover::before { opacity: 1; }
+  .thread .thread-ix {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 18px;
+  }
+  .thread h3 {
+    margin-bottom: 14px;
+    color: var(--fg-strong);
+    font-variation-settings: "SOFT" 30;
+  }
+  .thread p {
+    font-size: 15px;
+    color: var(--fg-muted);
+    line-height: 1.65;
+    margin-bottom: 22px;
+  }
+  .thread .tag-row { display: flex; gap: 6px; flex-wrap: wrap; }
+
+  .now-kicker {
+    font-family: var(--serif);
+    font-size: clamp(17px, 1.7vw, 21px);
+    color: var(--fg);
+    line-height: 1.55;
+    max-width: 78ch;
+    font-variation-settings: "SOFT" 30;
+    border-left: 2px solid var(--accent);
+    padding: 4px 0 4px 22px;
+    margin: 0;
+    font-weight: 350;
+  }
 
   /* ------------------------------------------------------------
      5. research agenda cards
@@ -693,6 +769,91 @@
   .collab-list span:hover { color: var(--accent); cursor: default; }
 
   /* ------------------------------------------------------------
+     9b. writing & articles
+     ------------------------------------------------------------ */
+  .writing-list {
+    display: flex; flex-direction: column;
+    gap: 14px;
+  }
+  .writing-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 28px;
+    align-items: center;
+    padding: 24px 28px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    position: relative;
+    overflow: hidden;
+  }
+  .writing-item::before {
+    content: "";
+    position: absolute; left: 0; top: 0;
+    width: 2px; height: 100%;
+    background: var(--accent);
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.4s var(--ease);
+  }
+  .writing-item:hover {
+    border-color: color-mix(in oklab, var(--accent) 36%, transparent);
+    background: var(--bg-card-hi);
+  }
+  .writing-item:hover::before { transform: scaleY(1); }
+  .writing-kicker {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .writing-info h4 {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+    color: var(--fg-strong);
+    margin-bottom: 6px;
+    font-variation-settings: "SOFT" 30;
+  }
+  .writing-info p {
+    font-size: 14px;
+    color: var(--fg-muted);
+    margin: 0;
+    line-height: 1.55;
+    max-width: 70ch;
+  }
+  .writing-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border: 1px solid var(--border-strong);
+    border-radius: 999px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--fg);
+    background: color-mix(in oklab, var(--accent) 6%, transparent);
+    flex-shrink: 0;
+    transition: all 0.25s ease;
+  }
+  .writing-action svg { width: 13px; height: 13px; }
+  .writing-item:hover .writing-action {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+  }
+  @media (max-width: 700px) {
+    .writing-item { grid-template-columns: 1fr; gap: 16px; padding: 22px 22px; }
+    .writing-action { justify-self: start; }
+  }
+
+  /* ------------------------------------------------------------
      10. contact
      ------------------------------------------------------------ */
   .contact {
@@ -774,11 +935,13 @@
     <a href="#top" class="brand"><span class="dot"></span> Szymaniak</a>
     <div class="nav-links">
       <a href="#about">About</a>
+      <a href="#now">Now</a>
       <a href="#research">Research</a>
       <a href="#papers">Papers</a>
       <a href="#projects">Projects</a>
       <a href="#experience">Experience</a>
       <a href="#teaching">Teaching</a>
+      <a href="#writing">Writing</a>
       <a href="#contact">Contact</a>
     </div>
     <a href="KatarzynaSzymaniakCV.pdf" class="nav-cv" target="_blank" rel="noopener">CV ↓</a>
@@ -808,15 +971,15 @@
       </h1>
 
       <p class="hero-tagline reveal">
-        AI Researcher & Engineer working on <span class="k">adaptive machine learning</span> 
-        for the messy, drifting signals around and within real human bodies — 
+        AI Researcher & Engineer working on <span class="k">adaptive machine learning</span>
+        for the messy, drifting signals around and within real human bodies —
         biosignals, audio, and the systems that try to read them.
       </p>
 
       <div class="hero-role reveal">PhD · University of Edinburgh · 2026</div>
 
       <div class="cta-row reveal">
-        <a href="#research" class="btn primary">Explore the work <span class="arrow">→</span></a>
+        <a href="#now" class="btn primary">Explore the work <span class="arrow">→</span></a>
         <a href="mailto:kszymaniak043@gmail.com" class="btn">Get in touch</a>
       </div>
     </div>
@@ -834,6 +997,12 @@
         </a>
         <a href="https://github.com/KatarzynaSzymaniak" target="_blank" rel="noopener" title="GitHub" aria-label="GitHub">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.6.5 11.9c0 5 3.3 9.3 7.8 10.8.6.1.8-.2.8-.6v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.5-.3-5.2-1.3-5.2-5.7 0-1.3.4-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.2 1.2.9-.3 1.9-.4 2.9-.4s2 .1 2.9.4c2.2-1.5 3.2-1.2 3.2-1.2.6 1.7.2 2.9.1 3.2.7.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.2 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.8-5.8 7.8-10.8C23.5 5.6 18.3.5 12 .5z"/></svg>
+        </a>
+        <a href="https://huggingface.co/KasiaAI" target="_blank" rel="noopener" title="Hugging Face" aria-label="Hugging Face">
+          <!-- HF "smiley" silhouette in a single fill colour so it inherits the socials theme -->
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 2.6C6.81 2.6 2.6 6.81 2.6 12s4.21 9.4 9.4 9.4 9.4-4.21 9.4-9.4S17.19 2.6 12 2.6Zm0 1.6a7.8 7.8 0 1 1 0 15.6 7.8 7.8 0 0 1 0-15.6Zm-3.2 5.4a1.35 1.35 0 1 0 0 2.7 1.35 1.35 0 0 0 0-2.7Zm6.4 0a1.35 1.35 0 1 0 0 2.7 1.35 1.35 0 0 0 0-2.7ZM7.7 13.85a.75.75 0 0 0-.55 1.27c1.21 1.3 2.94 2.13 4.85 2.13s3.64-.83 4.85-2.13a.75.75 0 0 0-1.1-1.02c-.94 1-2.27 1.65-3.75 1.65s-2.81-.65-3.75-1.65a.75.75 0 0 0-.55-.25Z"/>
+          </svg>
         </a>
         <a href="https://www.linkedin.com/in/katarzyna-szymaniak-ai/" target="_blank" rel="noopener" title="LinkedIn" aria-label="LinkedIn">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 2h-17A1.5 1.5 0 0 0 2 3.5v17A1.5 1.5 0 0 0 3.5 22h17a1.5 1.5 0 0 0 1.5-1.5v-17A1.5 1.5 0 0 0 20.5 2zM8 19H5V9h3v10zM6.5 7.7a1.7 1.7 0 1 1 0-3.4 1.7 1.7 0 0 1 0 3.4zM19 19h-3v-5.3c0-1.3-.5-2.1-1.6-2.1-1.2 0-1.9.8-1.9 2.1V19h-3V9h2.9v1.3c.4-.8 1.5-1.6 3-1.6 2.2 0 3.6 1.4 3.6 4.3V19z"/></svg>
@@ -875,8 +1044,8 @@
 
     <div class="about-grid">
       <p class="about-lead reveal">
-        Most ML works when the world holds still. 
-        Real-world signals don't — so my work is about the models that 
+        Most ML works when the world holds still.
+        Real-world signals don't — so my work is about the models that
         <span class="serif-italic">keep up</span>.
       </p>
 
@@ -890,17 +1059,17 @@
           users adapt to the model while the model is trying to adapt to them.
         </p>
         <p>
-          Before finishing the PhD I worked on <span class="k">multimodal sensor fusion</span> and 
-          <span class="k">personalising foundation models</span>  
+          Before finishing the PhD I worked on <span class="k">multimodal sensor fusion</span> and
+          <span class="k">personalising foundation models</span>
           at Meta Reality Labs in New York, building wristband interaction models that
           had to run with low latency in genuinely out-of-distribution conditions.
         </p>
         <p>
-          My research targets the core failure modes of deployed ML on continuous sensor data: non-stationarity, 
-          cross-user and cross-session distribution shift, label scarcity under real-world annotation budgets, 
-          and signal corruption from noise, motion artefacts, and environmental variability. These are shared 
-          bottlenecks across biosignal processing, wearable sensing, and audio — speaker variability, domain mismatch, 
-          acoustic noise robustness, and low-resource adaptation are structurally the same problems in a different modality. 
+          My research targets the core failure modes of deployed ML on continuous sensor data: non-stationarity,
+          cross-user and cross-session distribution shift, label scarcity under real-world annotation budgets,
+          and signal corruption from noise, motion artefacts, and environmental variability. These are shared
+          bottlenecks across biosignal processing, wearable sensing, and audio — speaker variability, domain mismatch,
+          acoustic noise robustness, and low-resource adaptation are structurally the same problems in a different modality.
           I currently work on extending these methods to audio and foundation-model adaptation.
           I work end-to-end: from experimental design and data curation through model development to deployment optimisation.
         </p>
@@ -946,12 +1115,80 @@
 </section>
 
 <!-- ============================================================
+     NOW — CURRENT WORK
+============================================================ -->
+<section id="now">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">02 — Now</div>
+      <h2>Current <span class="serif-italic">work</span></h2>
+      <div class="meta">In progress · 2026</div>
+    </div>
+
+    <p class="now-lead reveal">
+      Audio LLMs are quietly failing at the thing they're supposed to do.
+      Recent work shows that much of the gain from reasoning-tuned audio models comes
+      from reasoning over <em>text</em>, not the audio, and that longer chains of thought
+      often <em>degrade</em> performance as the model's grip on the audio fades through
+      the chain. Reasoning, where it works, is unevenly useful: necessary for some prompts,
+      wasted for others, and silently harmful when the model can't actually hear what it
+      claims to hear.
+    </p>
+
+    <div class="now-threads reveal-stagger">
+      <article class="thread">
+        <div class="thread-ix">Thread 01 · Inference-time</div>
+        <h3>Test-time re-grounding</h3>
+        <p>
+          Training-free decoding strategies that force the model to re-attend to the
+          audio at fixed points in its reasoning chain, paired with a mechanistic
+          analysis of where audio attention drops out.
+        </p>
+        <div class="tag-row">
+          <span class="tag accent">Training-free</span>
+          <span class="tag">Mech-interp</span>
+          <span class="tag">Audio LLMs</span>
+        </div>
+      </article>
+
+      <article class="thread">
+        <div class="thread-ix">Thread 02 · Adaptive compute</div>
+        <h3>Adaptive inference routing</h3>
+        <p>
+          A learned router that decides, per prompt, whether reasoning helps or hurts —
+          treating inference compute as an <em>acquisition function</em> rather than a
+          fixed budget.
+        </p>
+        <div class="tag-row">
+          <span class="tag accent">Routing</span>
+          <span class="tag">Acquisition</span>
+          <span class="tag signal">Adaptive budget</span>
+        </div>
+      </article>
+    </div>
+
+    <p class="now-kicker reveal">
+      Same framing as the biosignals work: <span class="k">distribution shift</span>,
+      <span class="k">adaptive compute</span>, and the budget constraints that decide
+      whether a model survives contact with deployment.
+    </p>
+
+    <div class="cta-row reveal" style="margin-top: 40px;">
+      <a href="https://github.com/KatarzynaSzymaniak" target="_blank" rel="noopener" class="btn primary">
+        <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.7.5.5 5.6.5 11.9c0 5 3.3 9.3 7.8 10.8.6.1.8-.2.8-.6v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.5-.3-5.2-1.3-5.2-5.7 0-1.3.4-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.2 1.2.9-.3 1.9-.4 2.9-.4s2 .1 2.9.4c2.2-1.5 3.2-1.2 3.2-1.2.6 1.7.2 2.9.1 3.2.7.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.2 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.8-5.8 7.8-10.8C23.5 5.6 18.3.5 12 .5z"/></svg>
+        Code on GitHub <span class="arrow">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
      RESEARCH AGENDA
 ============================================================ -->
 <section id="research">
   <div class="wrap">
     <div class="section-head">
-      <div class="num">02 — Research</div>
+      <div class="num">03 — Research</div>
       <h2>What I <span class="serif-italic">think about</span></h2>
       <div class="meta">Agenda · 2026 →</div>
     </div>
@@ -1033,7 +1270,7 @@
 <section id="papers">
   <div class="wrap">
     <div class="section-head">
-      <div class="num">03 — Papers</div>
+      <div class="num">04 — Papers</div>
       <h2>Selected <span class="serif-italic">publications</span></h2>
       <div class="meta">
         <a href="https://scholar.google.com/citations?user=lwHIQVcAAAAJ&hl=en" target="_blank" rel="noopener" style="color:var(--accent);">Full list on Scholar →</a>
@@ -1173,7 +1410,7 @@
 <section id="projects">
   <div class="wrap">
     <div class="section-head">
-      <div class="num">04 — Projects</div>
+      <div class="num">05 — Projects</div>
       <h2>Selected <span class="serif-italic">projects</span></h2>
       <div class="meta">Hands-on · 2022 →</div>
     </div>
@@ -1271,7 +1508,7 @@
 <section id="experience">
   <div class="wrap">
     <div class="section-head">
-      <div class="num">05 — Experience</div>
+      <div class="num">06 — Experience</div>
       <h2>The <span class="serif-italic">trajectory</span></h2>
       <div class="meta">2016 → 2025</div>
     </div>
@@ -1389,7 +1626,7 @@
 <section id="teaching">
   <div class="wrap">
     <div class="section-head">
-      <div class="num">06 — Outreach</div>
+      <div class="num">07 — Outreach</div>
       <h2>Workshops, <span class="serif-italic">organising</span> &amp; collaborations</h2>
       <div class="meta">2021 →</div>
     </div>
@@ -1437,12 +1674,67 @@
 </section>
 
 <!-- ============================================================
+     WRITING & ARTICLES
+============================================================ -->
+<section id="writing">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">08 — Writing</div>
+      <h2>Writing &amp; <span class="serif-italic">articles</span></h2>
+      <div class="meta">Notes · 2025 →</div>
+    </div>
+
+    <div class="writing-list reveal-stagger">
+
+      <a href="writing#academic-writing" class="writing-item">
+        <div class="writing-info">
+          <div class="writing-kicker">Notes · Ongoing</div>
+          <h4>Academic Writing Tips and Resources</h4>
+          <p>A practical collection of academic writing habits and go-to paper-writing resources.</p>
+        </div>
+        <span class="writing-action">
+          <!-- open-book icon -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 4.5h7a3 3 0 0 1 3 3V20a2.5 2.5 0 0 0-2.5-2.5H2z"/><path d="M22 4.5h-7a3 3 0 0 0-3 3V20a2.5 2.5 0 0 1 2.5-2.5H22z"/></svg>
+          Read
+        </span>
+      </a>
+
+      <a href="writing#beyond-the-cloud" class="writing-item">
+        <div class="writing-info">
+          <div class="writing-kicker">Pieces Blog · August 2025</div>
+          <h4>Beyond the Cloud: SLMs, Local AI, and Agentic Constellations</h4>
+          <p>A vision for local-first AI built on biology-inspired architectures.</p>
+        </div>
+        <span class="writing-action">
+          <!-- external link icon -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Read
+        </span>
+      </a>
+
+      <a href="writing#too-much-good-thing" class="writing-item">
+        <div class="writing-info">
+          <div class="writing-kicker">Pieces Blog · July 2025</div>
+          <h4>Too Much of a Good Thing: How Chasing Scale is Stifling AI Innovation</h4>
+          <p>The “Great Amnesia” of AI's scaling monoculture.</p>
+        </div>
+        <span class="writing-action">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Read
+        </span>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
      CONTACT
 ============================================================ -->
 <section id="contact" class="contact">
   <div class="wrap">
     <div class="section-head">
-      <div class="num">07 — Contact</div>
+      <div class="num">09 — Contact</div>
       <h2>Let's <span class="serif-italic">talk</span></h2>
       <div class="meta">Open · 2026 →</div>
     </div>
