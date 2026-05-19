@@ -423,16 +423,17 @@
         <span class="toc-title">Academic Writing Tips and Resources</span>
         <span class="toc-meta">Notes · Ongoing</span>
       </a>
-      <a href="#beyond-the-cloud">
-        <span class="toc-ix">02</span>
-        <span class="toc-title">Beyond the Cloud: SLMs, Local AI, and Agentic Constellations</span>
-        <span class="toc-meta">Pieces · Aug 2025</span>
-      </a>
       <a href="#too-much-good-thing">
-        <span class="toc-ix">03</span>
-        <span class="toc-title">Too Much of a Good Thing: How Chasing Scale is Stifling AI Innovation</span>
-        <span class="toc-meta">Pieces · Jul 2025</span>
+        <span class="toc-ix">02</span>
+        <span class="toc-title">The Hidden Saboteurs: How Confounding Factors Keep Bionic Hands from Working in the Real World</span>
+        <span class="toc-meta">Article · Ongoing ·Dec 2025</span>
       </a>
+      <a href="#beyond-the-cloud">
+        <span class="toc-ix">03</span>
+        <span class="toc-title">Beyond the Cloud: SLMs, Local AI, and Agentic Constellations</span>
+        <span class="toc-meta">Article · Aug 2025</span>
+      </a>
+
     </nav>
   </div>
 </header>
@@ -529,7 +530,96 @@ mpl.rcParams.update({
       </div>
     </article>
 
-    <!-- ARTICLE 02 ============================================ -->
+    <!-- ARTICLE 03 ============================================ -->
+    <article class="article" id="too-much-good-thing">
+      <header class="article-header reveal">
+        <div class="article-kicker">
+          <span>02 · Blog</span>
+          <span class="dot-sep">·</span>
+          <span>Ongoing</span>
+        </div>
+        <h2>The Hidden Saboteurs: How Confounding Factors Keep Bionic Hands from Working in the Real World</h2>
+        <p class="article-lede">
+          TLDR: Myoelectric prostheses translate muscle signals into movement, but those signals are easily disrupted by everything from arm position and fatigue to electrode slippage and sweat. 
+          These disruptions, called confounding factors, are why devices that work flawlessly in the lab often fail in daily life. 
+          This article maps where they come from, how they interact, and what it will take to overcome them.
+        </p>
+        <a href="#" class="external">
+          Read original here
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+      </header>
+
+      <div class="prose reveal">
+        <p>
+          Imagine a prosthetic hand that works flawlessly in a clinical lab — seamlessly opening, closing, and gripping on command — 
+          only to fail the moment its user reaches up to a top shelf. No hardware malfunction, no broken component. The problem is invisible: 
+          the muscle signals the device depends on have quietly shifted, and the system can no longer understand them.
+          This is the central frustration of modern myoelectric prosthetics, and it is caused by what researchers call confounding factors — a class 
+          of variables so pervasive and so subtle that they have become one of the defining unsolved problems of the field.
+        </p>
+
+        <h3>What Is Myoelectric Control?</h3>
+        <p>
+          Myoelectric prostheses are electrically powered artificial limbs that translate the wearer's 
+          own muscle activity into movement commands. They work by detecting surface electromyographic 
+          (sEMG) signals — the electrical impulses generated when muscles contract — via electrodes placed on 
+          the skin of the residual limb. Machine learning models, trained to recognise patterns in these signals 
+          corresponding to different intended gestures, then decode them in real time to drive motors in the prosthetic hand.
+        </p>
+        <p>
+          In theory, it is elegant. In practice, the signals are far messier than the models expect.
+        </p>
+
+        <h3>The Problem: Signals That Will Not Sit Still</h3>
+        <p>
+          EMG signals are inherently stochastic — noisy, variable, and deeply sensitive to context. The same person attempting 
+          the same gesture on two different days, or from two different arm positions, will produce measurably different signals. 
+          This variability is not random noise that can simply be filtered out; it reflects genuine physiological and environmental 
+          changes that systematically shift the signal distribution in ways that confuse even well-trained classifiers.
+        </p>
+        <p>
+          Confounding factors are the variables responsible for these shifts. They introduce unwanted variation into recorded signals, disrupting
+          the feature representations that machine learning models rely on and degrading their decoding capabilities. The consequences are 
+          not merely academic: poor control reliability directly raises cognitive load, increases user frustration, and is one of the primary 
+          drivers of prosthesis abandonment.
+        </p>
+        
+        <h3>Can we differentiate them?</h3>
+        <blockquote>
+          The Problem: Signals That Will Not Sit Still
+        </blockquote>
+        <ul>
+          <li>Intrinsic Factors: The Body's Own Interference</li>
+          <li>Extrinsic Factors: When the World Interferes</li>
+          <li>Compounded Factors: When Problems Multiply</li>
+        </ul>
+
+        <h3>Where the Field Is Heading</h3>
+        <p>
+          Vestibulum ante ipsum primis in faucibus orci luctus et ultrices
+          posuere cubilia curae; In ac dui quis mi consectetuer lacinia. Nam
+          pretium turpis et arcu. Duis arcu tortor, suscipit eget, imperdiet
+          nec, imperdiet iaculis, ipsum.
+        </p>
+        <p>
+          Sed aliquam ultrices mauris. Integer ante arcu, accumsan a,
+          consectetuer eget, posuere ut, mauris. Praesent adipiscing. Phasellus
+          ullamcorper ipsum rutrum nunc.
+        </p>
+
+        <hr/>
+
+        <p>
+          This article is based on the background chapter of the author's PhD thesis, 
+          #"Mitigating Confounding Factors in Myoelectric Control Through Adaptive Modelling 
+          and Learning," submitted to the University of Edinburgh, May 2026.
+        </p>
+      </div>
+
+
+    
+    <!-- ARTICLE 03 ============================================ -->
     <article class="article" id="beyond-the-cloud">
       <header class="article-header reveal">
         <div class="article-kicker">
@@ -544,7 +634,7 @@ mpl.rcParams.update({
           next order of magnitude.
         </p>
         <a href="#" class="external">
-          Read original on Pieces
+          Read original here
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
         </a>
       </header>
@@ -611,76 +701,7 @@ mpl.rcParams.update({
       </div>
     </article>
 
-    <!-- ARTICLE 03 ============================================ -->
-    <article class="article" id="too-much-good-thing">
-      <header class="article-header reveal">
-        <div class="article-kicker">
-          <span>03 · Pieces Blog</span>
-          <span class="dot-sep">·</span>
-          <span>July 2025</span>
-        </div>
-        <h2>Too Much of a Good Thing: How Chasing Scale is Stifling AI Innovation</h2>
-        <p class="article-lede">
-          On the “Great Amnesia” of AI's scaling monoculture — and what the
-          field is quietly forgetting as it chases the next order of magnitude.
-        </p>
-        <a href="#" class="external">
-          Read original on Pieces
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        </a>
-      </header>
 
-      <div class="prose reveal">
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam
-          lectus. Sed sit amet ipsum mauris. Maecenas congue ligula ac quam
-          viverra nec consectetur ante hendrerit.
-        </p>
-
-        <h3>The scaling monoculture</h3>
-        <p>
-          Donec et mollis dolor. Praesent et diam eget libero egestas mattis sit
-          amet vitae augue. Nam tincidunt congue enim, ut porta lorem lacinia
-          consectetur. Donec ut libero sed arcu vehicula ultricies a non tortor.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet. Sed dignissim lacinia nunc. Curabitur
-          tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor.
-          <em>Maecenas mattis</em>, sem ut nisi accumsan accumsan.
-        </p>
-
-        <h3>What gets forgotten</h3>
-        <blockquote>
-          A field with a monoculture isn't one paradigm doing well — it's a dozen
-          paradigms not being tried.
-        </blockquote>
-        <ul>
-          <li>Bayesian methods for genuine uncertainty.</li>
-          <li>Symbolic reasoning hybrids.</li>
-          <li>Energy-based models, neuro-symbolic stacks, and the long tail.</li>
-        </ul>
-
-        <h3>A path back</h3>
-        <p>
-          Vestibulum ante ipsum primis in faucibus orci luctus et ultrices
-          posuere cubilia curae; In ac dui quis mi consectetuer lacinia. Nam
-          pretium turpis et arcu. Duis arcu tortor, suscipit eget, imperdiet
-          nec, imperdiet iaculis, ipsum.
-        </p>
-        <p>
-          Sed aliquam ultrices mauris. Integer ante arcu, accumsan a,
-          consectetuer eget, posuere ut, mauris. Praesent adipiscing. Phasellus
-          ullamcorper ipsum rutrum nunc.
-        </p>
-
-        <hr/>
-
-        <p>
-          Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt.
-          Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis
-          magna. Sed consequat, leo eget bibendum sodales.
-        </p>
-      </div>
 
       <div class="back-to-top">
         <a href="#top">↑ Top</a>
