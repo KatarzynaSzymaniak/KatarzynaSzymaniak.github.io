@@ -1,0 +1,1642 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Katarzyna Szymaniak — Biomedical AI · Adaptive ML for Biosignals & Wearables</title>
+<meta name="description" content="Dr. Katarzyna Szymaniak — Biomedical AI researcher. PhD, University of Edinburgh. Adaptive machine learning for biosignals, wearables, and the messy distribution shifts of real human bodies." />
+<meta name="author" content="Katarzyna Szymaniak" />
+<meta property="og:title" content="Katarzyna Szymaniak — Biomedical AI Researcher" />
+<meta property="og:description" content="Adaptive machine learning for biosignals, wearables, and the messy distribution shifts of real human bodies." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://katarzynaszymaniak.github.io/" />
+<meta property="og:image" content="https://katarzynaszymaniak.github.io/me.jpeg" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:creator" content="@szymaniak_kasia" />
+<meta name="theme-color" content="#0a0a0c" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0a0c'/%3E%3Cpath d='M6 32 L18 32 L22 18 L30 46 L36 24 L42 38 L46 32 L58 32' stroke='%23d4a574' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,300..900,0..100,0..1&family=DM+Sans:opsz,wght@9..40,300..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script>
+  // Pre-paint theme init: avoids flash on first load.
+  (function () {
+    try {
+      var stored = localStorage.getItem('ks-theme');
+      var prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+      if (stored === 'light' || (!stored && prefersLight)) {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    } catch (_) { /* no-op */ }
+  })();
+</script>
+<style>
+  /* ------------------------------------------------------------
+     0. tokens
+     ------------------------------------------------------------ */
+  :root {
+    --bg:           #0a0a0c;
+    --bg-elev:      #101015;
+    --bg-card:      #14141a;
+    --bg-card-hi:   #1a1a22;
+    --fg:           #ece8de;
+    --fg-strong:    #f6f3eb;
+    --fg-muted:     #8a8478;
+    --fg-dim:       #5a544a;
+    --border:       rgba(236, 232, 222, 0.08);
+    --border-strong:rgba(236, 232, 222, 0.16);
+    --accent:       #d4a574;   /* copper / sand — human, warmth */
+    --accent-dim:   #8a6d47;
+    --signal:       #7ae5b8;   /* electric green — biosignal, sparingly */
+    --signal-dim:   #2f6b54;
+    --rust:         #e58a6e;
+    --grain-opacity: 0.6;
+    --grain-blend:   overlay;
+    --serif:        'Fraunces', 'Iowan Old Style', 'Apple Garamond', Garamond, 'Times New Roman', serif;
+    --sans:         'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --mono:         'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+    --maxw:         1180px;
+    --gutter:       clamp(20px, 4vw, 56px);
+    --ease:         cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* light theme — warm cream paper with the same copper accent.
+     Same skeleton, inverted contrast, signal hue shifted darker so it
+     stays visible against bright backgrounds. */
+  [data-theme="light"] {
+    --bg:           #f4efe3;
+    --bg-elev:      #faf6ec;
+    --bg-card:      #fbf7ed;
+    --bg-card-hi:   #ffffff;
+    --fg:           #1c1a16;
+    --fg-strong:    #0a0908;
+    --fg-muted:     #6e6657;
+    --fg-dim:       #9c937f;
+    --border:       rgba(26, 22, 16, 0.10);
+    --border-strong:rgba(26, 22, 16, 0.22);
+    --accent:       #a8743e;   /* deeper copper for contrast on cream */
+    --accent-dim:   #7a5530;
+    --signal:       #1f8266;   /* deep teal-green — biosignal on paper */
+    --signal-dim:   #14503f;
+    --rust:         #b85a3a;
+    --grain-opacity: 0.18;
+    --grain-blend:   multiply;
+  }
+  /* smooth color crossfade when toggling */
+  html { transition: background-color 0.5s var(--ease); }
+  body, .nav, .nav-cv, .btn, .agenda-card, .proj, .outreach-card,
+  .hero-portrait, .pub .links a, .socials a {
+    transition: background-color 0.4s var(--ease), color 0.4s var(--ease),
+                border-color 0.4s var(--ease);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+  }
+
+  /* ------------------------------------------------------------
+     1. base
+     ------------------------------------------------------------ */
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    font-feature-settings: "ss01", "cv11";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+  /* film grain overlay — opacity & blend mode swap with theme */
+  body::before {
+    content: "";
+    position: fixed; inset: 0;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.9  0 0 0 0 0.85  0 0 0 0 0.75  0 0 0 0.035 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    opacity: var(--grain-opacity);
+    mix-blend-mode: var(--grain-blend);
+    z-index: 9999;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+
+  a { color: inherit; text-decoration: none; }
+  img { max-width: 100%; display: block; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 var(--gutter); }
+
+  /* typography */
+  h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; letter-spacing: -0.02em; line-height: 1.05; margin: 0; font-variation-settings: "SOFT" 30, "WONK" 0; }
+  h1 { font-size: clamp(56px, 10vw, 132px); letter-spacing: -0.035em; }
+  h2 { font-size: clamp(36px, 5.5vw, 64px); }
+  h3 { font-size: clamp(22px, 2.6vw, 30px); letter-spacing: -0.015em; }
+  h4 { font-size: 18px; font-family: var(--sans); font-weight: 500; letter-spacing: 0; }
+  p { margin: 0 0 1em; }
+
+  .serif-italic { font-family: var(--serif); font-style: italic; font-variation-settings: "SOFT" 100, "WONK" 1; }
+  .mono { font-family: var(--mono); font-size: 0.82em; letter-spacing: 0.02em; }
+  .muted { color: var(--fg-muted); }
+  .dim   { color: var(--fg-dim); }
+  .accent { color: var(--accent); }
+  .signal { color: var(--signal); }
+
+  /* curly-brace emphasis (echoes Kasia's own writing style) */
+  .k { color: var(--fg-strong); font-weight: 500; white-space: nowrap; }
+  .k::before, .k::after { color: var(--accent); font-family: var(--mono); font-weight: 400; opacity: 0.65; }
+  .k::before { content: "{"; margin-right: 0.05em; }
+  .k::after  { content: "}"; margin-left: 0.05em; }
+
+  /* small tag pill */
+  .tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--fg-muted);
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: rgba(255,255,255,0.015);
+  }
+  .tag.accent { color: var(--accent); border-color: color-mix(in oklab, var(--accent) 38%, transparent); }
+  .tag.signal { color: var(--signal); border-color: color-mix(in oklab, var(--signal) 35%, transparent); }
+
+  /* section header */
+  .section-head {
+    display: flex; align-items: baseline; gap: 18px;
+    margin-bottom: clamp(36px, 5vw, 64px);
+    border-top: 1px solid var(--border);
+    padding-top: clamp(36px, 5vw, 56px);
+  }
+  .section-head .num {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.18em;
+    color: var(--accent); text-transform: uppercase;
+    flex-shrink: 0;
+    padding-top: 0.5em;
+  }
+  .section-head .meta {
+    margin-left: auto;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em;
+    color: var(--fg-dim); text-transform: uppercase;
+    text-align: right;
+  }
+  .section-head h2 .serif-italic { color: var(--accent); }
+
+  section { padding: clamp(60px, 8vw, 120px) 0; }
+
+  /* ------------------------------------------------------------
+     2. nav
+     ------------------------------------------------------------ */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    background: color-mix(in oklab, var(--bg) 55%, transparent);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.4s var(--ease), background 0.4s var(--ease);
+  }
+  .nav.scrolled { border-bottom-color: var(--border); background: color-mix(in oklab, var(--bg) 88%, transparent); }
+  .nav-inner {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 14px var(--gutter);
+    display: flex; align-items: center; gap: 28px;
+  }
+  .brand {
+    font-family: var(--serif); font-size: 19px; font-weight: 500; letter-spacing: -0.01em;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .brand .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--signal); box-shadow: 0 0 12px var(--signal); animation: pulse 2.4s ease-in-out infinite; }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.85; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.85); }
+  }
+  .nav-links { display: flex; gap: 34px; margin-left: auto; }
+  .nav-links a {
+    font-size: 18px; color: var(--fg-muted);
+    transition: color 0.2s ease;
+    position: relative;
+    font-weight: 400;
+    letter-spacing: -0.005em;
+  }
+  .nav-links a:hover { color: var(--fg); }
+  .nav-cv {
+    font-family: var(--mono); font-size: 14px; text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--accent);
+    border: 1px solid color-mix(in oklab, var(--accent) 42%, transparent);
+    padding: 10px 18px; border-radius: 999px;
+    transition: all 0.25s ease;
+  }
+  .brand { font-size: 24px; }
+  .nav-inner { padding: 18px var(--gutter); gap: 28px; }
+  .nav-cv:hover { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+
+  /* theme toggle — sun/moon swap, lives next to CV */
+  .theme-toggle {
+    width: 42px; height: 42px;
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    border: 1px solid var(--border-strong);
+    color: var(--fg-muted);
+    cursor: pointer;
+    transition: all 0.3s var(--ease);
+    position: relative;
+    overflow: hidden;
+  }
+  .theme-toggle:hover { color: var(--accent); border-color: var(--accent); transform: rotate(15deg); }
+  .theme-toggle svg { width: 18px; height: 18px; transition: transform 0.5s var(--ease), opacity 0.3s ease; position: absolute; }
+  .theme-toggle .moon { opacity: 1; transform: rotate(0deg) scale(1); }
+  .theme-toggle .sun  { opacity: 0; transform: rotate(-90deg) scale(0.4); }
+  [data-theme="light"] .theme-toggle .moon { opacity: 0; transform: rotate(90deg) scale(0.4); }
+  [data-theme="light"] .theme-toggle .sun  { opacity: 1; transform: rotate(0deg) scale(1); }
+
+  .nav-burger { display: none; margin-left: auto; gap: 10px; }
+  @media (max-width: 900px) {
+    .nav-links { display: none; }
+    .nav-burger { display: flex; align-items: center; gap: 10px; }
+  }
+
+  /* ------------------------------------------------------------
+     3. hero
+     ------------------------------------------------------------ */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    min-height: 100svh;
+    padding: 140px 0 200px;     /* extra bottom room so the EMG band lives fully inside */
+    display: flex; flex-direction: column; justify-content: center;
+    overflow: hidden;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: clamp(32px, 5vw, 64px);
+    align-items: start;
+  }
+  @media (max-width: 880px) { .hero-grid { grid-template-columns: 1fr; gap: 40px; } }
+
+  .hero-eyebrow {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 32px;
+  }
+  .hero-eyebrow .status {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--fg-muted);
+    padding: 6px 12px;
+    border: 1px solid var(--border-strong);
+    border-radius: 999px;
+    background: rgba(255,255,255,0.02);
+  }
+  .hero-eyebrow .status::before {
+    content: ""; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--signal); box-shadow: 0 0 8px var(--signal);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  .hero h1 {
+    font-variation-settings: "SOFT" 50, "WONK" 0, "opsz" 144;
+    font-weight: 350;
+  }
+  .hero h1 .last { display: block; font-style: italic; color: var(--fg-strong); font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144; font-weight: 300; }
+  .hero-tagline {
+    margin-top: 28px;
+    font-size: clamp(17px, 1.6vw, 21px);
+    color: var(--fg-muted);
+    max-width: 56ch;
+    line-height: 1.5;
+  }
+  .hero-role {
+    margin-top: 18px;
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .hero-side {
+    display: flex; flex-direction: column; gap: 28px;
+    align-items: stretch;
+    align-self: start;
+    /* matches eyebrow pill height (~30px) + its margin-bottom (32px) so the
+       portrait's top edge sits level with the H1, not with the pill. */
+    padding-top: 68px;
+  }
+  @media (max-width: 880px) { .hero-side { padding-top: 0; } }
+  @media (max-width: 880px) { .hero-side { align-items: stretch; max-width: 420px; } }
+  .hero-portrait {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    max-width: 560px;
+    margin-left: auto;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1px solid var(--border-strong);
+    background: var(--bg-card);
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.5s var(--ease), border-color 0.3s ease;
+    box-shadow: 0 30px 80px -30px rgba(0,0,0,0.6);
+  }
+  @media (max-width: 880px) { .hero-portrait { margin-left: 0; max-width: 360px; } }
+  .hero-portrait:hover { transform: scale(1.02); border-color: var(--accent); }
+  .hero-portrait img { width: 100%; height: 100%; object-fit: cover; }
+  .hero-portrait::after {
+    content: "psst — that's me";
+    position: absolute; bottom: -28px; left: 0; right: 0;
+    text-align: center;
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em;
+    color: var(--fg-dim); text-transform: uppercase;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .hero-portrait:hover::after { opacity: 1; }
+
+  /* social row — sits below the portrait, centered to its width */
+  .socials {
+    display: flex; gap: 12px; flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    max-width: 560px;
+    margin-left: auto;
+  }
+  @media (max-width: 880px) { .socials { margin-left: 0; max-width: 360px; } }
+  .socials a {
+    width: 44px; height: 44px;
+    display: inline-flex; align-items: center; justify-content: center;
+    border: 1px solid var(--border-strong);
+    border-radius: 50%;
+    color: var(--fg-muted);
+    transition: all 0.25s ease;
+  }
+  .socials a:hover { color: var(--bg); background: var(--accent); border-color: var(--accent); transform: translateY(-2px); }
+  .socials svg { width: 18px; height: 18px; }
+
+  /* cta row */
+  .cta-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 36px; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 12px 20px;
+    border-radius: 999px;
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+    border: 1px solid var(--border-strong);
+    transition: all 0.25s ease;
+  }
+  .btn:hover { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+  .btn.primary { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+  .btn.primary:hover { background: var(--fg-strong); color: var(--bg); border-color: var(--fg-strong); }
+  .btn .arrow { transition: transform 0.25s ease; }
+  .btn:hover .arrow { transform: translateX(3px); }
+
+  /* the EMG band - signature element. Sits inside the hero's extra
+     bottom padding so the full waveform is visible above the next section. */
+  .emg-band {
+    position: absolute; left: 0; right: 0; bottom: 50px;
+    height: 110px;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.85;
+    mask-image: linear-gradient(to right, transparent 0%, #000 12%, #000 88%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 12%, #000 88%, transparent 100%);
+  }
+  .emg-band svg { width: 100%; height: 100%; }
+  .emg-trace {
+    fill: none;
+    stroke: var(--signal);
+    stroke-width: 1.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 0 6px color-mix(in oklab, var(--signal) 40%, transparent));
+  }
+  .emg-grid line { stroke: var(--border); stroke-width: 0.5; }
+  .emg-label {
+    font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em;
+    fill: var(--fg-dim); text-transform: uppercase;
+  }
+
+  /* scroll cue */
+  .scroll-cue {
+    position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%);
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--fg-dim);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+  }
+  .scroll-cue::after {
+    content: ""; width: 1px; height: 22px;
+    background: linear-gradient(to bottom, var(--fg-dim), transparent);
+    animation: scrollLine 2.2s ease-in-out infinite;
+  }
+  @keyframes scrollLine {
+    0% { transform: translateY(-100%); opacity: 0; }
+    50% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(100%); opacity: 0; }
+  }
+
+  /* ------------------------------------------------------------
+     4. about
+     ------------------------------------------------------------ */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: clamp(36px, 5vw, 72px);
+  }
+  @media (max-width: 880px) { .about-grid { grid-template-columns: 1fr; } }
+  .about-lead {
+    font-family: var(--serif); font-size: clamp(24px, 2.6vw, 34px);
+    line-height: 1.25; color: var(--fg-strong);
+    font-weight: 350; letter-spacing: -0.015em;
+    font-variation-settings: "SOFT" 30;
+  }
+  .about-body { color: var(--fg); font-size: 17px; line-height: 1.7; }
+  .about-body p { margin-bottom: 1.2em; }
+  .about-body p:last-child { margin-bottom: 0; }
+
+  .drivers {
+    margin-top: 56px;
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px 36px;
+    border-top: 1px solid var(--border);
+    padding-top: 36px;
+  }
+  @media (max-width: 700px) { .drivers { grid-template-columns: 1fr; } }
+  .driver {
+    padding: 18px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex; gap: 16px; align-items: flex-start;
+  }
+  .driver:last-child, .driver:nth-last-child(2) { border-bottom: 0; }
+  @media (max-width: 700px) { .driver:nth-last-child(2) { border-bottom: 1px solid var(--border); } }
+  .driver .marker {
+    font-family: var(--mono); font-size: 11px; color: var(--accent); letter-spacing: 0.1em;
+    padding-top: 4px; flex-shrink: 0;
+  }
+  .driver h4 { margin-bottom: 4px; }
+  .driver p { font-size: 14px; color: var(--fg-muted); margin: 0; line-height: 1.55; }
+
+  /* ------------------------------------------------------------
+     5. research agenda cards
+     ------------------------------------------------------------ */
+  .agenda-intro {
+    font-family: var(--serif); font-size: clamp(22px, 2.4vw, 30px);
+    color: var(--fg); line-height: 1.35;
+    max-width: 60ch;
+    margin-bottom: 48px;
+    font-weight: 350;
+    font-variation-settings: "SOFT" 30;
+  }
+  .agenda-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+  .agenda-card {
+    background: var(--bg);
+    padding: 28px 24px;
+    transition: background 0.3s ease;
+    position: relative;
+  }
+  .agenda-card:hover { background: var(--bg-card); }
+  .agenda-card .ix {
+    position: absolute; top: 16px; right: 18px;
+    font-family: var(--mono); font-size: 10px; color: var(--fg-dim); letter-spacing: 0.1em;
+  }
+  .agenda-card h4 {
+    font-family: var(--serif); font-weight: 400; font-size: 22px; line-height: 1.2;
+    margin-bottom: 10px;
+    color: var(--fg-strong);
+    font-variation-settings: "SOFT" 30;
+  }
+  .agenda-card p {
+    font-size: 14px; line-height: 1.6; color: var(--fg-muted);
+    margin: 0;
+  }
+  .agenda-card .glyph {
+    font-family: var(--mono); color: var(--accent); font-size: 14px; margin-right: 8px;
+  }
+
+  /* ------------------------------------------------------------
+     6. publications
+     ------------------------------------------------------------ */
+  .pub-list { display: flex; flex-direction: column; }
+  .pub {
+    display: grid;
+    grid-template-columns: 110px 1fr auto;
+    gap: 24px;
+    padding: 26px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: start;
+    transition: background 0.3s ease;
+    position: relative;
+  }
+  .pub:first-child { border-top: 1px solid var(--border); }
+  @media (max-width: 720px) {
+    .pub { grid-template-columns: 1fr; gap: 8px; }
+  }
+  .pub .venue {
+    font-family: var(--mono); font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.12em; color: var(--accent);
+    padding-top: 4px;
+  }
+  .pub h4 {
+    font-family: var(--serif); font-weight: 400; font-size: 22px; line-height: 1.3;
+    color: var(--fg-strong); margin-bottom: 6px;
+    letter-spacing: -0.01em;
+    font-variation-settings: "SOFT" 30;
+  }
+  .pub .authors { font-size: 13px; color: var(--fg-muted); margin-bottom: 8px; }
+  .pub .authors b { color: var(--fg); font-weight: 600; }
+  .pub .summary { font-size: 14px; color: var(--fg-muted); line-height: 1.6; max-width: 70ch; }
+  .pub .links { display: flex; gap: 8px; align-self: start; padding-top: 6px; flex-wrap: wrap; }
+  .pub .links a {
+    font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em;
+    padding: 7px 13px;
+    border: 1px solid var(--border-strong); border-radius: 999px;
+    color: var(--fg);
+    background: color-mix(in oklab, var(--accent) 8%, transparent);
+    font-weight: 500;
+    transition: all 0.22s ease;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .pub .links a::after {
+    content: "↗"; font-size: 10px; opacity: 0.6;
+    transition: transform 0.22s ease, opacity 0.22s ease;
+  }
+  .pub .links a:hover {
+    color: var(--bg); background: var(--accent); border-color: var(--accent);
+    transform: translateY(-1px);
+  }
+  .pub .links a:hover::after { transform: translate(2px, -2px); opacity: 1; }
+
+  /* ------------------------------------------------------------
+     7. projects
+     ------------------------------------------------------------ */
+  .proj-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+  @media (max-width: 800px) { .proj-grid { grid-template-columns: 1fr; } }
+  .proj {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 32px;
+    border-radius: 4px;
+    display: flex; flex-direction: column;
+    transition: border-color 0.3s ease, transform 0.3s var(--ease);
+    position: relative;
+    overflow: hidden;
+  }
+  .proj::before {
+    content: ""; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 50% at 100% 0%, color-mix(in oklab, var(--accent) 9%, transparent), transparent 60%);
+    opacity: 0; transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
+  .proj:hover { border-color: color-mix(in oklab, var(--accent) 42%, transparent); transform: translateY(-2px); }
+  .proj:hover::before { opacity: 1; }
+  .proj .tag-row { display: flex; gap: 6px; margin-bottom: 20px; flex-wrap: wrap; }
+  .proj h3 { margin-bottom: 12px; }
+  .proj .blurb { font-size: 14px; line-height: 1.65; color: var(--fg-muted); margin-bottom: 18px; }
+  .proj .meta {
+    margin-top: auto; padding-top: 18px;
+    border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--fg-dim);
+  }
+  .proj .meta a { color: var(--accent); transition: color 0.2s ease; }
+  .proj .meta a:hover { color: var(--fg-strong); }
+  .proj .meta a::after { content: " →"; transition: margin 0.2s ease; display: inline-block; }
+  .proj .meta a:hover::after { margin-left: 4px; }
+
+  /* ------------------------------------------------------------
+     8. experience timeline
+     ------------------------------------------------------------ */
+  .timeline { position: relative; }
+  .tl-item {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 32px;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .tl-item:first-child { border-top: 1px solid var(--border); }
+  @media (max-width: 700px) {
+    .tl-item { grid-template-columns: 1fr; gap: 8px; }
+  }
+  .tl-date {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--accent);
+    padding-top: 6px;
+  }
+  .tl-body h4 {
+    font-family: var(--serif); font-size: 22px; font-weight: 400; line-height: 1.25;
+    color: var(--fg-strong); margin-bottom: 4px;
+    font-variation-settings: "SOFT" 30;
+  }
+  .tl-body .org {
+    font-size: 13px; color: var(--fg-muted); margin-bottom: 12px;
+    font-family: var(--mono); letter-spacing: 0.06em;
+  }
+  .tl-body .descr { font-size: 14px; line-height: 1.65; color: var(--fg-muted); max-width: 70ch; }
+
+  /* ------------------------------------------------------------
+     9. teaching / outreach
+     ------------------------------------------------------------ */
+  .outreach-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+  .outreach-card {
+    background: var(--bg);
+    padding: 28px 24px;
+    transition: background 0.3s ease;
+  }
+  .outreach-card:hover { background: var(--bg-card); }
+  .outreach-card .kind {
+    font-family: var(--mono); font-size: 10px; text-transform: uppercase;
+    letter-spacing: 0.16em; color: var(--accent);
+    margin-bottom: 14px;
+  }
+  .outreach-card h4 {
+    font-family: var(--serif); font-size: 19px; font-weight: 400;
+    line-height: 1.25;
+    color: var(--fg-strong);
+    margin-bottom: 8px;
+    font-variation-settings: "SOFT" 30;
+  }
+  .outreach-card p { font-size: 13px; color: var(--fg-muted); line-height: 1.55; margin: 0; }
+
+  .collab-strip {
+    margin-top: 56px;
+    padding-top: 36px;
+    border-top: 1px solid var(--border);
+  }
+  .collab-strip h4 {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--fg-dim); margin-bottom: 18px;
+  }
+  .collab-list {
+    display: flex; flex-wrap: wrap; gap: 8px 28px;
+    font-family: var(--serif); font-size: 22px; color: var(--fg-muted);
+    font-variation-settings: "SOFT" 50;
+  }
+  .collab-list span { transition: color 0.3s ease; }
+  .collab-list span:hover { color: var(--accent); cursor: default; }
+
+  /* ------------------------------------------------------------
+     10. contact
+     ------------------------------------------------------------ */
+  .contact {
+    text-align: left;
+    padding-bottom: 0;
+  }
+  .contact-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: clamp(36px, 6vw, 80px);
+    align-items: end;
+  }
+  @media (max-width: 800px) { .contact-grid { grid-template-columns: 1fr; } }
+  .contact-headline {
+    font-family: var(--serif);
+    font-size: clamp(40px, 6vw, 78px);
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+    font-weight: 350;
+    font-variation-settings: "SOFT" 30;
+  }
+  .contact-headline .accent-italic {
+    font-style: italic; color: var(--accent);
+    font-variation-settings: "SOFT" 100, "WONK" 1;
+    font-weight: 300;
+  }
+  .contact-meta { font-size: 14px; color: var(--fg-muted); line-height: 1.7; }
+  .contact-meta a { color: var(--fg); border-bottom: 1px solid var(--border-strong); padding-bottom: 1px; transition: all 0.2s ease; }
+  .contact-meta a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+  .contact-meta strong { color: var(--fg-strong); font-weight: 600; }
+  .contact .email-big {
+    margin-top: 32px;
+    font-family: var(--mono); font-size: clamp(18px, 2.4vw, 28px);
+    color: var(--accent);
+    display: inline-block;
+    border-bottom: 1px solid color-mix(in oklab, var(--accent) 38%, transparent);
+    padding-bottom: 4px;
+    transition: all 0.2s ease;
+  }
+  .contact .email-big:hover { border-bottom-color: var(--accent); letter-spacing: 0.01em; }
+
+  /* footer */
+  footer {
+    padding: 48px var(--gutter) 36px;
+    border-top: 1px solid var(--border);
+    margin-top: 100px;
+    text-align: center;
+  }
+  footer .colophon {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--fg-dim);
+    max-width: 600px; margin: 0 auto;
+    line-height: 1.8;
+  }
+  footer .colophon b { color: var(--fg-muted); font-weight: 500; }
+
+  /* reveal on scroll */
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.9s var(--ease), transform 0.9s var(--ease); }
+  .reveal.in { opacity: 1; transform: none; }
+  .reveal-stagger > * { opacity: 0; transform: translateY(16px); transition: opacity 0.7s var(--ease), transform 0.7s var(--ease); }
+  .reveal-stagger.in > * { opacity: 1; transform: none; }
+  .reveal-stagger.in > *:nth-child(2) { transition-delay: 60ms; }
+  .reveal-stagger.in > *:nth-child(3) { transition-delay: 120ms; }
+  .reveal-stagger.in > *:nth-child(4) { transition-delay: 180ms; }
+  .reveal-stagger.in > *:nth-child(5) { transition-delay: 240ms; }
+  .reveal-stagger.in > *:nth-child(6) { transition-delay: 300ms; }
+  .reveal-stagger.in > *:nth-child(7) { transition-delay: 360ms; }
+  .reveal-stagger.in > *:nth-child(8) { transition-delay: 420ms; }
+  .reveal-stagger.in > *:nth-child(9) { transition-delay: 480ms; }
+  .reveal-stagger.in > *:nth-child(10) { transition-delay: 540ms; }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     NAV
+============================================================ -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#top" class="brand"><span class="dot"></span> Szymaniak</a>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#research">Research</a>
+      <a href="#papers">Papers</a>
+      <a href="#projects">Projects</a>
+      <a href="#experience">Experience</a>
+      <a href="#teaching">Teaching</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <a href="KatarzynaSzymaniakCV.pdf" class="nav-cv" target="_blank" rel="noopener">CV ↓</a>
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle colour theme" title="Toggle theme">
+      <!-- moon (shown in dark mode → click to go light) -->
+      <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>
+      <!-- sun (shown in light mode → click to go dark) -->
+      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+    </button>
+    <div class="nav-burger"><a href="#contact" class="nav-cv">Contact</a></div>
+  </div>
+</nav>
+
+<!-- ============================================================
+     HERO
+============================================================ -->
+<header class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="hero-eyebrow reveal-stagger">
+        <span class="status">Available — Research Scientist · Applied Scientist</span>
+      </div>
+
+      <h1 class="reveal">
+        Katarzyna<br/>
+        Szymaniak<span class="last">— in signals.</span>
+      </h1>
+
+      <p class="hero-tagline reveal">
+        AI Researcher & Engineer working on <span class="k">adaptive machine learning</span> 
+        for the messy, drifting signals around and within real human bodies — 
+        biosignals, audio, and the systems that try to read them.
+      </p>
+
+      <div class="hero-role reveal">PhD · University of Edinburgh · 2026</div>
+
+      <div class="cta-row reveal">
+        <a href="#research" class="btn primary">Explore the work <span class="arrow">→</span></a>
+        <a href="mailto:kszymaniak043@gmail.com" class="btn">Get in touch</a>
+      </div>
+    </div>
+
+    <aside class="hero-side reveal">
+      <div class="hero-portrait" id="portrait" title="Click for the other version">
+        <img src="me.jpeg" alt="Katarzyna Szymaniak" id="portraitImg" />
+      </div>
+      <div class="socials" aria-label="Social links">
+        <a href="mailto:kszymaniak043@gmail.com" title="Email" aria-label="Email">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+        </a>
+        <a href="https://scholar.google.com/citations?user=lwHIQVcAAAAJ&hl=en" target="_blank" rel="noopener" title="Google Scholar" aria-label="Google Scholar">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 1 9l11 7 9-5.7V17h2V9zM4 13.5V18l8 5 8-5v-4.5l-8 5z"/></svg>
+        </a>
+        <a href="https://github.com/KatarzynaSzymaniak" target="_blank" rel="noopener" title="GitHub" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.6.5 11.9c0 5 3.3 9.3 7.8 10.8.6.1.8-.2.8-.6v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.5-.3-5.2-1.3-5.2-5.7 0-1.3.4-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.2 1.2.9-.3 1.9-.4 2.9-.4s2 .1 2.9.4c2.2-1.5 3.2-1.2 3.2-1.2.6 1.7.2 2.9.1 3.2.7.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.2 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.8-5.8 7.8-10.8C23.5 5.6 18.3.5 12 .5z"/></svg>
+        </a>
+        <a href="https://www.linkedin.com/in/katarzyna-szymaniak-ai/" target="_blank" rel="noopener" title="LinkedIn" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 2h-17A1.5 1.5 0 0 0 2 3.5v17A1.5 1.5 0 0 0 3.5 22h17a1.5 1.5 0 0 0 1.5-1.5v-17A1.5 1.5 0 0 0 20.5 2zM8 19H5V9h3v10zM6.5 7.7a1.7 1.7 0 1 1 0-3.4 1.7 1.7 0 0 1 0 3.4zM19 19h-3v-5.3c0-1.3-.5-2.1-1.6-2.1-1.2 0-1.9.8-1.9 2.1V19h-3V9h2.9v1.3c.4-.8 1.5-1.6 3-1.6 2.2 0 3.6 1.4 3.6 4.3V19z"/></svg>
+        </a>
+        <a href="https://x.com/szymaniak_kasia" target="_blank" rel="noopener" title="Twitter / X" aria-label="Twitter">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+      </div>
+    </aside>
+  </div>
+
+  <!-- live EMG band -->
+  <div class="emg-band" aria-hidden="true">
+    <svg viewBox="0 0 1400 120" preserveAspectRatio="none" id="emgSvg">
+      <g class="emg-grid">
+        <line x1="0" y1="30" x2="1400" y2="30"/>
+        <line x1="0" y1="60" x2="1400" y2="60"/>
+        <line x1="0" y1="90" x2="1400" y2="90"/>
+      </g>
+      <text x="14" y="14" class="emg-label">CH1 · EMG · 1000 Hz</text>
+      <text x="1330" y="14" class="emg-label" text-anchor="end">LIVE</text>
+      <path id="emgPath" class="emg-trace" d=""/>
+    </svg>
+  </div>
+
+  <div class="scroll-cue">Scroll</div>
+</header>
+
+<!-- ============================================================
+     ABOUT
+============================================================ -->
+<section id="about">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">01 — About</div>
+      <h2>Who <span class="serif-italic">I am</span></h2>
+      <div class="meta">2025</div>
+    </div>
+
+    <div class="about-grid">
+      <p class="about-lead reveal">
+        Most ML works when the world holds still. 
+        Real-world signals don't — so my work is about the models that 
+        <span class="serif-italic">keep up</span>.
+      </p>
+
+      <div class="about-body reveal">
+        <p>
+          I'm a biomedical AI researcher with a PhD from the University of Edinburgh
+          (December 2025), supervised by Prof. Kianoush Nazarpour. My thesis —
+          <em>Mitigating Confounding Factors in Myoelectric Control Through Adaptive
+          Modelling and Learning</em> — sits exactly where deep learning meets the
+          inconvenient reality of biosignals: electrodes shift, postures change,
+          users adapt to the model while the model is trying to adapt to them.
+        </p>
+        <p>
+          Before finishing the PhD I worked on <span class="k">multimodal sensor fusion</span> and 
+          <span class="k">personalising foundation models</span>  
+          at Meta Reality Labs in New York, building wristband interaction models that
+          had to run with low latency in genuinely out-of-distribution conditions.
+        </p>
+        <p>
+          My research targets the core failure modes of deployed ML on continuous sensor data: non-stationarity, 
+          cross-user and cross-session distribution shift, label scarcity under real-world annotation budgets, 
+          and signal corruption from noise, motion artefacts, and environmental variability. These are shared 
+          bottlenecks across biosignal processing, wearable sensing, and audio — speaker variability, domain mismatch, 
+          acoustic noise robustness, and low-resource adaptation are structurally the same problems in a different modality. 
+          I currently work on extending these methods to audio and foundation-model adaptation.
+          I work end-to-end: from experimental design and data curation through model development to deployment optimisation.
+        </p>
+        <p>
+          Currently, I'm looking for the next place to do this work in earnest — foundation models for audio and biosignals,
+          Health AI, neural interfaces, or any research group
+          that takes <span class="k">real-world robustness</span> seriously.
+        </p>
+      </div>
+    </div>
+
+    <div class="drivers reveal-stagger">
+      <div class="driver">
+        <span class="marker">→</span>
+        <div>
+          <h4>Adaptation over accuracy</h4>
+          <p>Static benchmarks tell us about a frozen world. The models that ship are the ones that keep working in the second week.</p>
+        </div>
+      </div>
+      <div class="driver">
+        <span class="marker">→</span>
+        <div>
+          <h4>Cheap labels, sharp questions</h4>
+          <p>Annotation budgets are the real constraint in clinical ML. Active learning and curation are first-class research, not engineering chores.</p>
+        </div>
+      </div>
+      <div class="driver">
+        <span class="marker">→</span>
+        <div>
+          <h4>Signals before scale</h4>
+          <p>EMG, EEG, ECG, IMU — each has its own physics. Architectures that respect the signal generalise farther than those that ignore it.</p>
+        </div>
+      </div>
+      <div class="driver">
+        <span class="marker">→</span>
+        <div>
+          <h4>The body in the loop</h4>
+          <p>The wearer adapts too. Co-adaptation is the design problem nobody warns you about — and the one most worth solving.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     RESEARCH AGENDA
+============================================================ -->
+<section id="research">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">02 — Research</div>
+      <h2>What I <span class="serif-italic">think about</span></h2>
+      <div class="meta">Agenda · 2026 →</div>
+    </div>
+
+    <p class="agenda-intro reveal">
+      A research agenda for the post-scaling era of physiological ML.
+      Below: the questions I want to spend the next decade on, organised
+      from <em>signal</em> to <em>system</em> to <em>person</em>.
+    </p>
+
+    <div class="agenda-grid reveal-stagger">
+      <div class="agenda-card">
+        <span class="ix">01</span>
+        <h4><span class="glyph">≈</span>Distribution Shift in the Wild</h4>
+        <p>Biosignals drift across days, electrodes, postures, sweat, and mood. The interesting science is identifying which shifts matter and building models that don't quietly fail when reality moves.</p>
+      </div>
+      <div class="agenda-card">
+        <span class="ix">02</span>
+        <h4><span class="glyph">∮</span>Foundation Models for Biosignals</h4>
+        <p>PPG, EMG, ECG, EEG. What does pretraining on heterogeneous bodies actually give us, and what's the right tokenisation for a noisy, non-stationary, low-SNR signal?</p>
+      </div>
+      <div class="agenda-card">
+        <span class="ix">03</span>
+        <h4><span class="glyph">↻</span>Adaptive &amp; Continual Learning</h4>
+        <p>From session-level recalibration to lifelong adaptation. Closing the loop between the model and the wearer without catastrophic forgetting or runaway drift.</p>
+      </div>
+      <div class="agenda-card">
+        <span class="ix">04</span>
+        <h4><span class="glyph">?</span>Active &amp; Preference Learning</h4>
+        <p>When labelling is expensive — clinic time, expert annotation, RLHF — what is the smallest budget that still moves the model? Acquisition functions as first-class research objects.</p>
+      </div>
+      <div class="agenda-card">
+        <span class="ix">05</span>
+        <h4><span class="glyph">⊕</span>Multimodal Sensor Fusion</h4>
+        <p>EMG + IMU + audio + vision. Different noise floors, different sampling rates, different latencies. Fusion that respects the asymmetries rather than averaging them away.</p>
+      </div>
+      <div class="agenda-card">
+        <span class="ix">06</span>
+        <h4><span class="glyph">⊢</span>Domain Generalisation</h4>
+        <p>Most biosignal benchmarks measure within-session accuracy. Deployment doesn't. I'm interested in OOD-by-design evaluation, not OOD as a post-hoc surprise.</p>
+      </div>
+      <div class="agenda-card">
+        <span class="ix">07</span>
+        <h4><span class="glyph">∂</span>Physics-Informed ML</h4>
+        <p>Skin, muscle, electrode placement and impedance all have a physics. Architectures that encode it as inductive bias generalise farther than those that brute-force it from data.</p>
+      </div>
+      <div class="agenda-card">
+        <span class="ix">08</span>
+        <h4><span class="glyph">⇋</span>Human-in-the-Loop Systems</h4>
+        <p>The wearer is not a passive data source. They learn the model while the model learns them. Co-adaptation has its own dynamics and its own failure modes.</p>
+      </div>
+      <div class="agenda-card">
+        <span class="ix">09</span>
+        <h4><span class="glyph">⟶</span>From Lab to Limb</h4>
+        <p>Translational work for prosthetic and rehabilitation users. The last 20% of distribution shift kills more devices than any other failure mode, and it lives in people's homes.</p>
+      </div>
+      <div class="agenda-card">
+        <span class="ix">10</span>
+        <h4><span class="glyph">∿</span>Time Series at the Edge</h4>
+        <p>Low-power, low-latency inference on wristbands, patches, and implants. The constraints aren't an afterthought — they're often the most interesting part of the problem.</p>
+      </div>
+      <div class="agenda-card">
+        <span class="ix">11</span>
+        <h4><span class="glyph">⌬</span>Robust Benchmarking</h4>
+        <p>Designing evaluation protocols that surface failure modes before deployment does. Statistical rigour and cross-subject splits as a design principle, not a footnote.</p>
+      </div>
+      <div class="agenda-card">
+        <span class="ix">12</span>
+        <h4><span class="glyph">♡</span>Human-Centred AI</h4>
+        <p>The reason for all of the above. Augmenting human capability — clinical, assistive, expressive — rather than automating around it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PUBLICATIONS
+============================================================ -->
+<section id="papers">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">03 — Papers</div>
+      <h2>Selected <span class="serif-italic">publications</span></h2>
+      <div class="meta">
+        <a href="https://scholar.google.com/citations?user=lwHIQVcAAAAJ&hl=en" target="_blank" rel="noopener" style="color:var(--accent);">Full list on Scholar →</a>
+      </div>
+    </div>
+
+    <div class="pub-list">
+
+      <article class="pub">
+        <div class="venue">EurIPS Workshop 2025<br/><span class="muted" style="font-size:10px;letter-spacing:0.05em;">to EMBC 2026</span></div>
+        <div>
+          <h4>Position: Domain Generalisation in Myoelectric Control</h4>
+          <div class="authors"><b>K. Szymaniak</b>, H. Gouk</div>
+          <p class="summary">Position paper benchmarking domain generalisation methods for robust myoelectric control across varying arm positions and contexts in EMG-based control. Accepted at the EurIPS Workshop on the Science of Benchmarking and Evaluating AI.</p>
+          <div class="tag-row" style="margin-top:10px;">
+            <span class="tag">Distribution Shift</span>
+            <span class="tag">Benchmarking</span>
+            <span class="tag">EMG</span>
+          </div>
+        </div>
+        <div class="links">
+          <a href="#">PDF</a>
+          <a href="#">Code</a>
+        </div>
+      </article>
+
+      <article class="pub">
+        <div class="venue">IEEE TNSRE 2025</div>
+        <div>
+          <h4>Deep Feature Learning from Electromyographic Signals for Gesture Recognition Systems</h4>
+          <div class="authors">W. Zhong, X. Jiang, <b>K. Szymaniak</b>, M. Jabbari, C. Ma, K. Nazarpour</div>
+          <p class="summary">Position paper on deep learning approaches for EMG-based gesture recognition with improved feature representations. Published in IEEE Transactions on Neural Systems and Rehabilitation Engineering.</p>
+          <div class="tag-row" style="margin-top:10px;">
+            <span class="tag">Deep Learning</span>
+            <span class="tag">Feature Representation</span>
+            <span class="tag">Gesture Recognition</span>
+          </div>
+        </div>
+        <div class="links">
+          <a href="https://ieeexplore.ieee.org/abstract/document/11262198" target="_blank" rel="noopener">Paper</a>
+          <a href="https://doi.org/10.1109/TNSRE.2025.3635419">DOI</a>
+        </div>
+      </article>
+
+      <article class="pub">
+        <div class="venue">Nature Sci. Data 2025</div>
+        <div>
+          <h4>It's GREAT: Gesture REcognition for Arm Translation</h4>
+          <div class="authors"><b>K. Szymaniak</b>, I. Kyranou,, K. Nazarpour</div>
+          <p class="summary">End-to-end experimental study isolating <em>arm translation</em> — same gesture, same user, different limb position — as a distribution shift in EMG-based control. Open dataset and benchmark released for reproducible work on adaptive prosthetic control.</p>
+          <div class="tag-row" style="margin-top:10px;">
+            <span class="tag">Open Dataset</span>
+            <span class="tag">Arm Translation</span>
+            <span class="tag">Myoelectric Control</span>
+          </div>
+        </div>
+        <div class="links">
+          <a href="https://www.nature.com/articles/s41597-024-04296-8" target="_blank" rel="noopener">Paper</a>
+          <a href="https://doi.org/10.1038/s41597-024-04296-8" target="_blank" rel="noopener">DOI</a>
+          <a href="https://github.com/MoveR-Digital-Health-and-Care-Hub/MoveR_AT_GREAT" target="_blank" rel="noopener">Code</a>
+        </div>
+      </article>
+
+      <article class="pub">
+        <div class="venue">Front. Neurorobotics 2022</div>
+        <div>
+          <h4>Recalibration of Myoelectric Control with Active Learning</h4>
+          <div class="authors"><b>K. Szymaniak</b>, A. Krasoulis, K. Nazarpour</div>
+          <p class="summary">A human-in-the-loop active learning framework for long-term adaptation of myoelectric prostheses, defining optimal query strategies for robust EMG-based control.</p>
+          <div class="tag-row" style="margin-top:10px;">
+            <span class="tag">Active Learning</span>
+            <span class="tag">HITL</span>
+            <span class="tag">Clinical</span>
+          </div>
+        </div>
+        <div class="links">
+          <a href="https://www.frontiersin.org/journals/neurorobotics/articles/10.3389/fnbot.2022.1061201/full" target="_blank" rel="noopener">PDF</a>
+          <a href="https://doi.org/10.3389/fnbot.2022.1061201" target="_blank" rel="noopener">DOI</a>
+        </div>
+      </article>
+
+      <article class="pub">
+        <div class="venue">MRes Thesis 2020</div>
+        <div>
+          <h4>Predicting Behaviour through Brain Data Analysis</h4>
+          <div class="authors"><b>K. Szymaniak</b>, mentor: O. Mac Aodha</div>
+          <p class="summary">Applied deep learning to in vivo calcium imaging data from freely-behaving mice, predicting spatial navigation and exploratory behaviour through neuron activation mapping inspired by class activation techniques.</p>
+          <div class="tag-row" style="margin-top:10px;">
+            <span class="tag">Calcium Imaging</span>
+            <span class="tag">Computer Vision</span>
+            <span class="tag">Neuroscience</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="pub">
+        <div class="venue">MRes Thesis 2019</div>
+        <div>
+          <h4>EEG Sequential Data Analysis in Decision Making</h4>
+          <div class="authors"><b>K. Szymaniak</b>, mentors: J. Deng, X. Xie</div>
+          <p class="summary">Sequential deep learning approaches for EEG signal analysis, addressing time dependencies, non-stationarity, cross-channel connectivity, and memory mechanisms in brain–computer interfaces.</p>
+          <div class="tag-row" style="margin-top:10px;">
+            <span class="tag">EEG</span>
+            <span class="tag">BCI</span>
+            <span class="tag">Sequence Models</span>
+          </div>
+        </div>
+        <div class="links">
+          <a href="#">Report</a>
+        </div>
+      </article>
+
+      <article class="pub">
+        <div class="venue">Project · 2018 <br/><span class="muted" style="font-size:10px;letter-spacing:0.05em;">Best Student Project</span></div>
+        <div>
+          <h4>Neuroimaging Data Analysis: HoloLens for Medical Education</h4>
+          <div class="authors"><b>K. Szymaniak</b></div>
+          <p class="summary">3D visualisation tool for MRI brain scans using Unity and Microsoft HoloLens, designed to improve spatial data comprehension for medical students. Awarded <em>Best Student Project</em>, Department of Computer Science, Swansea University.</p>
+          <div class="tag-row" style="margin-top:10px;">
+            <span class="tag">Mixed Reality</span>
+            <span class="tag">Volume Rendering</span>
+            <span class="tag">HCI</span>
+          </div>
+        </div>
+        <div class="links">
+          <a href="https://www.youtube.com/watch?v=BCHFJswreW8" target="_blank" rel="noopener">Demo</a>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PROJECTS
+============================================================ -->
+<section id="projects">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">04 — Projects</div>
+      <h2>Selected <span class="serif-italic">projects</span></h2>
+      <div class="meta">Hands-on · 2022 →</div>
+    </div>
+
+    <div class="proj-grid reveal-stagger">
+
+      <article class="proj">
+        <div class="tag-row">
+          <span class="tag accent">Industry</span>
+          <span class="tag">Meta Reality Labs</span>
+          <span class="tag">2022–2023</span>
+        </div>
+        <h3>Multimodal Sensor Fusion for Wristband Interactions</h3>
+        <p class="blurb">
+          End-to-end ML pipeline for continuous navigation tasks via wristband biosignals,
+          including supervised fine-tuning of foundation models, data curation, and
+          deployment optimisation. Real-time inference for continuous gesture
+          recognition with reduced latency, adapting off-the-shelf models to novel
+          biosignal tasks for next-generation AR/VR input.
+        </p>
+        <div class="meta">
+          <span>RESEARCH INTERN</span>
+          <span>NEW YORK, USA</span>
+        </div>
+      </article>
+
+      <article class="proj">
+        <div class="tag-row">
+          <span class="tag signal">Open Dataset</span>
+          <span class="tag">Benchmark</span>
+          <span class="tag">EMG · Arm Translation</span>
+        </div>
+        <h3>GREAT — Gesture REcognition for Arm Translation</h3>
+        <p class="blurb">
+          An open EMG dataset and benchmark for one of the most under-studied
+          confounders in myoelectric control: <span class="serif-italic">arm translation</span>.
+          Same gesture, same user, different limb posture in space — and the
+          decoder falls apart. The dataset isolates that distribution shift, and
+          the accompanying benchmark evaluates classical and deep learning
+          approaches under it. Published in <em>Nature Scientific Data</em>.
+          Repo hosted by the MoveR Digital Health &amp; Care Hub.
+        </p>
+        <div class="meta">
+          <span>NATURE SCI. DATA · 2025</span>
+          <a href="https://github.com/MoveR-Digital-Health-and-Care-Hub/MoveR_AT_GREAT" target="_blank" rel="noopener">Repo</a>
+        </div>
+      </article>
+
+      <article class="proj">
+        <div class="tag-row">
+          <span class="tag signal">Open Source</span>
+          <span class="tag">Active Learning</span>
+          <span class="tag">DPO / RLHF</span>
+        </div>
+        <h3>Active Preference Learning for DPO Efficiency</h3>
+        <p class="blurb">
+          Simulation fine-tuning <span class="mono">Mistral-7B</span> with an Active Preference
+          Learning acquisition function for DPO, compared against random sampling
+          under a fixed annotation budget. Win-rate plots show APL reaching higher
+          performance with substantially less labelled preference data — same
+          adaptive-data thesis from EMG, ported to language model alignment.
+        </p>
+        <div class="meta">
+          <span>2025</span>
+          <a href="https://github.com/KatarzynaSzymaniak" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </article>
+
+      <article class="proj">
+        <div class="tag-row">
+          <span class="tag accent">Award</span>
+          <span class="tag">Mixed Reality</span>
+          <span class="tag">2018</span>
+        </div>
+        <h3>HoloLens for Neuroimaging in Medical Education</h3>
+        <p class="blurb">
+          Volumetric MRI rendered as an interactive 3D mesh in Unity, deployed to
+          Microsoft HoloLens so medical students can manipulate brain anatomy in
+          their physical environment. Awarded <em>Best Student Project</em>,
+          Department of Computer Science, Swansea University.
+        </p>
+        <div class="meta">
+          <span>BEST STUDENT PROJECT</span>
+          <a href="https://www.youtube.com/watch?v=BCHFJswreW8" target="_blank" rel="noopener">Demo</a>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     EXPERIENCE
+============================================================ -->
+<section id="experience">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">05 — Experience</div>
+      <h2>The <span class="serif-italic">trajectory</span></h2>
+      <div class="meta">2016 → 2025</div>
+    </div>
+
+    <div class="timeline">
+
+      <div class="tl-item">
+        <div class="tl-date">Sep 2020 — Dec 2025</div>
+        <div class="tl-body">
+          <h4>PhD, Biomedical Artificial Intelligence</h4>
+          <div class="org">University of Edinburgh · Edinburgh Neuroprosthetics Lab · Supervisor: Prof. Kianoush Nazarpour</div>
+          <p class="descr">
+            Thesis: <em>Mitigating Confounding Factors in Myoelectric Control Through
+            Adaptive Modelling and Learning</em>. Successfully defended December 2025.
+            Focus on distribution shift, active learning, and domain generalisation
+            in EMG-based control of upper-limb prostheses.
+          </p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">Sep 2023 — Jun 2024</div>
+        <div class="tl-body">
+          <h4>Teaching Assistant — Entrepreneurship &amp; Innovation</h4>
+          <div class="org">University of Edinburgh</div>
+          <p class="descr">
+            Co-led a course bridging technical AI implementation with entrepreneurial
+            problem-solving. Guided students in developing MVP solutions for real-world
+            health and technology challenges.
+          </p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">Sep 2022 — Mar 2023</div>
+        <div class="tl-body">
+          <h4>Research Scientist Intern</h4>
+          <div class="org">Meta Reality Labs · New York</div>
+          <p class="descr">
+            Developed large-scale multimodal sensor fusion models for continuous
+            navigation tasks in wristband-based interactions. End-to-end ML pipeline
+            including data curation, SFT of foundation models, and deployment
+            optimisation — contributing to next-generation AR/VR input systems.
+          </p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">2022</div>
+        <div class="tl-body">
+          <h4>Oxford Machine Learning Summer School</h4>
+          <div class="org">University of Oxford</div>
+          <p class="descr">Intensive ML training across modern deep learning, probabilistic methods, and large-scale systems.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">2019 — 2020</div>
+        <div class="tl-body">
+          <h4>MRes, Biomedical Artificial Intelligence</h4>
+          <div class="org">University of Edinburgh</div>
+          <p class="descr">
+            Computer vision and deep learning applied to <em>in vivo</em> calcium
+            imaging of freely-behaving mice (with Prof. Oisin Mac Aodha &amp; the
+            Centre for Discovery Brain Sciences) — neuron activation mapping for
+            behaviour prediction.
+          </p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">2018 — 2019</div>
+        <div class="tl-body">
+          <h4>MRes, Visual Computing</h4>
+          <div class="org">Swansea University · SeanseaVision Lab</div>
+          <p class="descr">
+            Sequential deep learning for EEG analysis in decision-making contexts
+            — time dependencies, non-stationarity, and cross-channel connectivity
+            for brain–computer interfaces.
+          </p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">Jan 2017 — Sep 2019</div>
+        <div class="tl-body">
+          <h4>Teaching Assistant &amp; Lab Demonstrator</h4>
+          <div class="org">Swansea University · Department of Computer Science</div>
+          <p class="descr">
+            Object-Oriented Programming (Java), data structures, and algorithms —
+            for first- and second-year undergraduates.
+          </p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">2015 — 2018</div>
+        <div class="tl-body">
+          <h4>BSc (Hons), Computer Science · First Class</h4>
+          <div class="org">Swansea University</div>
+          <p class="descr">
+            Final-year project: HoloLens for medical neuroimaging education
+            (Best Student Project, College of Science Award).
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     TEACHING / OUTREACH
+============================================================ -->
+<section id="teaching">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">06 — Outreach</div>
+      <h2>Workshops, <span class="serif-italic">organising</span> &amp; collaborations</h2>
+      <div class="meta">2021 →</div>
+    </div>
+
+    <div class="outreach-grid reveal-stagger">
+      <div class="outreach-card">
+        <div class="kind">Co-organiser · 2021</div>
+        <h4>Women in Machine Learning Workshop @ NeurIPS</h4>
+        <p>Co-organised the WiML workshop, the largest community gathering for women researchers in machine learning, co-located with NeurIPS.</p>
+      </div>
+      <div class="outreach-card">
+        <div class="kind">Co-organiser</div>
+        <h4>Co-Design: Edinburgh Movement &amp; Rehabilitation Hub</h4>
+        <p>Co-organised a workshop bringing together clinicians, end-users, and ML researchers to scope adaptive, human-centred rehabilitation technology.</p>
+      </div>
+      <div class="outreach-card">
+        <div class="kind">Co-organiser</div>
+        <h4>Co-Creation in Neuroprosthetics</h4>
+        <p>Workshop on participatory design for neuroprosthetic systems, foregrounding the lived experience of prosthesis users alongside technical research.</p>
+      </div>
+      <div class="outreach-card">
+        <div class="kind">Teaching · 2023–2024</div>
+        <h4>Entrepreneurship &amp; Innovation (TA)</h4>
+        <p>Co-taught a course on bridging technical AI implementation with MVP product development for health and technology contexts.</p>
+      </div>
+    </div>
+
+    <div class="collab-strip reveal">
+      <h4>Collaborations &amp; affiliations</h4>
+      <div class="collab-list">
+        <span>Edinburgh Neuroprosthetics</span>
+        <span>·</span>
+        <span>Centre for Discovery Brain Sciences</span>
+        <span>·</span>
+        <span>ccBrain Lab, Cardiff</span>
+        <span>·</span>
+        <span>Samsung Research</span>
+        <span>·</span>
+        <span>Neuranics</span>
+        <span>·</span>
+        <span>Meta Reality Labs</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CONTACT
+============================================================ -->
+<section id="contact" class="contact">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">07 — Contact</div>
+      <h2>Let's <span class="serif-italic">talk</span></h2>
+      <div class="meta">Open · 2026 →</div>
+    </div>
+
+    <div class="contact-grid">
+      <div>
+        <p class="contact-headline">
+          The next role.<br/>
+          A <span class="accent-italic">collaboration.</span><br/>
+          A good problem.
+        </p>
+      </div>
+      <div class="contact-meta">
+        <p>
+          I'm actively looking for <strong>Research Scientist</strong> and
+          <strong>Applied Scientist</strong> roles in Health AI, neural interfaces,
+          wearables, and foundation models for physiological data — in
+          industry or applied research labs.
+        </p>
+        <p>
+          Particularly excited by groups that take real-world robustness,
+          adaptation, and clinical translation seriously rather than as
+          ablations at the end of a paper.
+        </p>
+        <p>
+          Edinburgh-based, comfortable relocating, fluent in long-haul flights
+          and longer biosignal pipelines.
+        </p>
+        <a href="mailto:kszymaniak043@gmail.com" class="email-big">kszymaniak043@gmail.com</a>
+        <div class="cta-row" style="margin-top: 28px;">
+          <a href="KatarzynaSzymaniakCV.pdf" target="_blank" rel="noopener" class="btn primary">Download CV <span class="arrow">↓</span></a>
+          <a href="https://www.linkedin.com/in/katarzyna-szymaniak-ai/" target="_blank" rel="noopener" class="btn">LinkedIn</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+============================================================ -->
+<footer>
+  <div class="colophon">
+    <b>© 2026 Katarzyna Szymaniak.</b>
+  </div>
+</footer>
+
+<!-- ============================================================
+     SCRIPTS
+============================================================ -->
+<script>
+  // -------- theme toggle (dark default, persists in localStorage,
+  // respects prefers-color-scheme on first visit)
+  (function theme() {
+    const root = document.documentElement;
+    const KEY = 'ks-theme';
+    const stored = (() => { try { return localStorage.getItem(KEY); } catch (_) { return null; } })();
+    const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+    const initial = stored || (prefersLight ? 'light' : 'dark');
+    if (initial === 'light') root.setAttribute('data-theme', 'light');
+
+    const btn = document.getElementById('themeToggle');
+    if (!btn) return;
+    btn.addEventListener('click', () => {
+      const isLight = root.getAttribute('data-theme') === 'light';
+      if (isLight) {
+        root.removeAttribute('data-theme');
+        try { localStorage.setItem(KEY, 'dark'); } catch (_) {}
+      } else {
+        root.setAttribute('data-theme', 'light');
+        try { localStorage.setItem(KEY, 'light'); } catch (_) {}
+      }
+    });
+  })();
+
+  // -------- nav scroll state
+  const nav = document.getElementById('nav');
+  let lastY = 0;
+  const onScroll = () => {
+    const y = window.scrollY;
+    nav.classList.toggle('scrolled', y > 40);
+    lastY = y;
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // -------- reveal on scroll
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+  document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => io.observe(el));
+
+  // -------- live EMG waveform
+  // generates a synthetic EMG-ish trace that scrolls; mixes pink noise w/ occasional bursts.
+  // It's not a real EMG model — just visually evocative and rhythmically right.
+  (function emg() {
+    const path = document.getElementById('emgPath');
+    if (!path) return;
+    const W = 1400, H = 120;
+    const CENTRE = H / 2;
+    const SAMPLES = 700;        // points across the band
+    const DX = W / SAMPLES;
+    const BUFFER = new Array(SAMPLES).fill(CENTRE);
+
+    // gentle pink-ish noise (smoothed white)
+    let lastNoise = 0;
+    function noise() {
+      const w = (Math.random() - 0.5) * 2;
+      lastNoise = lastNoise * 0.72 + w * 0.28;
+      return lastNoise;
+    }
+
+    // burst envelope (Hann-like)
+    let burst = null;
+    function maybeStartBurst() {
+      if (burst) return;
+      if (Math.random() < 0.018) {       // burst probability per frame
+        burst = {
+          t: 0,
+          len: 14 + Math.floor(Math.random() * 22),
+          amp: 22 + Math.random() * 26,
+          freq: 0.55 + Math.random() * 0.45
+        };
+      }
+    }
+    function burstSample() {
+      if (!burst) return 0;
+      const u = burst.t / burst.len;
+      const env = 0.5 - 0.5 * Math.cos(Math.PI * 2 * u); // Hann
+      const carrier = Math.sin(burst.t * burst.freq * Math.PI);
+      const sub = Math.sin(burst.t * burst.freq * Math.PI * 2.7) * 0.4;
+      const v = burst.amp * env * (carrier + sub);
+      burst.t += 1;
+      if (burst.t > burst.len) burst = null;
+      return v;
+    }
+
+    let frame = 0;
+    function tick() {
+      maybeStartBurst();
+      // slow baseline drift
+      const drift = Math.sin(frame * 0.006) * 3;
+      const baseline = noise() * 4;
+      const b = burstSample();
+      // shift buffer left, append new value
+      BUFFER.shift();
+      BUFFER.push(CENTRE + drift + baseline + b);
+
+      // build d
+      let d = 'M 0 ' + BUFFER[0].toFixed(2);
+      for (let i = 1; i < SAMPLES; i++) {
+        d += ' L ' + (i * DX).toFixed(2) + ' ' + BUFFER[i].toFixed(2);
+      }
+      path.setAttribute('d', d);
+      frame++;
+      requestAnimationFrame(tick);
+    }
+    // respect reduced motion
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) {
+      // draw a single static trace
+      for (let i = 0; i < SAMPLES; i++) BUFFER[i] = CENTRE + Math.sin(i * 0.08) * 6 + (Math.random()-0.5) * 3;
+      let d = 'M 0 ' + BUFFER[0].toFixed(2);
+      for (let i = 1; i < SAMPLES; i++) d += ' L ' + (i * DX).toFixed(2) + ' ' + BUFFER[i].toFixed(2);
+      path.setAttribute('d', d);
+    } else {
+      tick();
+    }
+  })();
+
+  // -------- portrait click easter egg
+  // toggles a subtle filter to give a "you've found me" beat. Replace src logic if a second photo exists.
+  (function portrait() {
+    const wrap = document.getElementById('portrait');
+    const img = document.getElementById('portraitImg');
+    if (!wrap || !img) return;
+    let toggled = false;
+    wrap.addEventListener('click', () => {
+      toggled = !toggled;
+      img.style.transition = 'filter 0.5s ease';
+      img.style.filter = toggled
+        ? 'grayscale(1) contrast(1.15) brightness(1.05) sepia(0.15)'
+        : 'none';
+    });
+  })();
+
+  // -------- year in footer (drift-safe)
+  // (kept as static '© 2026' above; if you want auto, replace with new Date().getFullYear())
+</script>
+
+</body>
+</html>
