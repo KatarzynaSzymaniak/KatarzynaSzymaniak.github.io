@@ -1,0 +1,1081 @@
+<!doctype html>
+<html lang="en" data-lens="wearables">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Katarzyna Szymaniak — ML for Signals That Won't Hold Still</title>
+<meta name="description" content="Dr Katarzyna Szymaniak — machine learning researcher (PhD, University of Edinburgh, 2026; ex-Meta Reality Labs). Models for noisy, non-stationary time series that stay reliable under distribution shift and scarce labels: wearables and biosignals, sensor time series, audio." />
+<meta name="author" content="Katarzyna Szymaniak" />
+<meta property="og:title" content="Katarzyna Szymaniak — ML for signals that won't hold still" />
+<meta property="og:description" content="Robust, label-efficient machine learning for non-stationary time series — wearables, biosignals, audio. PhD Edinburgh · ex-Meta Reality Labs (CTRL-labs)." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://katarzynaszymaniak.github.io/" />
+<meta property="og:image" content="https://katarzynaszymaniak.github.io/me_pic_small.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:creator" content="@szymaniak_kasia" />
+<meta name="theme-color" content="#0a0a0c" />
+<link rel="canonical" href="https://katarzynaszymaniak.github.io/" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0a0c'/%3E%3Cpath d='M6 32 L18 32 L22 18 L30 46 L36 24 L42 38 L46 32 L58 32' stroke='%239b8cff' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Katarzyna Szymaniak",
+  "jobTitle": "Machine Learning Researcher",
+  "email": "mailto:k.szymaniak.ai@gmail.com",
+  "url": "https://katarzynaszymaniak.github.io/",
+  "image": "https://katarzynaszymaniak.github.io/me_pic_small.png",
+  "alumniOf": [
+    {"@type": "CollegeOrUniversity", "name": "University of Edinburgh"},
+    {"@type": "CollegeOrUniversity", "name": "Swansea University"}
+  ],
+  "knowsAbout": ["Machine learning", "Time series", "Distribution shift", "Domain generalisation", "Active learning", "Wearables", "Biosignals", "Surface EMG", "Multimodal sensor fusion", "Audio-language models", "Post-training"],
+  "sameAs": [
+    "https://scholar.google.com/citations?user=lwHIQVcAAAAJ",
+    "https://github.com/KatarzynaSzymaniak",
+    "https://huggingface.co/KasiaAI",
+    "https://www.linkedin.com/in/katarzyna-szymaniak-ai/",
+    "https://x.com/szymaniak_kasia"
+  ]
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,300..900,0..100,0..1&family=DM+Sans:opsz,wght@9..40,300..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script>
+  // Pre-paint: theme, lens (from ?lens=), and js flag — avoids a flash of the wrong state.
+  (function () {
+    var root = document.documentElement;
+    root.classList.add('js');
+    try {
+      var stored = localStorage.getItem('ks-theme');
+      var prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+      if (stored === 'light' || (!stored && prefersLight)) root.setAttribute('data-theme', 'light');
+    } catch (_) {}
+    try {
+      var p = new URLSearchParams(location.search).get('lens');
+      var alias = { w: 'wearables', wearables: 'wearables', health: 'wearables',
+                    t: 'timeseries', ts: 'timeseries', timeseries: 'timeseries',
+                    a: 'audio', audio: 'audio', speech: 'audio' };
+      if (p && alias[p.toLowerCase()]) root.setAttribute('data-lens', alias[p.toLowerCase()]);
+    } catch (_) {}
+  })();
+</script>
+<style>
+  /* ------------------------------------------------------------
+     0. tokens
+     ------------------------------------------------------------ */
+  :root {
+    --bg:#0a0a0c; --bg-elev:#101015; --bg-card:#14141a; --bg-card-hi:#1a1a22;
+    --fg:#ece8de; --fg-strong:#f6f3eb; --fg-muted:#8f897d; --fg-dim:#5f594f;
+    --border:rgba(236,232,222,0.08); --border-strong:rgba(236,232,222,0.16);
+    --accent:#9b8cff; --accent-dim:#5b4fc0;   /* ultramarine violet — luminous on near-black */
+    --signal:#7ae5b8; --signal-dim:#2f6b54;
+    --grain-opacity:0.6; --grain-blend:overlay;
+    --serif:'Fraunces','Iowan Old Style','Apple Garamond',Garamond,'Times New Roman',serif;
+    --sans:'DM Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Monaco,monospace;
+    --maxw:1180px; --gutter:clamp(16px,4vw,56px);
+    --ease:cubic-bezier(0.22,1,0.36,1);
+  }
+  [data-theme="light"] {
+    --bg:#f4efe3; --bg-elev:#faf6ec; --bg-card:#fbf7ed; --bg-card-hi:#ffffff;
+    --fg:#1c1a16; --fg-strong:#0a0908; --fg-muted:#6a6253; --fg-dim:#9c937f;
+    --border:rgba(26,22,16,0.10); --border-strong:rgba(26,22,16,0.22);
+    --accent:#4a2fd0; --accent-dim:#33209a;   /* deep ultramarine on cream paper */
+    --signal:#1f8266; --signal-dim:#14503f;
+    --grain-opacity:0.18; --grain-blend:multiply;
+  }
+  html { transition: background-color 0.5s var(--ease); }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; }
+  }
+
+  /* ------------------------------------------------------------
+     1. lens system — one page, three vocabularies
+     ------------------------------------------------------------ */
+  [data-lens="wearables"]  .l:not(.l-w),
+  [data-lens="timeseries"] .l:not(.l-t),
+  [data-lens="audio"]      .l:not(.l-a) { display: none; }
+
+  /* ------------------------------------------------------------
+     2. base
+     ------------------------------------------------------------ */
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body {
+    margin:0; background:var(--bg); color:var(--fg);
+    font-family:var(--sans); font-size:16px; line-height:1.6;
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    overflow-x:hidden;
+  }
+  body::before {
+    content:""; position:fixed; inset:0; pointer-events:none;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.9  0 0 0 0 0.85  0 0 0 0 0.75  0 0 0 0.035 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    opacity:var(--grain-opacity); mix-blend-mode:var(--grain-blend); z-index:9999;
+  }
+  ::selection { background:var(--accent); color:var(--bg); }
+  a { color:inherit; text-decoration:none; }
+  img { max-width:100%; display:block; }
+  button { font:inherit; color:inherit; background:none; border:0; cursor:pointer; }
+  .wrap { max-width:var(--maxw); margin:0 auto; padding:0 var(--gutter); }
+
+  h1,h2,h3,h4 { font-family:var(--serif); font-weight:400; letter-spacing:-0.02em; line-height:1.05; margin:0; font-variation-settings:"SOFT" 30,"WONK" 0; }
+  h2 { font-size:clamp(34px,5vw,60px); }
+  h3 { font-size:clamp(22px,2.4vw,28px); letter-spacing:-0.015em; line-height:1.15; }
+  p { margin:0 0 1em; }
+  .serif-italic { font-family:var(--serif); font-style:italic; font-variation-settings:"SOFT" 100,"WONK" 1; }
+  .mono { font-family:var(--mono); font-size:0.82em; letter-spacing:0.02em; }
+  .k { color:var(--fg-strong); font-weight:500; }
+  .k::before,.k::after { color:var(--accent); font-family:var(--mono); font-weight:400; opacity:0.65; }
+  .k::before { content:"{"; margin-right:0.05em; } .k::after { content:"}"; margin-left:0.05em; }
+
+  .tag {
+    display:inline-block; font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:0.12em;
+    color:var(--fg-muted); padding:4px 10px; border:1px solid var(--border); border-radius:999px;
+  }
+  .tag.accent { color:var(--accent); border-color:color-mix(in oklab,var(--accent) 38%,transparent); }
+  .tag.signal { color:var(--signal); border-color:color-mix(in oklab,var(--signal) 35%,transparent); }
+  .tag-row { display:flex; gap:6px; flex-wrap:wrap; }
+
+  section { padding:clamp(56px,8vw,112px) 0; }
+  .section-head {
+    display:flex; align-items:baseline; gap:18px; flex-wrap:wrap;
+    margin-bottom:clamp(32px,5vw,56px);
+    border-top:1px solid var(--border); padding-top:clamp(32px,5vw,52px);
+  }
+  .section-head .num { font-family:var(--mono); font-size:12px; letter-spacing:0.18em; color:var(--accent); text-transform:uppercase; flex-shrink:0; }
+  .section-head .meta { margin-left:auto; font-family:var(--mono); font-size:11px; letter-spacing:0.1em; color:var(--fg-dim); text-transform:uppercase; }
+  .section-head h2 .serif-italic { color:var(--accent); }
+  .lede {
+    font-family:var(--serif); font-size:clamp(20px,2.3vw,28px); line-height:1.4; color:var(--fg);
+    font-weight:350; font-variation-settings:"SOFT" 30; max-width:62ch; margin-bottom:44px;
+  }
+  .lede em { color:var(--fg-strong); }
+
+  /* ------------------------------------------------------------
+     3. nav
+     ------------------------------------------------------------ */
+  .nav {
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    backdrop-filter:blur(14px) saturate(140%); -webkit-backdrop-filter:blur(14px) saturate(140%);
+    background:color-mix(in oklab,var(--bg) 55%,transparent);
+    border-bottom:1px solid transparent;
+    transition:border-color 0.4s var(--ease), background 0.4s var(--ease);
+  }
+  .nav.scrolled { border-bottom-color:var(--border); background:color-mix(in oklab,var(--bg) 90%,transparent); }
+  .nav-inner { max-width:var(--maxw); margin:0 auto; padding:16px var(--gutter); display:flex; align-items:center; gap:22px; }
+  .brand { font-family:var(--serif); font-size:21px; font-weight:500; display:flex; align-items:center; gap:10px; }
+  .brand .dot { width:7px; height:7px; border-radius:50%; background:var(--signal); box-shadow:0 0 12px var(--signal); animation:pulse 2.4s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { opacity:0.85; transform:scale(1); } 50% { opacity:0.4; transform:scale(0.85); } }
+  .nav-links { display:flex; gap:24px; margin-left:auto; }
+  .nav-links a { font-size:15px; color:var(--fg-muted); transition:color 0.2s ease; position:relative; white-space:nowrap; }
+  .nav-links a:hover { color:var(--fg); }
+  .nav-links a.active { color:var(--accent); }
+  .nav-links a.active::after { content:""; position:absolute; left:0; right:0; bottom:-5px; height:1px; background:var(--accent); }
+  .nav-cv {
+    font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.12em; color:var(--accent);
+    border:1px solid color-mix(in oklab,var(--accent) 42%,transparent); padding:8px 15px; border-radius:999px; transition:all 0.25s ease;
+  }
+  .nav-cv:hover { background:var(--accent); color:var(--bg); border-color:var(--accent); }
+  .theme-toggle {
+    width:38px; height:38px; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0;
+    border-radius:50%; border:1px solid var(--border-strong); color:var(--fg-muted);
+    transition:all 0.3s var(--ease); position:relative; overflow:hidden;
+  }
+  .theme-toggle:hover { color:var(--accent); border-color:var(--accent); }
+  .theme-toggle svg { width:17px; height:17px; position:absolute; transition:transform 0.5s var(--ease), opacity 0.3s ease; }
+  .theme-toggle .sun { opacity:0; transform:rotate(-90deg) scale(0.4); }
+  [data-theme="light"] .theme-toggle .moon { opacity:0; transform:rotate(90deg) scale(0.4); }
+  [data-theme="light"] .theme-toggle .sun { opacity:1; transform:none; }
+  section { scroll-margin-top:72px; }
+  @media (max-width:1024px) {
+    .nav-inner { flex-wrap:wrap; padding:12px var(--gutter) 0; gap:14px; }
+    .nav-cv { margin-left:auto; }
+    .nav-links {
+      order:3; flex-basis:100%; margin-left:0; gap:22px; padding:8px 0 12px;
+      overflow-x:auto; scrollbar-width:none;
+      -webkit-mask-image:linear-gradient(to right,#000 88%,transparent); mask-image:linear-gradient(to right,#000 88%,transparent);
+    }
+    .nav-links::-webkit-scrollbar { display:none; }
+    .nav-links a { font-size:14px; }
+    .nav-links a:last-child { padding-right:28px; }
+    section { scroll-margin-top:110px; }
+    .hero { padding-top:150px; }
+  }
+
+  /* ------------------------------------------------------------
+     4. hero
+     ------------------------------------------------------------ */
+  .hero { position:relative; min-height:100vh; min-height:100svh; padding:132px 0 190px; display:flex; flex-direction:column; justify-content:center; overflow:hidden; }
+  .hero-grid { display:grid; grid-template-columns:1.35fr 1fr; gap:clamp(32px,5vw,64px); align-items:start; }
+  @media (max-width:880px) { .hero-grid { grid-template-columns:1fr; gap:40px; } }
+  .status {
+    display:inline-flex; align-items:center; gap:8px; margin-bottom:28px;
+    font-family:var(--mono); font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:var(--fg-muted);
+    padding:6px 12px; border:1px solid var(--border-strong); border-radius:999px;
+  }
+  .status::before { content:""; width:6px; height:6px; border-radius:50%; background:var(--signal); box-shadow:0 0 8px var(--signal); animation:pulse 2s ease-in-out infinite; }
+  .hero h1 { font-size:clamp(50px,8.4vw,108px); letter-spacing:-0.035em; font-weight:350; font-variation-settings:"SOFT" 50,"WONK" 0,"opsz" 144; }
+  .hero-claim {
+    margin-top:22px; font-family:var(--serif); font-size:clamp(26px,3.3vw,42px); line-height:1.12;
+    letter-spacing:-0.02em; color:var(--fg-strong); font-weight:350; font-variation-settings:"SOFT" 40;
+  }
+  .hero-claim em { color:var(--accent); font-variation-settings:"SOFT" 100,"WONK" 1; font-weight:300; }
+
+  .lens { margin-top:30px; }
+  .lens-label { font-family:var(--mono); font-size:11.5px; letter-spacing:0.14em; text-transform:uppercase; color:var(--fg-muted); margin-bottom:12px; }
+  .lens-label span { color:var(--accent); }
+  .lens-switch { display:flex; flex-wrap:wrap; gap:10px; }
+  .lens-switch button {
+    display:inline-flex; align-items:center; gap:9px;
+    font-family:var(--sans); font-size:15px; font-weight:500; color:var(--fg);
+    padding:11px 18px 11px 14px; border-radius:10px;
+    background:var(--bg-card); border:1px solid var(--border-strong);
+    box-shadow:0 1px 0 var(--border-strong), 0 6px 18px -10px rgba(0,0,0,0.45);
+    transition:transform 0.2s var(--ease), border-color 0.2s ease, background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .lens-switch button svg { width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; color:var(--accent); flex-shrink:0; }
+  .lens-switch button .tick { display:none; font-size:13px; margin-left:2px; }
+  .lens-switch button:hover { transform:translateY(-2px); border-color:var(--accent); box-shadow:0 1px 0 var(--accent), 0 10px 22px -10px rgba(0,0,0,0.5); }
+  .lens-switch button:active { transform:translateY(0); }
+  .lens-switch button:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
+  .lens-switch button[aria-pressed="true"] { background:var(--accent); border-color:var(--accent); color:var(--bg); box-shadow:0 8px 22px -10px color-mix(in oklab,var(--accent) 70%,transparent); }
+  .lens-switch button[aria-pressed="true"] svg { color:var(--bg); }
+  .lens-switch button[aria-pressed="true"] .tick { display:inline; }
+  .lens-switch.nudge button[aria-pressed="false"] { animation:nudge 1.6s var(--ease) 2; }
+  @keyframes nudge { 0%,100% { border-color:var(--border-strong); } 40% { border-color:var(--accent); transform:translateY(-2px); } }
+  .lens-hint { margin-top:10px; font-size:13px; color:var(--fg-dim); }
+  @media (max-width:520px) { .lens-switch button { font-size:14px; padding:9px 14px 9px 11px; } }
+  .hero-tagline { margin-top:22px; font-size:clamp(17px,1.5vw,20px); color:var(--fg-muted); max-width:58ch; line-height:1.55; min-height:4.7em; }
+  .hero-tagline strong { color:var(--fg); font-weight:500; }
+  .hero-proof { margin-top:10px; font-family:var(--mono); font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent); line-height:1.9; }
+  .hero-proof span + span::before { content:"·"; margin:0 10px; color:var(--fg-dim); }
+
+  .cta-row { display:flex; gap:12px; flex-wrap:wrap; margin-top:32px; }
+  .btn {
+    display:inline-flex; align-items:center; gap:10px; padding:12px 20px; border-radius:999px;
+    font-family:var(--mono); font-size:12px; letter-spacing:0.14em; text-transform:uppercase;
+    border:1px solid var(--border-strong); transition:all 0.25s ease;
+  }
+  .btn:hover { background:var(--fg); color:var(--bg); border-color:var(--fg); }
+  .btn.primary { background:var(--accent); color:var(--bg); border-color:var(--accent); }
+  .btn.primary:hover { background:var(--fg-strong); border-color:var(--fg-strong); }
+
+  .hero-side { display:flex; flex-direction:column; gap:26px; padding-top:60px; }
+  @media (max-width:880px) { .hero-side { padding-top:0; max-width:380px; } }
+  .hero-portrait {
+    width:100%; aspect-ratio:1/1; max-width:500px; margin-left:auto; border-radius:50%; overflow:hidden;
+    border:1px solid var(--border-strong); background:var(--bg-card); cursor:pointer;
+    transition:transform 0.5s var(--ease), border-color 0.3s ease; box-shadow:0 30px 80px -30px rgba(0,0,0,0.6);
+  }
+  @media (max-width:880px) { .hero-portrait { margin-left:0; max-width:300px; } }
+  .hero-portrait:hover { transform:scale(1.02); border-color:var(--accent); }
+  .hero-portrait img { width:100%; height:100%; object-fit:cover; }
+  .socials { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; max-width:500px; margin-left:auto; width:100%; }
+  @media (max-width:880px) { .socials { margin-left:0; justify-content:flex-start; } }
+  .socials a {
+    width:42px; height:42px; display:inline-flex; align-items:center; justify-content:center;
+    border:1px solid var(--border-strong); border-radius:50%; color:var(--fg-muted); transition:all 0.25s ease;
+  }
+  .socials a:hover { color:var(--bg); background:var(--accent); border-color:var(--accent); transform:translateY(-2px); }
+  .socials svg { width:17px; height:17px; }
+
+  .emg-band {
+    position:absolute; left:0; right:0; bottom:46px; height:110px; z-index:-1; pointer-events:none; opacity:0.85;
+    mask-image:linear-gradient(to right,transparent 0%,#000 12%,#000 88%,transparent 100%);
+    -webkit-mask-image:linear-gradient(to right,transparent 0%,#000 12%,#000 88%,transparent 100%);
+  }
+  .emg-band svg { width:100%; height:100%; }
+  .emg-trace { fill:none; stroke:var(--signal); stroke-width:1.4; stroke-linecap:round; stroke-linejoin:round; filter:drop-shadow(0 0 6px color-mix(in oklab,var(--signal) 40%,transparent)); }
+  .emg-grid line { stroke:var(--border); stroke-width:0.5; }
+  .emg-label { font-family:var(--mono); font-size:9px; letter-spacing:0.18em; fill:var(--fg-dim); text-transform:uppercase; }
+
+  /* ------------------------------------------------------------
+     6. about + translation grid
+     ------------------------------------------------------------ */
+  .about-grid { display:grid; grid-template-columns:1fr 1.35fr; gap:clamp(32px,5vw,72px); }
+  @media (max-width:880px) { .about-grid { grid-template-columns:1fr; } }
+  .about-lead { font-family:var(--serif); font-size:clamp(24px,2.6vw,34px); line-height:1.25; color:var(--fg-strong); font-weight:350; letter-spacing:-0.015em; font-variation-settings:"SOFT" 30; }
+  .about-lead .serif-italic { color:var(--accent); }
+  .about-body { font-size:17px; line-height:1.7; }
+  .about-body p:last-child { margin-bottom:0; }
+  .about-body strong { color:var(--fg-strong); font-weight:600; }
+
+  .xlate { margin-top:clamp(56px,7vw,88px); }
+  .xlate-head { display:flex; align-items:baseline; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:22px; }
+  .xlate-head h3 { color:var(--fg-strong); }
+  .xlate-head p { margin:0; font-size:14px; color:var(--fg-muted); max-width:46ch; }
+  .xgrid { border:1px solid var(--border); border-radius:4px; overflow:hidden; }
+  .xrow { display:grid; grid-template-columns:1.1fr 1fr 1fr 1fr 1.5fr; border-top:1px solid var(--border); }
+  .xrow:first-child { border-top:0; }
+  .xrow > div { padding:16px 18px; font-size:14px; line-height:1.5; color:var(--fg-muted); border-left:1px solid var(--border); transition:background 0.35s var(--ease), color 0.35s var(--ease); }
+  .xrow > div:first-child { border-left:0; }
+  .xrow .p { font-family:var(--serif); font-size:17px; color:var(--fg-strong); line-height:1.3; font-variation-settings:"SOFT" 30; }
+  .xrow .ev { color:var(--fg); }
+  .xrow.hd > div { font-family:var(--mono); font-size:10.5px; letter-spacing:0.14em; text-transform:uppercase; color:var(--fg-dim); padding-top:14px; padding-bottom:14px; background:var(--bg-elev); }
+  .xrow.hd .ev { color:var(--accent); }
+  [data-lens="wearables"]  .xrow .cw,
+  [data-lens="timeseries"] .xrow .ct,
+  [data-lens="audio"]      .xrow .ca { background:color-mix(in oklab,var(--accent) 9%,transparent); color:var(--fg-strong); }
+  [data-lens="wearables"]  .xrow.hd .cw,
+  [data-lens="timeseries"] .xrow.hd .ct,
+  [data-lens="audio"]      .xrow.hd .ca { color:var(--accent); }
+  @media (max-width:880px) {
+    .xrow { grid-template-columns:1fr; }
+    .xrow > div { border-left:0; padding:10px 18px; }
+    .xrow > div:first-child { padding-top:18px; }
+    .xrow > div:last-child { padding-bottom:18px; }
+    .xrow.hd { display:none; }
+    [data-lens="wearables"]  .xrow .ct, [data-lens="wearables"]  .xrow .ca,
+    [data-lens="timeseries"] .xrow .cw, [data-lens="timeseries"] .xrow .ca,
+    [data-lens="audio"]      .xrow .cw, [data-lens="audio"]      .xrow .ct { display:none; }
+    .xrow .cw::before, .xrow .ct::before, .xrow .ca::before, .xrow .ev::before {
+      display:block; font-family:var(--mono); font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent); margin-bottom:4px;
+    }
+    .xrow .cw::before { content:"Looks like (wearables)"; }
+    .xrow .ct::before { content:"Looks like (time series)"; }
+    .xrow .ca::before { content:"Looks like (audio)"; }
+    .xrow .ev::before { content:"What I've shown"; }
+  }
+
+  /* ------------------------------------------------------------
+     7. pillars
+     ------------------------------------------------------------ */
+  .pillars { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+  @media (max-width:960px) { .pillars { grid-template-columns:1fr; } }
+  .pillar { background:var(--bg-card); border:1px solid var(--border); border-radius:4px; padding:30px 28px 26px; display:flex; flex-direction:column; position:relative; overflow:hidden; transition:border-color 0.3s ease; }
+  .pillar::before { content:""; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(to right,var(--accent),transparent); opacity:0; transition:opacity 0.4s var(--ease); }
+  .pillar:hover { border-color:color-mix(in oklab,var(--accent) 42%,transparent); }
+  .pillar:hover::before { opacity:1; }
+  .pillar .ix { font-family:var(--mono); font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:var(--accent); margin-bottom:16px; }
+  .pillar h3 { color:var(--fg-strong); margin-bottom:10px; }
+  .pillar .q { font-family:var(--serif); font-style:italic; font-size:17px; color:var(--fg); line-height:1.4; margin-bottom:16px; font-variation-settings:"SOFT" 100; }
+  .pillar .body { font-size:14.5px; color:var(--fg-muted); line-height:1.65; margin-bottom:18px; }
+  .pillar .in-domain { font-size:13.5px; color:var(--fg); border-left:2px solid var(--signal); padding:2px 0 2px 12px; margin-bottom:20px; }
+  .pillar .in-domain b { font-family:var(--mono); font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase; color:var(--signal); font-weight:500; display:block; margin-bottom:2px; }
+  .pillar ul { list-style:none; padding:16px 0 0; margin:auto 0 0; border-top:1px solid var(--border); display:flex; flex-direction:column; gap:8px; }
+  .pillar li { font-size:13px; color:var(--fg-muted); line-height:1.5; padding-left:16px; position:relative; }
+  .pillar li::before { content:"→"; position:absolute; left:0; color:var(--accent); font-family:var(--mono); font-size:11px; top:1px; }
+  .pillar li a { color:var(--fg); border-bottom:1px solid var(--border-strong); }
+  .pillar li a:hover { color:var(--accent); border-bottom-color:var(--accent); }
+
+  /* ------------------------------------------------------------
+     8. now
+     ------------------------------------------------------------ */
+  .now-main { display:grid; grid-template-columns:1.25fr 1fr; gap:clamp(28px,4vw,56px); align-items:start; }
+  @media (max-width:880px) { .now-main { grid-template-columns:1fr; } }
+  .now-card { background:var(--bg-card); border:1px solid var(--border); border-radius:4px; padding:32px 30px; }
+  .now-card .kicker { font-family:var(--mono); font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:var(--accent); margin-bottom:14px; }
+  .now-card h3 { color:var(--fg-strong); margin-bottom:14px; }
+  .now-card > p { font-size:15px; color:var(--fg-muted); line-height:1.65; }
+  .now-card dl { margin:20px 0 22px; display:grid; grid-template-columns:auto 1fr; gap:12px 18px; }
+  .now-card dt { font-family:var(--mono); font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--signal); padding-top:3px; }
+  .now-card dd { margin:0; font-size:14.5px; color:var(--fg); line-height:1.55; }
+  .threads h4 { font-family:var(--mono); font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:var(--fg-dim); font-weight:400; margin-bottom:14px; }
+  .thread { border-top:1px solid var(--border); padding:18px 0; }
+  .thread:last-of-type { border-bottom:1px solid var(--border); }
+  .thread h5 { font-family:var(--serif); font-size:20px; font-weight:400; color:var(--fg-strong); margin:0 0 6px; font-variation-settings:"SOFT" 30; }
+  .thread p { font-size:14px; color:var(--fg-muted); line-height:1.6; margin:0; }
+  .now-kicker { margin-top:26px; font-family:var(--serif); font-size:clamp(17px,1.6vw,20px); line-height:1.55; color:var(--fg); border-left:2px solid var(--accent); padding:4px 0 4px 20px; font-weight:350; font-variation-settings:"SOFT" 30; }
+
+  /* ------------------------------------------------------------
+     9. industry
+     ------------------------------------------------------------ */
+  .industry { display:grid; grid-template-columns:1fr 1.6fr; gap:clamp(28px,4vw,56px); background:var(--bg-card); border:1px solid var(--border); border-radius:4px; padding:clamp(26px,4vw,44px); }
+  @media (max-width:880px) { .industry { grid-template-columns:1fr; } }
+  .industry .org { font-family:var(--mono); font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent); margin-bottom:12px; }
+  .industry h3 { color:var(--fg-strong); margin-bottom:12px; }
+  .industry .side p { font-size:14px; color:var(--fg-muted); line-height:1.6; }
+  .industry ul { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:16px; }
+  .industry li { font-size:15px; line-height:1.6; color:var(--fg-muted); padding-left:18px; position:relative; }
+  .industry li::before { content:""; position:absolute; left:0; top:0.62em; width:6px; height:6px; border-radius:50%; background:var(--signal); }
+  .industry li b { color:var(--fg-strong); font-weight:500; }
+
+  /* ------------------------------------------------------------
+     10. publications
+     ------------------------------------------------------------ */
+  .pub { display:grid; grid-template-columns:130px 1fr auto; gap:24px; padding:26px 0; border-bottom:1px solid var(--border); align-items:start; }
+  .pub:first-child { border-top:1px solid var(--border); }
+  @media (max-width:760px) { .pub { grid-template-columns:1fr; gap:8px; } }
+  .pub .venue { font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:0.12em; color:var(--accent); padding-top:4px; line-height:1.6; }
+  .pub .venue span { display:block; color:var(--fg-dim); font-size:10px; letter-spacing:0.06em; }
+  .pub h4 { font-family:var(--serif); font-weight:400; font-size:21px; line-height:1.3; color:var(--fg-strong); margin-bottom:6px; letter-spacing:-0.01em; }
+  .pub .authors { font-size:13px; color:var(--fg-muted); margin-bottom:10px; }
+  .pub .authors b { color:var(--fg); font-weight:600; }
+  .pub .finding { font-size:14.5px; color:var(--fg-muted); line-height:1.6; max-width:72ch; margin:0 0 10px; }
+  .pub .finding b { color:var(--fg); font-weight:500; }
+  .pub .links { display:flex; gap:8px; flex-wrap:wrap; padding-top:4px; }
+  .pub .links a {
+    font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:0.12em; padding:7px 13px;
+    border:1px solid var(--border-strong); border-radius:999px; color:var(--fg);
+    background:color-mix(in oklab,var(--accent) 8%,transparent); transition:all 0.22s ease;
+  }
+  .pub .links a::after { content:" ↗"; font-size:10px; opacity:0.6; }
+  .pub .links a:hover { color:var(--bg); background:var(--accent); border-color:var(--accent); }
+  details.earlier { margin-top:28px; border:1px solid var(--border); border-radius:4px; padding:0 22px; }
+  details.earlier summary { cursor:pointer; padding:18px 0; font-family:var(--mono); font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:var(--fg-muted); list-style:none; }
+  details.earlier summary::-webkit-details-marker { display:none; }
+  details.earlier summary::before { content:"+ "; color:var(--accent); }
+  details.earlier[open] summary::before { content:"– "; }
+  details.earlier ul { margin:0 0 20px; padding:0; list-style:none; display:flex; flex-direction:column; gap:14px; }
+  details.earlier li { font-size:14px; color:var(--fg-muted); line-height:1.6; }
+  details.earlier li b { color:var(--fg); font-weight:500; }
+  details.earlier li a { color:var(--accent); }
+
+  /* ------------------------------------------------------------
+     12. background (timeline + service)
+     ------------------------------------------------------------ */
+  .timeline-wrap { max-width:860px; }
+  .tl-item { display:grid; grid-template-columns:120px 1fr; gap:22px; padding:20px 0; border-bottom:1px solid var(--border); }
+  .tl-item:first-child { border-top:1px solid var(--border); }
+  @media (max-width:520px) { .tl-item { grid-template-columns:1fr; gap:4px; } }
+  .tl-date { font-family:var(--mono); font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent); padding-top:5px; }
+  .tl-body h4 { font-family:var(--serif); font-size:20px; font-weight:400; line-height:1.25; color:var(--fg-strong); margin-bottom:4px; }
+  .tl-body .org { font-size:13px; color:var(--fg-muted); line-height:1.5; }
+  /* ------------------------------------------------------------
+     13. writing
+     ------------------------------------------------------------ */
+  .writing-list { display:flex; flex-direction:column; gap:12px; }
+  .writing-item { display:grid; grid-template-columns:1fr auto; gap:24px; align-items:center; padding:22px 26px; background:var(--bg-card); border:1px solid var(--border); border-radius:6px; transition:border-color 0.3s ease, background 0.3s ease; }
+  .writing-item:hover { border-color:color-mix(in oklab,var(--accent) 36%,transparent); background:var(--bg-card-hi); }
+  .writing-kicker { font-family:var(--mono); font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent); margin-bottom:6px; }
+  .writing-item h4 { font-family:var(--serif); font-size:20px; font-weight:400; line-height:1.3; color:var(--fg-strong); margin-bottom:4px; }
+  .writing-item p { font-size:14px; color:var(--fg-muted); margin:0; }
+  .writing-action { font-family:var(--mono); font-size:11px; letter-spacing:0.14em; text-transform:uppercase; padding:9px 16px; border:1px solid var(--border-strong); border-radius:999px; transition:all 0.25s ease; }
+  .writing-item:hover .writing-action { background:var(--accent); color:var(--bg); border-color:var(--accent); }
+  @media (max-width:640px) { .writing-item { grid-template-columns:1fr; gap:14px; } .writing-action { justify-self:start; } }
+
+  /* ------------------------------------------------------------
+     14. contact + footer
+     ------------------------------------------------------------ */
+  .contact { padding-bottom:0; }
+  .contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:clamp(32px,6vw,80px); align-items:center; }
+  @media (max-width:800px) { .contact-grid { grid-template-columns:1fr; } }
+  .contact-headline { font-family:var(--serif); font-size:clamp(38px,5.6vw,72px); line-height:1.02; letter-spacing:-0.025em; font-weight:350; margin:0; }
+  .contact-headline em { color:var(--accent); font-variation-settings:"SOFT" 100,"WONK" 1; font-weight:300; }
+  .contact-meta { font-size:15px; color:var(--fg-muted); line-height:1.7; }
+  .contact-meta strong { color:var(--fg-strong); font-weight:600; }
+  .fit { display:flex; flex-wrap:wrap; gap:6px; margin:4px 0 22px; }
+  .email-big { margin-top:8px; font-family:var(--mono); font-size:clamp(16px,2.2vw,24px); color:var(--accent); display:inline-block; border-bottom:1px solid color-mix(in oklab,var(--accent) 38%,transparent); padding-bottom:4px; word-break:break-all; }
+  .email-big:hover { border-bottom-color:var(--accent); }
+  footer { padding:44px var(--gutter) 34px; border-top:1px solid var(--border); margin-top:96px; text-align:center; font-family:var(--mono); font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:var(--fg-dim); }
+
+  @media (max-width:520px) {
+    .hero-portrait { max-width:220px; }
+  }
+
+  /* reveal — only when JS is present, so content is never hidden without it */
+  .js .reveal { opacity:0; transform:translateY(18px); transition:opacity 0.9s var(--ease), transform 0.9s var(--ease); }
+  .js .reveal.in { opacity:1; transform:none; }
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#top" class="brand"><span class="dot"></span> Szymaniak</a>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#research">Research</a>
+      <a href="#now">Now</a>
+      <a href="#industry">Industry</a>
+      <a href="#papers">Papers</a>
+      <a href="#background">Background</a>
+      <a href="#writing">Writing</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <a href="KSzymaniak_CV_2026_HealthAI.pdf" class="nav-cv js-cv" target="_blank" rel="noopener">CV</a>
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle colour theme" title="Toggle theme">
+      <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>
+      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ============================================================ HERO -->
+<header class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="status">Open to Research &amp; Applied Scientist roles</span>
+
+      <h1>Katarzyna<br/>Szymaniak</h1>
+
+      <p class="hero-claim">Machine learning for signals that <em>won't hold still.</em></p>
+
+      <div class="lens">
+        <div class="lens-label"><span>Choose your field</span> — the page adapts</div>
+        <div class="lens-switch" role="group" aria-label="Choose your field; the page adapts">
+          <button type="button" data-set-lens="wearables" aria-pressed="true">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="6" width="10" height="12" rx="3"/><path d="M9 6V3h6v3M9 18v3h6v-3M10 12h1.5l1-2 1 4 1-2H15"/></svg>
+            Wearables &amp; health<span class="tick" aria-hidden="true">✓</span>
+          </button>
+          <button type="button" data-set-lens="timeseries" aria-pressed="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20h18M3 4v16M6 15l4-5 3 3 5-7 2 3"/></svg>
+            Time series<span class="tick" aria-hidden="true">✓</span>
+          </button>
+          <button type="button" data-set-lens="audio" aria-pressed="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4M8 7v10M12 4v16M16 8v8M20 11v2"/></svg>
+            Audio<span class="tick" aria-hidden="true">✓</span>
+          </button>
+        </div>
+        <div class="lens-hint" id="lensHint" aria-live="polite">Tailored for wearables &amp; health. Switch any time.</div>
+      </div>
+
+      <p class="hero-tagline">
+        <span class="l l-w">I build <strong>biosignal and wearable models</strong> — sEMG, IMU, EEG — that still work on the next user, the next session and the next week. Not just on the benchmark.</span>
+        <span class="l l-t">I build models for <strong>noisy, non-stationary, multichannel time series</strong> that hold up when the data drifts and labels are scarce — and the evaluations that prove it.</span>
+        <span class="l l-a">New speakers, new microphones, new rooms: <strong>audio has the same shift problem</strong> I solved on biosignals. I'm now bringing those methods to audio and audio-language models.</span>
+      </p>
+
+      <div class="hero-proof">
+        <span>PhD · Edinburgh · 2026</span><span>Ex-Meta Reality Labs (CTRL-labs)</span><span>Collaborating with NVIDIA</span>
+      </div>
+
+      <div class="cta-row">
+        <a href="#research" class="btn primary">See the research →</a>
+        <a href="KSzymaniak_CV_2026_HealthAI.pdf" class="btn js-cv" target="_blank" rel="noopener">CV ↓</a>
+        <a href="mailto:k.szymaniak.ai@gmail.com" class="btn">Email</a>
+      </div>
+    </div>
+
+    <aside class="hero-side">
+      <div class="hero-portrait" id="portrait" title="Hello">
+        <img src="me_pic_small.png" alt="Portrait of Katarzyna Szymaniak" id="portraitImg" />
+      </div>
+      <div class="socials" aria-label="Links">
+        <a href="mailto:k.szymaniak.ai@gmail.com" title="Email" aria-label="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></a>
+        <a href="https://scholar.google.com/citations?user=lwHIQVcAAAAJ&hl=en" target="_blank" rel="noopener" title="Google Scholar" aria-label="Google Scholar"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 1 9l11 7 9-5.7V17h2V9zM4 13.5V18l8 5 8-5v-4.5l-8 5z"/></svg></a>
+        <a href="https://github.com/KatarzynaSzymaniak" target="_blank" rel="noopener" title="GitHub" aria-label="GitHub"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.6.5 11.9c0 5 3.3 9.3 7.8 10.8.6.1.8-.2.8-.6v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.5-.3-5.2-1.3-5.2-5.7 0-1.3.4-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.2 1.2.9-.3 1.9-.4 2.9-.4s2 .1 2.9.4c2.2-1.5 3.2-1.2 3.2-1.2.6 1.7.2 2.9.1 3.2.7.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.2 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.5-1.5 7.8-5.8 7.8-10.8C23.5 5.6 18.3.5 12 .5z"/></svg></a>
+        <a href="https://huggingface.co/KasiaAI" target="_blank" rel="noopener" title="Hugging Face" aria-label="Hugging Face"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.6C6.81 2.6 2.6 6.81 2.6 12s4.21 9.4 9.4 9.4 9.4-4.21 9.4-9.4S17.19 2.6 12 2.6Zm0 1.6a7.8 7.8 0 1 1 0 15.6 7.8 7.8 0 0 1 0-15.6Zm-3.2 5.4a1.35 1.35 0 1 0 0 2.7 1.35 1.35 0 0 0 0-2.7Zm6.4 0a1.35 1.35 0 1 0 0 2.7 1.35 1.35 0 0 0 0-2.7ZM7.7 13.85a.75.75 0 0 0-.55 1.27c1.21 1.3 2.94 2.13 4.85 2.13s3.64-.83 4.85-2.13a.75.75 0 0 0-1.1-1.02c-.94 1-2.27 1.65-3.75 1.65s-2.81-.65-3.75-1.65a.75.75 0 0 0-.55-.25Z"/></svg></a>
+        <a href="https://www.linkedin.com/in/katarzyna-szymaniak-ai/" target="_blank" rel="noopener" title="LinkedIn" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 2h-17A1.5 1.5 0 0 0 2 3.5v17A1.5 1.5 0 0 0 3.5 22h17a1.5 1.5 0 0 0 1.5-1.5v-17A1.5 1.5 0 0 0 20.5 2zM8 19H5V9h3v10zM6.5 7.7a1.7 1.7 0 1 1 0-3.4 1.7 1.7 0 0 1 0 3.4zM19 19h-3v-5.3c0-1.3-.5-2.1-1.6-2.1-1.2 0-1.9.8-1.9 2.1V19h-3V9h2.9v1.3c.4-.8 1.5-1.6 3-1.6 2.2 0 3.6 1.4 3.6 4.3V19z"/></svg></a>
+        <a href="https://x.com/szymaniak_kasia" target="_blank" rel="noopener" title="X" aria-label="X"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      </div>
+    </aside>
+  </div>
+
+  <div class="emg-band" aria-hidden="true">
+    <svg viewBox="0 0 1400 120" preserveAspectRatio="none">
+      <g class="emg-grid"><line x1="0" y1="30" x2="1400" y2="30"/><line x1="0" y1="60" x2="1400" y2="60"/><line x1="0" y1="90" x2="1400" y2="90"/></g>
+      <text x="14" y="14" class="emg-label l l-w">CH1 · sEMG · 2000 Hz</text>
+      <text x="14" y="14" class="emg-label l l-t">x(t) · non-stationary · multichannel</text>
+      <text x="14" y="14" class="emg-label l l-a">MIC · 16 kHz · unseen device</text>
+      <text x="1330" y="14" class="emg-label" text-anchor="end">LIVE</text>
+      <path id="emgPath" class="emg-trace" d=""/>
+    </svg>
+  </div>
+</header>
+
+<!-- ============================================================ ABOUT -->
+<section id="about">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">01 — About</div>
+      <h2>One problem, <span class="serif-italic">many signals</span></h2>
+    </div>
+
+    <div class="about-grid reveal">
+      <p class="about-lead">
+        Most ML works when the world holds still. Real signals don't — so I build the models that <span class="serif-italic">keep up</span>, and the evaluations that prove it.
+      </p>
+      <div class="about-body">
+        <p>
+          I'm an ML researcher with a PhD from the University of Edinburgh (January 2026), supervised by
+          Prof. Kianoush Nazarpour and Prof. Timothy Hospedales. My thesis —
+          <em>Mitigating Confounding Factors in Myoelectric Control Through Adaptive Modelling and Learning</em> —
+          sits where deep learning meets the inconvenient reality of biosignals: electrodes shift, postures change,
+          and users adapt to the model while the model is trying to adapt to them.
+        </p>
+        <p>
+          At Meta Reality Labs (CTRL-labs) in New York, I took that problem to wrist-worn neural interfaces:
+          fusing sEMG with IMU, and building few-shot personalisation for a Conformer decoder that had to hold up
+          when the band came off and went back on.
+        </p>
+        <p>
+          My research targets the failure modes that decide whether a model survives deployment on continuous
+          sensor data: non-stationarity, cross-user and cross-session shift, labels that cost human time, and
+          signals corrupted by noise and motion. I've attacked them from three sides — a domain-generalisation
+          model that needs <strong>zero data</strong> from the unseen condition, active learning that replaced a full
+          calibration session with <strong>3.2 minutes</strong> of queried labels, and benchmarks rigorous enough
+          (<strong>~40k models</strong>, nested cross-validation) to separate real gains from noise.
+        </p>
+        <p>
+          I work end-to-end, from designing the human-subject protocol and collecting the data to modelling and
+          statistical evaluation. None of this is specific to EMG: speaker variability, device mismatch and
+          low-resource adaptation in audio share the same structure, and that is where I'm taking the work next.
+        </p>
+        <p>
+          I'm looking for the team to do this with in earnest — biosignal or audio foundation models, health AI,
+          neural interfaces, or any group that treats real-world robustness as the research problem, not the last ablation.
+        </p>
+      </div>
+    </div>
+
+    <div class="xlate reveal">
+      <div class="xlate-head">
+        <h3>Same problem, different signal</h3>
+        <p>The failure modes I work on, as they appear in each domain — and the evidence I have for each. The highlighted column follows the lens you picked above.</p>
+      </div>
+      <div class="xgrid" role="table" aria-label="Problems across domains">
+        <div class="xrow hd" role="row">
+          <div role="columnheader">Problem</div>
+          <div class="cw" role="columnheader">Wearables</div>
+          <div class="ct" role="columnheader">Time series</div>
+          <div class="ca" role="columnheader">Audio</div>
+          <div class="ev" role="columnheader">What I've shown</div>
+        </div>
+        <div class="xrow" role="row">
+          <div class="p" role="cell">The world moves under the model</div>
+          <div class="cw" role="cell">Electrode shift, arm posture, sweat, fatigue</div>
+          <div class="ct" role="cell">Regime change, sensor drift, broken seasonality</div>
+          <div class="ca" role="cell">New room, noise floor, microphone</div>
+          <div class="ev" role="cell">Quantified a ≤10% position-induced drop (GREAT); generalised to unseen positions with zero target data (DR-cGMM).</div>
+        </div>
+        <div class="xrow" role="row">
+          <div class="p" role="cell">New user, new device</div>
+          <div class="cw" role="cell">Cross-user, cross-session sEMG; re-donning</div>
+          <div class="ct" role="cell">New sites, machines, patients</div>
+          <div class="ca" role="cell">New speakers, accents, hardware</div>
+          <div class="ev" role="cell">Few-shot per-user calibration of a Conformer decoder at Meta; cross-session learning curves over calibration budgets.</div>
+        </div>
+        <div class="xrow" role="row">
+          <div class="p" role="cell">Labels are the bottleneck</div>
+          <div class="cw" role="cell">User calibration time, clinic time</div>
+          <div class="ct" role="cell">Expert annotation budgets</div>
+          <div class="ca" role="cell">Transcription and preference labels</div>
+          <div class="ev" role="cell">3.2 min of actively queried data beat a full calibration session (86% vs 82%).</div>
+        </div>
+        <div class="xrow" role="row">
+          <div class="p" role="cell">More than one stream</div>
+          <div class="cw" role="cell">sEMG + IMU at different rates</div>
+          <div class="ct" role="cell">Multivariate sensors, asynchronous sampling</div>
+          <div class="ca" role="cell">Audio + text</div>
+          <div class="ev" role="cell">Early-fusion sEMG + IMU decoders; diagnosed modality imbalance — one stream dominating optimisation.</div>
+        </div>
+        <div class="xrow" role="row">
+          <div class="p" role="cell">Benchmarks flatter the model</div>
+          <div class="cw" role="cell">Within-session splits</div>
+          <div class="ct" role="cell">Look-ahead and cross-domain leakage</div>
+          <div class="ca" role="cell">Test-speaker and test-device leakage</div>
+          <div class="ev" role="cell">Leave-one-domain-out model selection, nested CV and Friedman/Nemenyi testing over ~40k models.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ RESEARCH -->
+<section id="research">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">02 — Research</div>
+      <h2>Three <span class="serif-italic">questions</span></h2>
+    </div>
+
+    <p class="lede reveal">
+      Everything I work on comes back to three questions about deployed models on continuous signals. Each has peer-reviewed evidence behind it — and each transfers beyond the signal I first answered it on.
+    </p>
+
+    <div class="pillars reveal">
+      <article class="pillar">
+        <div class="ix">01 · Robustness</div>
+        <h3>Distribution shift</h3>
+        <p class="q">How do you build a model that works in a condition it has never seen?</p>
+        <p class="body">I treat recording conditions as domains and design for the unseen one: a class-conditional Gaussian mixture with a covariance regulariser shared across domains, which needs zero data from the target condition.</p>
+        <div class="in-domain">
+          <b>In your domain</b>
+          <span class="l l-w">Arm position, band re-donning, long-term signal drift.</span>
+          <span class="l l-t">Regime changes, new sites, slowly drifting sensors.</span>
+          <span class="l l-a">Unseen microphones, rooms and noise conditions.</span>
+        </div>
+        <ul>
+          <li><a href="#pub-dg">DR-cGMM</a> — 94.3% vs 93.4% ERM; top-ranked for 6 of 8 users</li>
+          <li><a href="#pub-great">GREAT</a> — an open benchmark that isolates one controlled shift</li>
+        </ul>
+      </article>
+
+      <article class="pillar">
+        <div class="ix">02 · Label efficiency</div>
+        <h3>Adaptation on a budget</h3>
+        <p class="q">What is the smallest labelling budget that still moves the model?</p>
+        <p class="body">Acquisition functions as a research object, not a utility: uncertainty-based querying (least-confidence, margin, entropy), few-shot personalisation, and parameter-efficient fine-tuning when labels cost human time.</p>
+        <div class="in-domain">
+          <b>In your domain</b>
+          <span class="l l-w">Minutes of user calibration instead of full sessions.</span>
+          <span class="l l-t">Spending expert annotation where it changes the model.</span>
+          <span class="l l-a">Selecting SFT and DPO data when labels are scarce.</span>
+        </div>
+        <ul>
+          <li><a href="#pub-al">Active learning</a> — 3.2 min beats a full session; found a failure mode of diversity-based batching</li>
+          <li><a href="#industry">Few-shot Conformer personalisation</a> at Meta</li>
+        </ul>
+      </article>
+
+      <article class="pillar">
+        <div class="ix">03 · Rigour</div>
+        <h3>Evaluation you can trust</h3>
+        <p class="q">Would this result survive deployment?</p>
+        <p class="body">Splits that mirror deployment, model selection that never peeks at the test domain, and non-parametric significance tests — so that "method X helps" means something.</p>
+        <div class="in-domain">
+          <b>In your domain</b>
+          <span class="l l-w">Cross-subject and cross-session splits by design.</span>
+          <span class="l l-t">No look-ahead, no leakage across domains or entities.</span>
+          <span class="l l-a">Held-out speakers, devices and acoustic conditions.</span>
+        </div>
+        <ul>
+          <li>~40k trained models, leave-one-domain-out + nested CV</li>
+          <li>Showed popular deep DG methods give no significant gain over ERM in the low-data regime</li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ NOW -->
+<section id="now">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">03 — Now</div>
+      <h2>Where I'm <span class="serif-italic">heading</span></h2>
+      <div class="meta">New direction · 2026</div>
+    </div>
+
+    <div class="now-main reveal">
+      <article class="now-card">
+        <div class="kicker">Early-stage · in collaboration with NVIDIA</div>
+        <h3>Robust adaptation of audio foundation models</h3>
+        <p>Audio is the next test bed for the question behind all my work: what happens when a pretrained model meets a speaker, device or room it has never encountered? Audio-language models are powerful but brittle under acoustic shift, and adapting them usually assumes plenty of labels. I'm starting from three questions:</p>
+        <dl>
+          <dt>Adapt</dt><dd>When does lightweight fine-tuning (LoRA, SFT) match full adaptation with only a handful of labels?</dd>
+          <dt>Stress-test</dt><dd>Do the gains hold on held-out speakers, devices and acoustic conditions, measured without leakage?</dd>
+          <dt>Spend labels wisely</dt><dd>Can uncertainty-guided selection stretch SFT and preference data, as active learning did for EMG calibration?</dd>
+        </dl>
+        <div class="tag-row">
+          <span class="tag accent">Post-training</span>
+          <span class="tag">Audio-language models</span>
+          <span class="tag signal">Shift-aware evaluation</span>
+        </div>
+      </article>
+
+      <div class="threads">
+        <h4>Questions on my list</h4>
+        <div class="thread">
+          <h5>Do audio LLMs actually listen?</h5>
+          <p>Reasoning-tuned audio models may lean on text rather than sound as their chains of thought grow. Where does attention to the audio fade, and can training-free re-grounding bring it back?</p>
+        </div>
+        <div class="thread">
+          <h5>When is reasoning worth the compute?</h5>
+          <p>A router that decides, per input, whether extra inference helps or hurts — treating compute as an acquisition problem rather than a fixed budget.</p>
+        </div>
+        <p class="now-kicker">Same lens as the wearables work: <span class="k">distribution shift</span>, <span class="k">budgets</span>, and the evaluation that decides whether a model survives contact with deployment.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ INDUSTRY -->
+<section id="industry">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">04 — Industry</div>
+      <h2>Research at <span class="serif-italic">product scale</span></h2>
+    </div>
+
+    <div class="industry reveal">
+      <div class="side">
+        <div class="org">Meta Reality Labs · CTRL-labs · New York</div>
+        <h3>Research Scientist Intern, Continuous Navigation</h3>
+        <p class="mono" style="color:var(--fg-dim);text-transform:uppercase;letter-spacing:0.12em;">Sep 2022 – Mar 2023 · Host: Fabio Stefanini</p>
+        <p>The team's cross-user sEMG decoding research was published in <em>Nature</em> (2025) and underpins the Meta Neural Band.</p>
+      </div>
+      <ul>
+        <li><b>Multimodal fusion.</b> Extended the wrist-worn sEMG decoding stack to sEMG + IMU: inertial preprocessing, early-fusion decoders, and diagnosis of modality imbalance between the two streams.</li>
+        <li><b>Few-shot personalisation.</b> Built an end-to-end pipeline for new custom gestures — from the human-subject data-collection protocol to few-shot per-user calibration of a Conformer-based decoder (the convolution-augmented Transformer from speech recognition).</li>
+        <li><b>Evaluation under shift.</b> Measured cross-session generalisation after the band is re-worn, with per-user learning curves over calibration budgets; presented results and limitations at the team's technical deep dive.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ PAPERS -->
+<section id="papers">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">05 — Papers</div>
+      <h2>Selected <span class="serif-italic">publications</span></h2>
+      <div class="meta"><a href="https://scholar.google.com/citations?user=lwHIQVcAAAAJ&hl=en" target="_blank" rel="noopener" style="color:var(--accent);">Google Scholar →</a></div>
+    </div>
+
+    <div class="pub-list reveal">
+      <article class="pub" id="pub-dg">
+        <div class="venue">EurIPS 2025<span>Workshop · extended version under review at TMLR</span></div>
+        <div>
+          <h4>Position: Domain Generalisation in Myoelectric Control</h4>
+          <div class="authors"><b>K. Szymaniak</b>, K. Nazarpour, H. Gouk</div>
+          <p class="finding">Proposed <b>DR-cGMM</b>, a domain-regularised class-conditional Gaussian mixture that generalises to unseen domains with zero data from them. It was the <b>only method to significantly outperform ERM, MMD and CORAL</b>; popular deep DG methods gave no significant gain over ERM. Leave-one-domain-out model selection with nested CV and Friedman/Nemenyi testing over ~40k models.</p>
+          <div class="tag-row"><span class="tag">Domain generalisation</span><span class="tag">Benchmarking</span><span class="tag">Probabilistic models</span></div>
+        </div>
+      </article>
+
+      <article class="pub" id="pub-great">
+        <div class="venue">Scientific Data 2025<span>Open dataset</span></div>
+        <div>
+          <h4>EMG Dataset for Gesture Recognition with Arm Translation (GREAT)</h4>
+          <div class="authors">I. Kyranou*, <b>K. Szymaniak*</b>, K. Nazarpour &nbsp;<span style="color:var(--fg-dim)">* equal contribution</span></div>
+          <p class="finding">Designed the acquisition protocol for an open benchmark of <b>16-channel sEMG at 2 kHz</b> with synchronised 18-sensor hand kinematics over a 3×3 grid of arm positions. Quantified the shift — <b>up to 10% accuracy drop</b>, and position itself decodable from the signal (~80%) — and showed position-aware hierarchical decoding does not fix it outside an i.i.d. setting.</p>
+          <div class="tag-row"><span class="tag signal">Open data</span><span class="tag">Controlled shift</span><span class="tag">sEMG</span></div>
+        </div>
+        <div class="links">
+          <a href="https://www.nature.com/articles/s41597-024-04296-8" target="_blank" rel="noopener">Paper</a>
+          <a href="https://github.com/MoveR-Digital-Health-and-Care-Hub/MoveR_AT_GREAT" target="_blank" rel="noopener">Code</a>
+        </div>
+      </article>
+
+      <article class="pub" id="pub-al">
+        <div class="venue">Front. Neurorobotics 2022</div>
+        <div>
+          <h4>Recalibration of Myoelectric Control with Active Learning</h4>
+          <div class="authors"><b>K. Szymaniak</b>, A. Krasoulis, K. Nazarpour</div>
+          <p class="finding">First application of active learning to myoelectric control. <b>3.2 minutes of actively queried data beat a full calibration session</b> (86% vs 82%; 12 able-bodied participants, ~2 points in 2 transradial amputees; offline simulation). Identified a failure mode: diversity-based batch selection degraded margin sampling, likely because informative boundary samples cluster and get discarded as redundant.</p>
+          <div class="tag-row"><span class="tag">Active learning</span><span class="tag">Human-in-the-loop</span></div>
+        </div>
+        <div class="links">
+          <a href="https://www.frontiersin.org/journals/neurorobotics/articles/10.3389/fnbot.2022.1061201/full" target="_blank" rel="noopener">Paper</a>
+          <a href="https://doi.org/10.3389/fnbot.2022.1061201" target="_blank" rel="noopener">DOI</a>
+        </div>
+      </article>
+
+      <article class="pub">
+        <div class="venue">IEEE TNSRE 2026<span>Survey</span></div>
+        <div>
+          <h4>Deep Feature Learning from Electromyographic Signals for Gesture Recognition Systems</h4>
+          <div class="authors">W. Zhong, X. Jiang, <b>K. Szymaniak</b>, M. Jabbari, C. Ma, K. Nazarpour</div>
+          <p class="finding">Survey of deep representation learning for EMG-based gesture recognition.</p>
+        </div>
+        <div class="links">
+          <a href="https://ieeexplore.ieee.org/abstract/document/11262198" target="_blank" rel="noopener">Paper</a>
+          <a href="https://doi.org/10.1109/TNSRE.2025.3635419" target="_blank" rel="noopener">DOI</a>
+        </div>
+      </article>
+    </div>
+
+    <details class="earlier">
+      <summary>Earlier research</summary>
+      <ul>
+        <li><b>Predicting behaviour from brain data</b> (Edinburgh, 2021; Prof. Oisin Mac Aodha, with the Centre for Discovery Brain Sciences) — decoded the location of freely behaving mice from <em>in vivo</em> deep-brain calcium imaging, with neuron-activation maps inspired by class activation mapping.</li>
+        <li><b>Sequence models for EEG in decision deadlocks</b> (Swansea, 2020; Dr Jingjing Deng, Prof. Xianghua Xie) — temporal dependencies, non-stationarity and cross-channel connectivity for brain–computer interfaces.</li>
+        <li><b>HoloLens neuroimaging for medical education</b> (Swansea, 2019; Best Student Project) — MRI brain scans as interactive 3D meshes in mixed reality. <a href="https://www.youtube.com/watch?v=BCHFJswreW8" target="_blank" rel="noopener">Demo ↗</a></li>
+      </ul>
+    </details>
+  </div>
+</section>
+
+<!-- ============================================================ BACKGROUND -->
+<section id="background">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">06 — Background</div>
+      <h2>The <span class="serif-italic">trajectory</span></h2>
+    </div>
+    <div class="timeline-wrap reveal">
+      <div class="timeline">
+        <div class="tl-item"><div class="tl-date">2026 →</div><div class="tl-body"><h4>Independent research, audio-language models</h4><div class="org">In collaboration with NVIDIA</div></div></div>
+        <div class="tl-item"><div class="tl-date">2021 – 2026</div><div class="tl-body"><h4>PhD, Biomedical Artificial Intelligence</h4><div class="org">University of Edinburgh, School of Informatics · Supervisors: Prof. Kianoush Nazarpour, Prof. Timothy Hospedales · Thesis: <em>Mitigating Confounding Factors in Myoelectric Control Through Adaptive Modelling and Learning</em></div></div></div>
+        <div class="tl-item"><div class="tl-date">2022 – 2023</div><div class="tl-body"><h4>Research Scientist Intern</h4><div class="org">Meta Reality Labs (CTRL-labs), New York</div></div></div>
+        <div class="tl-item"><div class="tl-date">2022</div><div class="tl-body"><h4>Oxford Machine Learning Summer School</h4><div class="org">University of Oxford</div></div></div>
+        <div class="tl-item"><div class="tl-date">2020 – 2021</div><div class="tl-body"><h4>MRes, Biomedical Artificial Intelligence</h4><div class="org">University of Edinburgh</div></div></div>
+        <div class="tl-item"><div class="tl-date">2016 – 2021</div><div class="tl-body"><h4>MRes Visual Computing · BSc (Hons) Computer Science, First Class</h4><div class="org">Swansea University</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ WRITING -->
+<section id="writing">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">07 — Writing</div>
+      <h2>Notes &amp; <span class="serif-italic">essays</span></h2>
+    </div>
+    <div class="writing-list reveal">
+      <a href="writing#too-much-good-thing" class="writing-item">
+        <div><div class="writing-kicker">Blog · Dec 2025</div><h4>The Hidden Saboteurs: How Confounding Factors Keep Bionic Hands from Working in the Real World</h4><p>A taxonomy of what breaks myoelectric control and why it's harder to fix than it looks.</p></div>
+        <span class="writing-action">Read</span>
+      </a>
+      <a href="writing#beyond-the-cloud" class="writing-item">
+        <div><div class="writing-kicker">Blog · Aug 2025</div><h4>Beyond the Cloud: SLMs, Local AI, and Agentic Constellations</h4><p>A vision for local-first AI built on biology-inspired architectures.</p></div>
+        <span class="writing-action">Read</span>
+      </a>
+      <a href="writing#academic-writing" class="writing-item">
+        <div><div class="writing-kicker">Notes · Ongoing</div><h4>Academic Writing Tips and Resources</h4><p>Habits and go-to resources for writing papers.</p></div>
+        <span class="writing-action">Read</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ CONTACT -->
+<section id="contact" class="contact">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">08 — Contact</div>
+      <h2>Let's <span class="serif-italic">talk</span></h2>
+    </div>
+    <div class="contact-grid reveal">
+      <p class="contact-headline">The next role.<br/>A <em>collaboration.</em><br/>A good problem.</p>
+      <div class="contact-meta">
+        <p>
+          I'm looking for <strong>Research Scientist</strong> and <strong>Applied Scientist</strong> roles where models meet messy, real-world signals:
+        </p>
+        <div class="fit">
+          <span class="tag accent">Wearables &amp; health AI</span>
+          <span class="tag accent">Neural interfaces</span>
+          <span class="tag accent">Time-series &amp; sensor ML</span>
+          <span class="tag accent">Audio &amp; speech adaptation</span>
+          <span class="tag accent">Robustness &amp; evaluation</span>
+        </div>
+        <p>
+          <span class="l l-w">Especially teams building biosignal foundation models, personalisation, or validated on-device ML — where cross-user and cross-session shift is the product problem.</span>
+          <span class="l l-t">Especially teams whose data drifts — sensors, operations, clinical records — and who care whether a model still works next quarter.</span>
+          <span class="l l-a">Especially teams adapting speech or audio-language models to new devices, domains and low-resource settings.</span>
+          Based in Edinburgh, open to relocation.
+        </p>
+        <a href="mailto:k.szymaniak.ai@gmail.com" class="email-big">k.szymaniak.ai@gmail.com</a>
+        <div class="cta-row" style="margin-top:26px;">
+          <a href="KSzymaniak_CV_2026_HealthAI.pdf" target="_blank" rel="noopener" class="btn primary js-cv">Download CV ↓</a>
+          <a href="https://www.linkedin.com/in/katarzyna-szymaniak-ai/" target="_blank" rel="noopener" class="btn">LinkedIn</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>© 2026 Katarzyna Szymaniak</footer>
+
+<script>
+  /* ---------- config: one CV per lens. Upload both PDFs next to index.html,
+     then point each lens at the right file. ---------- */
+  const CV_BY_LENS = {
+    wearables:  'KSzymaniak_CV_2026_HealthAI.pdf',
+    timeseries: 'KSzymaniak_CV_2026_ML.pdf',
+    audio:      'KSzymaniak_CV_2026_ML.pdf'
+  };
+
+  /* ---------- lens: swaps vocabulary, highlights the matching column,
+     keeps ?lens= in the URL so a tailored link can be copied ---------- */
+  (function lens() {
+    const root = document.documentElement;
+    const buttons = document.querySelectorAll('[data-set-lens]');
+    function apply(name, push) {
+      root.setAttribute('data-lens', name);
+      buttons.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.setLens === name)));
+      document.querySelectorAll('.js-cv').forEach(a => { a.href = CV_BY_LENS[name] || CV_BY_LENS.wearables; });
+      const hint = document.getElementById('lensHint');
+      const label = { wearables: 'wearables &amp; health', timeseries: 'time-series ML', audio: 'audio &amp; speech' }[name];
+      if (hint) hint.innerHTML = 'Tailored for ' + label + '. Switch any time.';
+      if (push) {
+        try {
+          const url = new URL(location.href);
+          if (name === 'wearables') url.searchParams.delete('lens'); else url.searchParams.set('lens', name);
+          history.replaceState(null, '', url);
+        } catch (_) {}
+      }
+    }
+    const sw = document.querySelector('.lens-switch');
+    buttons.forEach(b => b.addEventListener('click', () => { if (sw) sw.classList.remove('nudge'); apply(b.dataset.setLens, true); }));
+    // one gentle nudge shortly after load so visitors see these are clickable
+    if (sw) setTimeout(() => sw.classList.add('nudge'), 1400);
+    apply(root.getAttribute('data-lens') || 'wearables', false);
+  })();
+
+  /* ---------- theme ---------- */
+  (function theme() {
+    const root = document.documentElement;
+    const btn = document.getElementById('themeToggle');
+    if (!btn) return;
+    btn.addEventListener('click', () => {
+      const light = root.getAttribute('data-theme') === 'light';
+      if (light) root.removeAttribute('data-theme'); else root.setAttribute('data-theme', 'light');
+      try { localStorage.setItem('ks-theme', light ? 'dark' : 'light'); } catch (_) {}
+    });
+  })();
+
+  /* ---------- nav state ---------- */
+  const nav = document.getElementById('nav');
+  const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 40);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  /* ---------- highlight the nav link for the section in view ---------- */
+  (function activeNav() {
+    const links = [...document.querySelectorAll('.nav-links a')];
+    const map = new Map(links.map(a => [a.getAttribute('href').slice(1), a]));
+    if (!('IntersectionObserver' in window)) return;
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        links.forEach(a => a.classList.remove('active'));
+        const a = map.get(e.target.id);
+        if (a) { a.classList.add('active'); const box = a.parentElement; if (box.scrollWidth > box.clientWidth) box.scrollTo({ left: a.offsetLeft - box.clientWidth / 2 + a.offsetWidth / 2, behavior: 'smooth' }); }
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    map.forEach((_, id) => { const el = document.getElementById(id); if (el) obs.observe(el); });
+  })();
+
+  /* ---------- reveal on scroll ---------- */
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  } else {
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
+  }
+
+  /* ---------- live signal band: smoothed noise + Hann-windowed bursts ---------- */
+  (function band() {
+    const path = document.getElementById('emgPath');
+    if (!path) return;
+    const W = 1400, H = 120, C = H / 2, N = 700, DX = W / N;
+    const buf = new Array(N).fill(C);
+    let last = 0, burst = null, frame = 0;
+    const noise = () => (last = last * 0.72 + (Math.random() - 0.5) * 2 * 0.28);
+    function burstSample() {
+      if (!burst && Math.random() < 0.018) burst = { t: 0, len: 14 + (Math.random() * 22 | 0), amp: 22 + Math.random() * 26, f: 0.55 + Math.random() * 0.45 };
+      if (!burst) return 0;
+      const env = 0.5 - 0.5 * Math.cos(2 * Math.PI * burst.t / burst.len);
+      const v = burst.amp * env * (Math.sin(burst.t * burst.f * Math.PI) + 0.4 * Math.sin(burst.t * burst.f * Math.PI * 2.7));
+      if (++burst.t > burst.len) burst = null;
+      return v;
+    }
+    function draw() {
+      let d = 'M 0 ' + buf[0].toFixed(2);
+      for (let i = 1; i < N; i++) d += ' L ' + (i * DX).toFixed(2) + ' ' + buf[i].toFixed(2);
+      path.setAttribute('d', d);
+    }
+    function tick() {
+      buf.shift();
+      buf.push(C + Math.sin(frame * 0.006) * 3 + noise() * 4 + burstSample());
+      draw(); frame++;
+      requestAnimationFrame(tick);
+    }
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      for (let i = 0; i < N; i++) buf[i] = C + Math.sin(i * 0.08) * 6 + (Math.random() - 0.5) * 3;
+      draw();
+    } else tick();
+  })();
+
+  /* ---------- portrait easter egg ---------- */
+  (function portrait() {
+    const wrap = document.getElementById('portrait'), img = document.getElementById('portraitImg');
+    if (!wrap || !img) return;
+    let on = false;
+    wrap.addEventListener('click', () => {
+      on = !on;
+      img.style.transition = 'filter 0.5s ease';
+      img.style.filter = on ? 'grayscale(1) contrast(1.15) brightness(1.05) sepia(0.15)' : 'none';
+    });
+  })();
+</script>
+</body>
+</html>
